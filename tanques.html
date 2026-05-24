@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Control de Planta de Agua</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        
+        html, body {
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            touch-action: none;
+            overscroll-behavior: none;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            margin: 0 auto;
+            background-color: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header { height: 70px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+        
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 30px;
+            gap: 30px;
+        }
+
+        .footer {
+            height: 120px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Contenedor fijo para que la interfaz no salte cuando el tanque cambie de tamaño */
+        .tank-wrapper {
+            height: 260px;
+            width: 180px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .tank-container {
+            width: 110px;
+            height: 260px;
+            background: #0f172a;
+            border: 6px solid #334155;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.5), 0 10px 25px -5px rgba(0,0,0,0.1);
+            /* Transición fluida y elástica para el cambio de tanque */
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Clase dinámica para el tanque TT (Más ancho y chato) */
+        .tank-container.tank-wide {
+            width: 180px;
+            height: 160px;
+            border-radius: 20px;
+        }
+
+        .water-level {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(180deg, #38bdf8 0%, #0369a1 100%);
+            border-top: 3px solid rgba(255,255,255,0.5);
+            transition: height 0.05s linear;
+            z-index: 5;
+        }
+
+        .ruler-mark {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .ruler-mark span {
+            position: absolute;
+            right: 4px;
+            bottom: 2px;
+            font-size: 10px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 800;
+            text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .tank-glare {
+            position: absolute;
+            top: 0;
+            left: 10%;
+            width: 25%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        .side-menu { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
+        
+        .tab-btn {
+            height: 55px;
+            border-radius: 16px;
+            font-weight: 700;
+            color: #64748b;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #0f172a;
+            color: white;
+            border-color: #0f172a;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.2);
+        }
+
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #modal-content {
+            background: white;
+            width: 100%;
+            max-width: 320px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #modal-overlay.active { display: flex; }
+        #modal-overlay.active #modal-content { transform: scale(1); opacity: 1; }
+
+        canvas { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <div class="flex flex-col">
+                <h1 class="text-xl font-black text-slate-900 tracking-tight">CONTROL <span class="text-blue-600">PRO</span></h1>
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Suma Exacta</span>
+            </div>
+            <button onclick="handleCameraClick()" class="bg-blue-600 w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg active:scale-90 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            </button>
+        </header>
+
+        <main class="main-content">
+            <div class="flex flex-col items-center gap-4">
+                <!-- Wrapper que mantiene la altura para que nada salte -->
+                <div class="tank-wrapper">
+                    <!-- Empieza con la clase tank-wide porque el primer tanque es el TT -->
+                    <div class="tank-container tank-wide" id="sensor-area">
+                        <div class="ruler-mark" style="bottom: 75%;"><span>3/4</span></div>
+                        <div class="ruler-mark" style="bottom: 50%;"><span>1/2</span></div>
+                        <div class="ruler-mark" style="bottom: 25%;"><span>1/4</span></div>
+                        <div class="ruler-mark" style="bottom: 12.5%;"><span>1/8</span></div>
+
+                        <div class="water-level" id="fill-ui" style="height: 100%;"></div>
+                        <div class="tank-glare"></div>
+                    </div>
+                </div>
+                <div id="ui-fraction" class="text-center font-black text-blue-600 border-2 border-blue-600 rounded-xl px-4 py-2 text-xs w-[180px] bg-blue-50">
+                    LLENO
+                </div>
+            </div>
+
+            <div class="side-menu">
+                <button onclick="switchTank('tt')" id="btn-tt" class="tab-btn active">TT</button>
+                <button onclick="switchTank('cruda')" id="btn-cruda" class="tab-btn">CRUDA</button>
+                <button onclick="switchTank('tratada')" id="btn-tratada" class="tab-btn">TRATADA</button>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="flex flex-col">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Capacidad Total</span>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-3xl font-black text-slate-900" id="ui-total-liters">19,000</span>
+                    <span class="text-blue-600 font-bold">L</span>
+                </div>
+            </div>
+            <button onclick="handleCopyClick()" class="bg-slate-900 text-white h-14 px-6 rounded-2xl font-bold text-sm shadow-xl active:scale-95 transition">
+                COPIAR PIZARRA
+            </button>
+        </footer>
+    </div>
+
+    <div id="modal-overlay">
+        <div id="modal-content">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="bg-blue-100 text-blue-600 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">Copiado al Jefe</h2>
+            </div>
+            <div id="modal-body" class="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap bg-slate-50 p-4 rounded-xl font-mono mb-6"></div>
+            <button onclick="closeModal()" class="w-full py-4 bg-slate-900 text-white rounded-xl font-bold active:scale-95 transition">
+                CERRAR
+            </button>
+        </div>
+    </div>
+
+    <canvas id="canvas-report" width="1000" height="1400"></canvas>
+
+    <script>
+        const capacities = { tt: 15000, cruda: 2000, tratada: 2000 };
+        let state = { tt: 1, cruda: 0.33, tratada: 0.46 };
+        let currentTank = 'tt';
+
+        const sensor = document.getElementById('sensor-area');
+        const fillUI = document.getElementById('fill-ui');
+        const uiFraction = document.getElementById('ui-fraction');
+        const uiTotalLiters = document.getElementById('ui-total-liters');
+
+        function getFractionLabel(p) {
+            if (p >= 0.96) return "Lleno";
+            if (p >= 0.84) return "3/4 arriba";
+            if (p >= 0.70) return "3/4";
+            if (p >= 0.60) return "3/4 abajo";
+            if (p >= 0.54) return "1/2 arriba";
+            if (p >= 0.46) return "1/2";
+            if (p >= 0.38) return "1/2 abajo";
+            if (p >= 0.28) return "1/4 arriba";
+            if (p >= 0.22) return "1/4";
+            if (p >= 0.14) return "1/4 abajo";
+            if (p >= 0.04) return "1/8";
+            return "Vacío";
+        }
+
+        function calculateExactLiters() {
+            const litTT = Math.round(state.tt * capacities.tt);
+            const litCruda = Math.round(state.cruda * capacities.cruda);
+            const litTratada = Math.round(state.tratada * capacities.tratada);
+            const total = litTT + litCruda + litTratada;
+            return { litTT, litCruda, litTratada, total };
+        }
+
+        function updateUI() {
+            const p = state[currentTank];
+            fillUI.style.height = `${p * 100}%`;
+            uiFraction.innerText = getFractionLabel(p).toUpperCase();
+            
+            const calc = calculateExactLiters();
+            uiTotalLiters.innerText = calc.total.toLocaleString();
+        }
+
+        function onTouch(e) {
+            e.preventDefault();
+            const rect = sensor.getBoundingClientRect();
+            // La magia ocurre aquí: no importa si el tanque está en su forma ancha o alta,
+            // rect.height lee la altura actual exacta, manteniendo la matemática intocable.
+            const y = e.touches ? e.touches[0].clientY : e.clientY;
+            let p = 1 - ((y - rect.top) / rect.height);
+            p = Math.max(0, Math.min(1, p));
+            state[currentTank] = p;
+            requestAnimationFrame(updateUI);
+        }
+
+        sensor.addEventListener('touchstart', onTouch, {passive: false});
+        sensor.addEventListener('touchmove', onTouch, {passive: false});
+        sensor.addEventListener('mousedown', (e) => {
+            onTouch(e);
+            const mv = (ev) => onTouch(ev);
+            window.addEventListener('mousemove', mv);
+            window.addEventListener('mouseup', () => window.removeEventListener('mousemove', mv), {once: true});
+        });
+
+        function switchTank(tank) {
+            currentTank = tank;
+            ['tt', 'cruda', 'tratada'].forEach(t => {
+                document.getElementById(`btn-${t}`).classList.toggle('active', t === tank);
+            });
+            
+            // LÓGICA DE FORMA DINÁMICA: Aplica la clase 'tank-wide' solo si es TT
+            if(tank === 'tt') {
+                sensor.classList.add('tank-wide');
+            } else {
+                sensor.classList.remove('tank-wide');
+            }
+            
+            updateUI();
+        }
+
+        function getReportData() {
+            const calc = calculateExactLiters();
+            return `🔹 Estado de planta🔹\n\n` +
+                   `💧 TT: ${calc.litTT}L o ${getFractionLabel(state.tt)}\n` +
+                   `🛢️ Cruda: ${calc.litCruda}L o ${getFractionLabel(state.cruda)}\n` +
+                   `💎 Tratada: ${calc.litTratada}L o ${getFractionLabel(state.tratada)}\n\n` +
+                   `✨ TOTAL PLANTA: ${calc.total.toLocaleString()}L`;
+        }
+
+        function handleCopyClick() {
+            const text = getReportData();
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            document.getElementById('modal-body').innerText = text;
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        function handleCameraClick() {
+            const text = getReportData();
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            generateHighEndImage();
+        }
+
+        // Esta función NO lee el CSS de la pantalla. Mantiene el estándar estricto y uniforme de los 3 tanques idénticos.
+        function generateHighEndImage() {
+            const canvas = document.getElementById('canvas-report');
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width;
+            const H = canvas.height;
+            const calc = calculateExactLiters(); 
+
+            const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+            bgGrad.addColorStop(0, '#0f172a');
+            bgGrad.addColorStop(1, '#1e293b');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'white';
+            ctx.font = '900 75px Inter';
+            ctx.fillText('ESTADO DE PLANTA', W/2, 150);
+
+            const tanks = [
+                { id:'TT', p: state.tt, litros: calc.litTT, c: ['#38bdf8', '#0369a1'] },
+                { id:'CRUDA', p: state.cruda, litros: calc.litCruda, c: ['#60a5fa', '#1d4ed8'] },
+                { id:'TRATADA', p: state.tratada, litros: calc.litTratada, c: ['#34d399', '#047857'] }
+            ];
+
+            const startX = 120;
+            const tankW = 200;
+            const tankH = 550;
+            const spacing = 280;
+
+            tanks.forEach((t, i) => {
+                const x = startX + (i * spacing);
+                const y = 300;
+
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 40;
+                ctx.fillStyle = '#1e293b';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 4;
+                roundRect(ctx, x, y, tankW, tankH, 35, true, true);
+                ctx.shadowBlur = 0;
+
+                const wh = tankH * t.p;
+                if(wh > 10) {
+                    const wGrad = ctx.createLinearGradient(x, y+tankH-wh, x, y+tankH);
+                    wGrad.addColorStop(0, t.c[0]);
+                    wGrad.addColorStop(1, t.c[1]);
+                    ctx.fillStyle = wGrad;
+                    roundRect(ctx, x, y+tankH-wh, tankW, wh, 35, true, false);
+                }
+
+                const glare = ctx.createLinearGradient(x, y, x + tankW, y);
+                glare.addColorStop(0.1, 'rgba(255,255,255,0.15)');
+                glare.addColorStop(0.3, 'rgba(255,255,255,0)');
+                ctx.fillStyle = glare;
+                roundRect(ctx, x, y, tankW, tankH, 35, true, false);
+
+                const fractions = [
+                    { p: 0.75, label: '3/4' },
+                    { p: 0.50, label: '1/2' },
+                    { p: 0.25, label: '1/4' },
+                    { p: 0.125, label: '1/8' }
+                ];
+                
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                ctx.font = 'bold 16px Inter';
+                ctx.textAlign = 'right';
+
+                fractions.forEach(frac => {
+                    const lineY = y + (tankH * (1 - frac.p));
+                    ctx.beginPath();
+                    ctx.moveTo(x + tankW - 40, lineY);
+                    ctx.lineTo(x + tankW, lineY);
+                    ctx.stroke();
+                    ctx.fillText(frac.label, x + tankW - 45, lineY + 6);
+                });
+                
+                ctx.textAlign = 'center';
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 36px Inter';
+                ctx.fillText(t.id, x + tankW/2, y + tankH + 70);
+                
+                ctx.fillStyle = t.c[0];
+                ctx.font = '900 55px Inter';
+                ctx.fillText(`${t.litros}L`, x + tankW/2, y + tankH + 130);
+                
+                ctx.fillStyle = 'white';
+                ctx.font = '700 24px Inter';
+                ctx.fillText(getFractionLabel(t.p).toUpperCase(), x + tankW/2, y + tankH + 175);
+            });
+
+            const boxY = H - 300;
+            ctx.fillStyle = '#0f172a';
+            roundRect(ctx, 150, boxY, W - 300, 220, 40, true, true);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '800 35px Inter';
+            ctx.fillText('DISPONIBILIDAD TOTAL', W/2, boxY + 70);
+            
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '900 110px Inter';
+            ctx.fillText(`${calc.total.toLocaleString()} L`, W/2, boxY + 175);
+
+            const link = document.createElement('a');
+            link.download = `Estado_Planta_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+        }
+
+        function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.lineTo(x + w - r, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+            if (stroke) ctx.stroke();
+        }
+
+        window.onload = updateUI;
+    </script>
+</body>
+</html>
