@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistemas Managua - Portal de Control</title>
+    <style>
+        /* =========================================
+           Variables CSS - Paleta de Colores y Diseño
+           ========================================= */
+        :root {
+            --bg-color: #0f172a;        /* Fondo principal (Slate 900) */
+            --card-bg: #1e293b;         /* Fondo de tarjetas (Slate 800) */
+            --text-main: #f8fafc;       /* Texto principal (Slate 50) */
+            --text-muted: #94a3b8;      /* Texto secundario (Slate 400) */
+            --accent-color: #38bdf8;    /* Acento azul brillante (Sky 400) */
+            --accent-glow: rgba(56, 189, 248, 0.15); /* Resplandor tecnológico */
+            --border-radius: 20px;
+        }
+
+        /* =========================================
+           Reset y Estilos Base
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Elimina el flash azul en móviles al tocar */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        /* =========================================
+           Encabezado (Header)
+           ========================================= */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* =========================================
+           Panel Central (Dashboard Grid)
+           ========================================= */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr; /* Una columna en móviles */
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 400px; /* Ancho máximo para mantener estética premium */
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Responsive: Más de una columna en pantallas grandes (Tablets/PCs) */
+        @media (min-width: 768px) {
+            .dashboard {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1000px;
+            }
+        }
+
+        /* =========================================
+           Botones / Tarjetas (Cards)
+           ========================================= */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Borde superior decorativo brillante */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Estados Hover y Active para interactividad táctil y de mouse */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 20px var(--accent-glow);
+            border-color: rgba(56, 189, 248, 0.3);
+            background-color: #24334a;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:active {
+            transform: translateY(2px) scale(0.98); /* Efecto táctil (hundimiento) */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* =========================================
+           Iconos y Textos de los Botones
+           ========================================= */
+        .icon-wrapper {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            color: var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .icon-wrapper {
+            background: var(--accent-color);
+            color: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .icon-wrapper svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .card h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        /* =========================================
+           Animaciones de entrada
+           ========================================= */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header class="header">
+        <h1>Sistemas Managua</h1>
+        <p>Portal de Control</p>
+    </header>
+
+    <!-- Panel Central / Botones -->
+    <main class="dashboard">
+        
+        <!-- Botón 1: Pedidos (Usando target="_self" para WebView) -->
+        <a href="https://gemini.google.com/share/d9371733e31e" target="_self" class="card">
+            <div class="icon-wrapper">
+                <!-- Icono de Portapapeles/Lista -->
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                </svg>
+            </div>
+            <h2>Pedidos Managuas</h2>
+        </a>
+
+        <!-- Botón 2: Tanques -->
+        <a href="https://gemini.google.com/share/da5569ceb2e2" target="_self" class="card">
+            <div class="icon-wrapper">
+                <!-- Icono de Cilindro/Tanque de Agua -->
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                </svg>
+            </div>
+            <h2>Tanques Managuas</h2>
+        </a>
+
+        <!-- Botón 3: Cuadre -->
+        <a href="https://gemini.google.com/share/10133f7d6b39" target="_self" class="card">
+            <div class="icon-wrapper">
+                <!-- Icono de Calculadora/Finanzas -->
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h2>Cuadre Managuas</h2>
+        </a>
+
+    </main>
+
+    <!-- Script opcional si requieres lógica adicional en el futuro. 
+         Actualmente las animaciones y enlaces se manejan de forma nativa con CSS/HTML -->
+    <script>
+        // Prevenir el comportamiento de arrastre por defecto en los enlaces 
+        // para mejorar la sensación de "App Nativa" en WebViews
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('dragstart', (e) => e.preventDefault());
+        });
+    </script>
+</body>
+  </html>
