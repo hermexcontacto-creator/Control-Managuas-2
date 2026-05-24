@@ -30,7 +30,6 @@
 </head>
 <body class="p-2 flex flex-col items-center min-h-screen relative">
     
-    <!-- ==================== CALCULADORA POS ==================== -->
     <section class="w-full max-w-md mx-auto">
         <div class="sticky top-0 z-10 bg-[#f1f5f9] pb-2 pt-2">
             <div class="glass-display">
@@ -56,7 +55,6 @@
                 <p id="promo-msg" class="text-[10px] font-black text-amber-700"></p>
             </div>
 
-            <!-- Botones de Productos -->
             <div class="grid grid-cols-5 gap-1.5 mb-3">
                 <button onclick="selectProduct('b19')" id="btn-b19" class="toy-btn h-11"><span class="text-lg">🚰</span><span class="text-[6px] font-black uppercase">R. 19L</span></button>
                 <button onclick="selectProduct('b12')" id="btn-b12" class="toy-btn h-11"><span class="text-lg">💧</span><span class="text-[6px] font-black uppercase">R. 12L</span></button>
@@ -70,7 +68,6 @@
                 <button onclick="togglePromo()" id="btn-promo" class="toy-btn h-11 btn-promo"><span class="text-lg">📅</span><span class="text-[6px] font-black uppercase">Oferta</span></button>
             </div>
             
-            <!-- Teclado Numérico -->
             <div class="bg-blue-50/80 p-3 rounded-[2rem] border-2 border-blue-100 shadow-inner">
                 <div class="numpad-grid mb-3">
                     <button onclick="appendQty(1)" class="toy-btn h-12 text-xl">1</button>
@@ -94,13 +91,11 @@
             </div>
         </div>
         
-        <!-- Lista de Carrito -->
         <div id="cart-list" class="space-y-2 mt-4 pb-10">
             <div class="text-center p-8 text-slate-300 font-bold italic text-sm">Carrito vacío</div>
         </div>
     </section>
 
-    <!-- ==================== MÓDULO DE COBRO Y VUELTO ==================== -->
     <div id="checkout-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex flex-col justify-end">
         <div class="bg-white rounded-t-3xl p-5 shadow-2xl transition-transform duration-300 translate-y-full" id="checkout-content">
             <div class="flex justify-between items-center mb-4">
@@ -115,7 +110,6 @@
             </div>
 
             <div class="space-y-3 mb-6">
-                <!-- Efectivo -->
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-xl shadow-sm border border-emerald-200">💵</div>
                     <div class="flex-1">
@@ -124,7 +118,6 @@
                     </div>
                 </div>
                 
-                <!-- Tarjeta / Pago Móvil -->
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-xl shadow-sm border border-indigo-200">💳</div>
                     <div class="flex-1">
@@ -147,12 +140,23 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        const firebaseConfig = JSON.parse(__firebase_config);
+        // --- TU NUEVA CONFIGURACIÓN DE FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlqNjRzkSIkqBb_MAVZhs1gsLPuSNJPuI",
+            authDomain: "sistemas-agua.firebaseapp.com",
+            projectId: "sistemas-agua",
+            storageBucket: "sistemas-agua.firebasestorage.app",
+            messagingSenderId: "465091238159",
+            appId: "1:465091238159:web:36fdf13f6e00712105c67a"
+        };
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        
+        // Identificador de la app para la ruta en Firebase
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'agua-pro-manual';
 
         let user = null;
@@ -161,12 +165,12 @@
         // --- MOTOR DE REDONDEO FINANCIERO ESTRICTO ---
         window.roundBs = (num) => +(Math.round(num + "e+2")  + "e-2");
 
-        // --- PRECIOS ACTUALIZADOS SEGÚN IMAGEN Y TEXTO ---
+        // --- PRECIOS ACTUALIZADOS ---
         const BS_PRICES = { 
-            b19: 230, // Actualizado de 220 a 230
-            b12: 180, // Actualizado de 170 a 180
-            b8: 90,   // Actualizado de 80 a 90
-            b5: 80    // Actualizado de 70 a 80
+            b19: 230, 
+            b12: 180, 
+            b8: 90,   
+            b5: 80    
         };
         const USD_PRICES = { 
             n19: 20, 
@@ -176,7 +180,7 @@
             tapa: 0.15 
         };
         
-        // Códigos Fijos de Máquina Fiscal ORIGINALES (Solicitados por el usuario)
+        // Códigos Fijos de Máquina Fiscal ORIGINALES
         const CODES = { b19: 8, b12: 4, b8: "X", b5: 2, n19: 6, n12: 5, hielo: 7, tapa: "X", mantenimiento: "M" };
         const COMBO_CODES = { b19_tapa: 3, b12_tapa: 1 };
         
@@ -200,7 +204,7 @@
                 const ref = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'bcv');
                 await setDoc(ref, { val: cleanVal, updatedAt: Date.now() });
                 updateTasaLabel("Guardado", "text-blue-500");
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Error al guardar en Firebase:", e); }
         }
 
         // --- AUTH Y SYNC ---
@@ -233,13 +237,16 @@
                     
                     renderCart();
                 }
-            }, (err) => console.error(err));
+            }, (err) => console.error("Error de sincronización con Firebase:", err));
         }
 
+        // Iniciar sesión anónima automáticamente para poder leer/escribir en tu Firebase
         const initAuth = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else { await signInAnonymously(auth); }
+            try {
+                await signInAnonymously(auth);
+            } catch (e) {
+                console.error("Error de autenticación:", e);
+            }
         };
         initAuth();
 
@@ -270,7 +277,7 @@
             const rate = parseFloat(rateInput.replace(',', '.')) || 0;
             let totalBs = 0; let itemsUI = []; let tempCart = { ...calcState.cart };
 
-            // Calcular precio de la Tapa (Ahora dependiente del BCV)
+            // Calcular precio de la Tapa
             const tapaPriceBs = window.roundBs(USD_PRICES.tapa * rate);
 
             let tapasRestantes = tempCart.tapa;
