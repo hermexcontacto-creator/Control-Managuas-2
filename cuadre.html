@@ -3,37 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuadre Perfecto - Managua</title>
+    <title>Cuadre Perfecto 19L</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
+        /* Animaciones para los paneles desplegables */
         .fade-in { animation: fadeIn 0.2s ease-in-out; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen p-4 md:p-8 font-sans text-slate-800 relative">
+<body class="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
 
-    <a href="index.html" class="fixed top-4 left-4 z-50 bg-slate-800 text-white p-3 rounded-full shadow-xl hover:bg-slate-900 transition-all flex items-center justify-center" title="Volver al Menú">
-        <i data-lucide="arrow-left" class="w-5 h-5"></i>
-    </a>
-
-    <div class="max-w-7xl mx-auto space-y-6 mt-12 md:mt-0">
-        
+    <div class="max-w-6xl mx-auto space-y-6">
+        <!-- Header -->
         <div class="bg-blue-800 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-2">
-                    <i data-lucide="droplet" class="w-8 h-8 text-blue-300"></i> Cuadre Perfecto 19L
+                    <i data-lucide="droplet" class="w-8 h-8 text-blue-300"></i>
+                    Cuadre Perfecto 19L
                 </h1>
                 <p class="text-blue-200 mt-1 opacity-90 flex items-center gap-1">
                     <i data-lucide="shield-check" class="w-4 h-4"></i> Distribución Creíble por Clientes
@@ -42,276 +37,394 @@
         </div>
 
         <div class="grid lg:grid-cols-12 gap-6">
-            
-            <div class="lg:col-span-5 space-y-6">
-                
+            <!-- Columna Izquierda: Controles e Inputs -->
+            <div class="lg:col-span-4 space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-lg font-semibold mb-4 text-slate-700 flex items-center gap-2">
-                        <i data-lucide="calculator" class="w-5 h-5 text-blue-600"></i> Ingreso de Datos
+                        <i data-lucide="calculator" class="w-5 h-5 text-blue-600"></i>
+                        Ingreso de Datos
                     </h2>
                     
                     <div class="space-y-4">
+                        <!-- 1. Herramientas Auxiliares (Puntos y Billetes) y Monto Físico -->
                         <div>
-                            <label class="block text-sm font-medium text-slate-600 mb-1">Monto en Caja Físico</label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-slate-400 font-medium text-sm">Bs.</span>
-                                <input type="number" id="amount1" step="0.01" placeholder="0.00" class="w-full pl-10 pr-24 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors font-bold text-slate-700" oninput="checkInputs()">
-                                <button onclick="toggleTool('panel-billetes')" class="absolute right-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-2 py-1 rounded-lg text-xs flex items-center gap-1 transition-colors">
-                                    <i data-lucide="wallet" class="w-3.5 h-3.5"></i> Billetes
-                                </button>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-sm font-medium text-slate-600">Monto en Caja Físico</label>
+                                <div class="flex gap-2">
+                                    <button id="btnTogglePos" class="text-xs font-semibold flex items-center gap-1 transition-colors px-2 py-1 rounded-md bg-blue-50 text-blue-600 hover:text-blue-800">
+                                        <i data-lucide="credit-card" class="w-3 h-3"></i> Puntos
+                                    </button>
+                                    <button id="btnToggleCash" class="text-xs font-semibold flex items-center gap-1 transition-colors px-2 py-1 rounded-md bg-blue-50 text-blue-600 hover:text-blue-800">
+                                        <i data-lucide="wallet" class="w-3 h-3"></i> Efectivo
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Panel de Puntos de Venta -->
+                            <div id="panelPos" class="hidden fade-in mb-3 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                                <p class="text-xs text-slate-500 font-medium mb-3 uppercase tracking-wider text-center">Sumar Puntos de Venta</p>
+                                <div class="grid grid-cols-1 gap-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-bold text-slate-600 w-24 text-right border-r border-slate-300 pr-2">Banesco</span>
+                                        <input type="number" id="inputBanesco" step="0.01" placeholder="0.00" class="w-full py-1 px-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm calc-pos">
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-bold text-slate-600 w-24 text-right border-r border-slate-300 pr-2">Venezuela</span>
+                                        <input type="number" id="inputVenezuela" step="0.01" placeholder="0.00" class="w-full py-1 px-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm calc-pos">
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
+                                    <div class="font-bold text-slate-700">
+                                        Total: <span class="text-blue-700" id="totalPos">Bs. 0.00</span>
+                                    </div>
+                                    <button id="btnUsePos" disabled class="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1 transition-colors">
+                                        <i data-lucide="arrow-down-circle" class="w-4 h-4"></i> Usar total
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Panel del Contador de Billetes -->
+                            <div id="panelCash" class="hidden fade-in mb-3 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                                <p class="text-xs text-slate-500 font-medium mb-3 uppercase tracking-wider text-center">Cantidad de billetes</p>
+                                <div class="grid grid-cols-2 gap-3" id="cashInputsContainer">
+                                    <!-- Inputs generados por JS -->
+                                </div>
+                                <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
+                                    <div class="font-bold text-slate-700">
+                                        Total: <span class="text-blue-700" id="totalCash">Bs. 0</span>
+                                    </div>
+                                    <button id="btnUseCash" disabled class="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1 transition-colors">
+                                        <i data-lucide="arrow-down-circle" class="w-4 h-4"></i> Usar total
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Input Principal Monto Físico -->
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Bs.</span>
+                                <input type="number" id="amount1" placeholder="0.00" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                             </div>
                         </div>
 
+                        <!-- 2. Monto del Sistema -->
                         <div>
                             <label class="block text-sm font-medium text-slate-600 mb-1">Monto del Sistema</label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-slate-400 font-medium text-sm">Bs.</span>
-                                <input type="number" id="amount2" step="0.01" placeholder="0.00" class="w-full pl-10 pr-24 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors font-bold text-slate-700" oninput="checkInputs()">
-                                <button onclick="toggleTool('panel-digital')" class="absolute right-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-2 py-1 rounded-lg text-xs flex items-center gap-1 transition-colors">
-                                    <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Puntos
-                                </button>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Bs.</span>
+                                <input type="number" id="amount2" placeholder="0.00" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                             </div>
                         </div>
 
-                        <div class="pt-2">
+                        <!-- 3. Tasa BCV -->
+                        <div class="pt-3 border-t border-slate-100 mt-2">
                             <div class="flex justify-between items-center mb-1">
                                 <label class="block text-sm font-medium text-slate-600">Tasa BCV del Día</label>
-                                <span id="bcv-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-slate-100 text-slate-500">Cargando...</span>
+                                <div id="bcvStatusContainer">
+                                    <!-- Status inyectado por JS -->
+                                </div>
                             </div>
+                            
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
-                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36,50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-200 rounded-xl outline-none focus:border-blue-500 font-black text-blue-600" oninput="handleTasaChange(this.value)">
+                                <input type="text" inputmode="decimal" id="tasaBcv" placeholder="Ej. 36.50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all">
                             </div>
+                            <p id="bcvWarning" class="hidden text-xs text-orange-600 mt-1 flex items-center gap-1">
+                                <i data-lucide="alert-circle" class="w-3 h-3"></i> Cuidado, esta tasa es de días anteriores.
+                            </p>
                         </div>
 
-                        <button id="calc-btn" onclick="handleCalculate()" disabled class="w-full mt-2 bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-base">
-                            Generar Maquillaje <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        <button id="btnCalculate" disabled class="w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                            <span id="btnCalculateText">Generar Maquillaje</span>
+                            <i data-lucide="arrow-right" id="btnCalculateIcon" class="w-5 h-5"></i>
                         </button>
                     </div>
                 </div>
 
-                <div id="panel-billetes" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-slate-200 fade-in">
-                    <div class="flex justify-between items-center mb-4 pb-2 border-b">
-                        <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm">
-                            <i data-lucide="wallet" class="text-emerald-600 w-4 h-4"></i> Desglose de Efectivo (Bs.)
-                        </h3>
-                        <button onclick="clearBilletes()" class="text-rose-500 text-xs font-bold hover:underline">Limpiar</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 mb-4">
-                        <div class="flex items-center gap-2">
-                            <span class="w-12 text-xs font-bold text-slate-500">100:</span>
-                            <input type="number" data-denom="100" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-12 text-xs font-bold text-slate-500">50:</span>
-                            <input type="number" data-denom="50" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-12 text-xs font-bold text-slate-500">20:</span>
-                            <input type="number" data-denom="20" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-12 text-xs font-bold text-slate-500">10:</span>
-                            <input type="number" data-denom="10" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-12 text-xs font-bold text-slate-500">5:</span>
-                            <input type="number" data-denom="5" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-12 text-xs font-bold text-slate-500">2:</span>
-                            <input type="number" data-denom="2" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-dashed">
-                        <div>
-                            <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Billetes</span>
-                            <span id="total-billetes-txt" class="font-black text-emerald-600 text-base">Bs. 0,00</span>
-                        </div>
-                        <button onclick="applyCash()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm transition-colors">
-                            Insertar en Caja
-                        </button>
-                    </div>
-                </div>
-
-                <div id="panel-digital" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-slate-200 fade-in">
-                    <div class="flex justify-between items-center mb-3 pb-2 border-b">
-                        <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm">
-                            <i data-lucide="credit-card" class="text-indigo-600 w-4 h-4"></i> Suma de Transacciones (POS/Pago Móvil)
-                        </h3>
-                        <button onclick="clearDigital()" class="text-rose-500 text-xs font-bold hover:underline">Limpiar</button>
-                    </div>
-                    <div class="space-y-2 mb-4 max-h-[180px] overflow-y-auto pr-1" id="digital-inputs-container">
-                        <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 1" oninput="sumarDigital()">
-                        <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 2" oninput="sumarDigital()">
-                        <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 3" oninput="sumarDigital()">
-                    </div>
-                    <button onclick="addDigitalRow()" class="w-full border-2 border-dashed border-slate-200 hover:border-slate-300 text-slate-500 py-1 rounded-xl text-xs font-bold mb-3 flex items-center justify-center gap-1 transition-all">
-                        <i data-lucide="plus" class="w-3.5 h-3.5"></i> Añadir otra casilla
-                    </button>
-                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-dashed">
-                        <div>
-                            <span class="text-[10px] uppercase font-bold text-slate-400 block">Suma Digital</span>
-                            <span id="total-digital-txt" class="font-black text-indigo-600 text-base">Bs. 0,00</span>
-                        </div>
-                        <button onclick="applyDigital()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm transition-colors">
-                            Insertar en Sistema
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="lg:col-span-7" id="results-container">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col items-center justify-center text-center">
-                    <i data-lucide="receipt" class="w-20 h-20 text-blue-100 mb-4"></i>
-                    <h3 class="text-xl font-bold text-slate-700">Listo para cuadrar</h3>
-                    <p class="text-slate-500 mt-2 max-w-md text-sm">
-                        Ingresa los montos. Puedes usar las herramientas laterales para sumar tus billetes y tus puntos de venta fácilmente. El sistema calculará la combinación exacta para tu cuaderno.
-                    </p>
+                <!-- Referencia de Precios -->
+                <div class="bg-slate-100 p-5 rounded-2xl border border-slate-200">
+                    <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4 text-blue-600"></i>
+                        Precios Activos
+                    </h3>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li class="flex justify-between font-bold text-blue-800"><span>⭐ Botellón 19L</span> <span>Bs. 230.00</span></li>
+                        <li class="flex justify-between"><span>Botellón 12L</span> <span>Bs. 180.00</span></li>
+                        <li class="flex justify-between"><span>Botellón 8L</span> <span>Bs. 90.00</span></li>
+                        <li class="flex justify-between"><span>Botellón 5L</span> <span>Bs. 80.00</span></li>
+                        <li class="flex justify-between text-emerald-700 border-t border-slate-200 pt-2 mt-2">
+                            <span>Tapa de Silicón ($0.15)</span> 
+                            <span id="capPriceDisplay" class="font-medium">Requiere BCV</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
+            <!-- Columna Derecha: Resultados -->
+            <div class="lg:col-span-8">
+                <div id="resultsContainer" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col">
+                    <!-- Estado Inicial -->
+                    <div id="initialState" class="flex-1 flex flex-col items-center justify-center text-center">
+                        <i data-lucide="receipt" class="w-20 h-20 text-blue-100 mb-4"></i>
+                        <h3 class="text-xl font-bold text-slate-700">Listo para cuadrar</h3>
+                        <p class="text-slate-500 mt-2 max-w-md">
+                            Ingresa los montos. Puedes usar las herramientas para sumar tus billetes y tus puntos de venta fácilmente. El sistema calculará la mejor combinación para tu cuaderno.
+                        </p>
+                    </div>
+
+                    <!-- Resultados se inyectan aquí vía JS -->
+                    <div id="calculatedState" class="hidden flex-1 flex-col"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Inicialización de Iconos Lucide
+    <!-- Firebase y Lógica JavaScript -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Inicializar Iconos
         lucide.createIcons();
 
-        let saveTimeout = null;
-        let globalCashTotal = 0;
-        let globalDigitalTotal = 0;
+        // 1. Configuración Firebase (La solicitada por el usuario + Fallback para entorno seguro)
+        const userConfig = {
+            apiKey: "AIzaSyB-xxxxxxxxx", // Nota: Esto fallará si se usa en local, requiere clave real
+            authDomain: "sistemas-managua.firebaseapp.com",
+            projectId: "sistemas-managua",
+            storageBucket: "sistemas-managua.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdefg"
+        };
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : userConfig;
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-        // --- MANEJO DE TASA BCV Y LOCALSTORAGE COMPARTIDO ---
-        window.onload = () => {
-            const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
-            const savedDate = localStorage.getItem('MANAGUA_BCV_DATE');
-            if(savedRate) {
-                document.getElementById('tasaBcv').value = savedRate.replace('.', ',');
-                checkDate(savedDate);
-            } else {
-                updateBcvBadge("Vacía", "bg-rose-100 text-rose-700");
+        // 2. Estado Global
+        let currentUser = null;
+        let isCalculating = false;
+        let bcvStatus = 'loading'; // current, old, empty
+        
+        // Elementos DOM
+        const inputAmount1 = document.getElementById('amount1');
+        const inputAmount2 = document.getElementById('amount2');
+        const inputTasaBcv = document.getElementById('tasaBcv');
+        const btnCalculate = document.getElementById('btnCalculate');
+        
+        // Firebase Auth y Carga
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Auth error:", error);
+            }
+        };
+        initAuth();
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) loadBcvData();
+        });
+
+        // Lógica de Tasa BCV
+        const loadBcvData = async () => {
+            if (!currentUser) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'bcvData');
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    inputTasaBcv.value = data.rate;
+                    updateCapPriceDisplay();
+                    checkBcvDate(data.timestamp);
+                } else {
+                    setBcvStatus('empty');
+                }
+            } catch (error) {
+                console.error("Error loading BCV:", error);
             }
         };
 
-        function handleTasaChange(val) {
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => {
-                if(!val) {
-                    updateBcvBadge("Vacía", "bg-rose-100 text-rose-700");
-                    return;
-                }
-                const cleanVal = val.replace(/,/g, '.');
-                localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
-                localStorage.setItem('MANAGUA_BCV_DATE', Date.now());
-                checkDate(Date.now());
-            }, 600);
-        }
+        const saveBcvToFirebase = async (rate) => {
+            if (!currentUser || !rate) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'bcvData');
+                const now = Date.now();
+                await setDoc(docRef, { rate: rate, timestamp: now });
+                checkBcvDate(now);
+            } catch (error) {
+                console.error("Error saving BCV:", error);
+            }
+        };
 
-        function checkDate(timestamp) {
-            if(!timestamp) return;
-            const today = new Date().toLocaleDateString();
-            const saved = new Date(parseInt(timestamp)).toLocaleDateString();
+        const checkBcvDate = (timestamp) => {
+            const options = { timeZone: 'America/Caracas', year: 'numeric', month: 'numeric', day: 'numeric' };
+            const savedDateStr = new Date(timestamp).toLocaleDateString('en-US', options);
+            const currentDateStr = new Date().toLocaleDateString('en-US', options);
+            setBcvStatus(savedDateStr === currentDateStr ? 'current' : 'old');
+        };
+
+        const setBcvStatus = (status) => {
+            bcvStatus = status;
+            const container = document.getElementById('bcvStatusContainer');
+            const warning = document.getElementById('bcvWarning');
             
-            if(today === saved) {
-                updateBcvBadge("Al día", "bg-green-100 text-green-700 border border-green-200");
+            inputTasaBcv.classList.remove('border-orange-300', 'focus:ring-orange-500', 'bg-orange-50', 'border-slate-300', 'focus:ring-emerald-500');
+            
+            if (status === 'current') {
+                container.innerHTML = `<span class="flex items-center gap-1 text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full uppercase tracking-wider"><i data-lucide="check" class="w-3 h-3"></i> Al día</span>`;
+                warning.classList.add('hidden');
+                inputTasaBcv.classList.add('border-slate-300', 'focus:ring-emerald-500');
+            } else if (status === 'old') {
+                container.innerHTML = `<span class="flex items-center gap-1 text-[10px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse"><i data-lucide="clock" class="w-3 h-3"></i> Desactualizada</span>`;
+                warning.classList.remove('hidden');
+                inputTasaBcv.classList.add('border-orange-300', 'focus:ring-orange-500', 'bg-orange-50');
             } else {
-                updateBcvBadge("Anterior", "bg-amber-100 text-amber-700 border border-amber-200 animate-pulse");
+                container.innerHTML = '';
+                warning.classList.add('hidden');
+                inputTasaBcv.classList.add('border-slate-300', 'focus:ring-emerald-500');
             }
-        }
-
-        function updateBcvBadge(text, classes) {
-            const el = document.getElementById('bcv-status');
-            el.className = `text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${classes}`;
-            el.innerText = text;
-        }
-
-        function checkInputs() {
-            const a1 = document.getElementById('amount1').value;
-            const a2 = document.getElementById('amount2').value;
-            document.getElementById('calc-btn').disabled = (!a1 && !a2);
-        }
-
-        function toggleTool(panelId) {
-            const panel = document.getElementById(panelId);
-            panel.classList.toggle('hidden');
-        }
-
-        // --- FUNCIONES AUXILIARES: CALCULADORA DE BILLETES ---
-        function sumarBilletes() {
-            let total = 0;
-            document.querySelectorAll('.bill-input').forEach(input => {
-                const denom = parseFloat(input.getAttribute('data-denom')) || 0;
-                const qty = parseInt(input.value) || 0;
-                total += (denom * qty);
-            });
-            globalCashTotal = total;
-            document.getElementById('total-billetes-txt').innerText = `Bs. ${total.toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
-        }
-
-        function clearBilletes() {
-            document.querySelectorAll('.bill-input').forEach(i => i.value = '');
-            globalCashTotal = 0;
-            document.getElementById('total-billetes-txt').innerText = `Bs. 0,00`;
-        }
-
-        function applyCash() {
-            if(globalCashTotal > 0) {
-                document.getElementById('amount1').value = globalCashTotal.toFixed(2);
-                checkInputs();
-                document.getElementById('panel-billetes').classList.add('hidden');
-            }
-        }
-
-        // --- FUNCIONES AUXILIARES: SUMA DIGITAL ---
-        function addDigitalRow() {
-            const container = document.getElementById('digital-inputs-container');
-            const count = container.querySelectorAll('.digital-input').length + 1;
-            const input = document.createElement('input');
-            input.type = "number";
-            input.step = "0.01";
-            input.className = "digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm fade-in";
-            input.placeholder = `Monto transacción ${count}`;
-            input.oninput = sumarDigital;
-            container.appendChild(input);
             lucide.createIcons();
-        }
+        };
 
-        function sumarDigital() {
-            let total = 0;
-            document.querySelectorAll('.digital-input').forEach(input => {
-                total += (parseFloat(input.value) || 0);
-            });
-            globalDigitalTotal = total;
-            document.getElementById('total-digital-txt').innerText = `Bs. ${total.toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
-        }
+        inputTasaBcv.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/,/g, '.').replace(/[^0-9.]/g, '');
+            const parts = val.split('.');
+            if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+            e.target.value = val;
+            updateCapPriceDisplay();
+            if (!val) setBcvStatus('empty');
+        });
 
-        function clearDigital() {
-            const container = document.getElementById('digital-inputs-container');
-            container.innerHTML = `
-                <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 1" oninput="sumarDigital()">
-                <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 2" oninput="sumarDigital()">
-                <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 3" oninput="sumarDigital()">
-            `;
-            globalDigitalTotal = 0;
-            document.getElementById('total-digital-txt').innerText = `Bs. 0,00`;
-        }
+        inputTasaBcv.addEventListener('blur', () => {
+            if (inputTasaBcv.value) saveBcvToFirebase(inputTasaBcv.value);
+        });
 
-        function applyDigital() {
-            if(globalDigitalTotal > 0) {
-                document.getElementById('amount2').value = globalDigitalTotal.toFixed(2);
-                checkInputs();
-                document.getElementById('panel-digital').classList.add('hidden');
+        const updateCapPriceDisplay = () => {
+            const display = document.getElementById('capPriceDisplay');
+            const rate = parseFloat(inputTasaBcv.value);
+            display.innerText = rate ? `Bs. ${(0.15 * rate).toFixed(2)}` : 'Requiere BCV';
+        };
+
+        // UI Tools (Puntos y Efectivo)
+        const btnTogglePos = document.getElementById('btnTogglePos');
+        const btnToggleCash = document.getElementById('btnToggleCash');
+        const panelPos = document.getElementById('panelPos');
+        const panelCash = document.getElementById('panelCash');
+
+        const togglePanel = (showPanel, hidePanel, activeBtn, inactiveBtn) => {
+            showPanel.classList.toggle('hidden');
+            if (!hidePanel.classList.contains('hidden')) hidePanel.classList.add('hidden');
+            
+            if (!showPanel.classList.contains('hidden')) {
+                activeBtn.classList.replace('bg-blue-50', 'bg-blue-600');
+                activeBtn.classList.replace('text-blue-600', 'text-white');
+            } else {
+                activeBtn.classList.replace('bg-blue-600', 'bg-blue-50');
+                activeBtn.classList.replace('text-white', 'text-blue-600');
             }
-        }
+            inactiveBtn.classList.replace('bg-blue-600', 'bg-blue-50');
+            inactiveBtn.classList.replace('text-white', 'text-blue-600');
+        };
 
+        btnTogglePos.addEventListener('click', () => togglePanel(panelPos, panelCash, btnTogglePos, btnToggleCash));
+        btnToggleCash.addEventListener('click', () => togglePanel(panelCash, panelPos, btnToggleCash, btnTogglePos));
 
-        // --- MOTOR MATEMÁTICO DEL MAQUILLAJE ---
-        function generateTransactions(breakdown, coins) {
+        // Lógica Puntos de Venta
+        const inputBanesco = document.getElementById('inputBanesco');
+        const inputVenezuela = document.getElementById('inputVenezuela');
+        const totalPosDisplay = document.getElementById('totalPos');
+        const btnUsePos = document.getElementById('btnUsePos');
+
+        const calculateTotalPos = () => {
+            const bCents = Math.round((parseFloat(inputBanesco.value) || 0) * 100);
+            const vCents = Math.round((parseFloat(inputVenezuela.value) || 0) * 100);
+            return ((bCents + vCents) / 100).toFixed(2);
+        };
+
+        const updatePos = () => {
+            const total = calculateTotalPos();
+            totalPosDisplay.innerText = `Bs. ${total}`;
+            btnUsePos.disabled = parseFloat(total) === 0;
+        };
+
+        inputBanesco.addEventListener('input', updatePos);
+        inputVenezuela.addEventListener('input', updatePos);
+
+        btnUsePos.addEventListener('click', () => {
+            inputAmount1.value = calculateTotalPos();
+            togglePanel(panelPos, panelCash, btnTogglePos, btnToggleCash); // Hide
+            checkCalcButton();
+        });
+
+        // Lógica Contador de Billetes
+        const cashInputsContainer = document.getElementById('cashInputsContainer');
+        const totalCashDisplay = document.getElementById('totalCash');
+        const btnUseCash = document.getElementById('btnUseCash');
+        const denominations = [500, 200, 100, 50, 20, 10];
+        
+        denominations.forEach(denom => {
+            cashInputsContainer.innerHTML += `
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold text-slate-600 w-12 text-right border-r border-slate-300 pr-2">Bs.${denom}</span>
+                    <input type="number" min="0" placeholder="0" data-denom="${denom}" class="cash-input w-full text-center py-1 px-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                </div>
+            `;
+        });
+
+        const calculateTotalCash = () => {
+            let total = 0;
+            document.querySelectorAll('.cash-input').forEach(input => {
+                const qty = parseInt(input.value) || 0;
+                const denom = parseInt(input.getAttribute('data-denom'));
+                total += (qty * denom);
+            });
+            return total;
+        };
+
+        const updateCash = () => {
+            const total = calculateTotalCash();
+            totalCashDisplay.innerText = `Bs. ${total}`;
+            btnUseCash.disabled = total === 0;
+        };
+
+        document.querySelectorAll('.cash-input').addEventListener = () => {}; // Mock para event delegation
+        cashInputsContainer.addEventListener('input', (e) => {
+            if (e.target.classList.contains('cash-input')) {
+                if (e.target.value !== '' && !/^\d+$/.test(e.target.value)) {
+                    e.target.value = e.target.value.replace(/\D/g, '');
+                }
+                updateCash();
+            }
+        });
+
+        btnUseCash.addEventListener('click', () => {
+            inputAmount1.value = calculateTotalCash();
+            togglePanel(panelCash, panelPos, btnToggleCash, btnTogglePos); // Hide
+            checkCalcButton();
+        });
+
+        // Validación de Botón Principal
+        const checkCalcButton = () => {
+            const val1 = inputAmount1.value;
+            const val2 = inputAmount2.value;
+            btnCalculate.disabled = isCalculating || (!val1 && !val2);
+        };
+        inputAmount1.addEventListener('input', checkCalcButton);
+        inputAmount2.addEventListener('input', checkCalcButton);
+
+        // --- NÚCLEO MATEMÁTICO ---
+        const generateTransactions = (breakdown, coins) => {
             let pool = [];
             if (breakdown['19L'] > 0) {
-                for (let i = 0; i < breakdown['19L']; i++) pool.push({ id: '19L', name: 'Botellón 19L', price: 23000 });
+                for (let i = 0; i < breakdown['19L']; i++) pool.push({ id: '19L', name: 'Botellón 19L', price: 23000 }); 
             }
             coins.forEach(coin => {
                 if (breakdown[coin.id] > 0) {
@@ -319,7 +432,6 @@
                 }
             });
 
-            // Algoritmo de desorden aleatorio (Fischer-Yates)
             for (let i = pool.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -329,9 +441,9 @@
             let clientCounter = 1;
 
             while (pool.length > 0) {
-                // Clientes compran entre 1 y 5 artículos a la vez
                 const itemsToTake = Math.min(Math.floor(Math.random() * 5) + 1, pool.length);
                 const currentClientItems = pool.splice(0, itemsToTake);
+                
                 let receiptBreakdown = {};
                 let receiptTotal = 0;
                 
@@ -345,174 +457,232 @@
                 clientCounter++;
             }
             return transactions;
-        }
+        };
 
-        function handleCalculate() {
-            const val1 = parseFloat(document.getElementById('amount1').value) || 0;
-            const val2 = parseFloat(document.getElementById('amount2').value) || 0;
-            const bcvInput = document.getElementById('tasaBcv').value;
-            const bcv = parseFloat(bcvInput.replace(/,/g, '.')) || 0;
-            
-            const missing = Math.abs(val1 - val2);
-            const container = document.getElementById('results-container');
+        btnCalculate.addEventListener('click', () => {
+            isCalculating = true;
+            checkCalcButton();
+            document.getElementById('btnCalculateText').innerText = 'Procesando...';
+            document.getElementById('btnCalculateIcon').classList.add('hidden');
 
-            if (missing === 0) {
-                container.innerHTML = `
-                <div class="bg-white p-6 rounded-2xl border-2 border-green-200 text-center h-full flex flex-col justify-center items-center p-8">
-                    <i data-lucide="check-circle" class="w-16 h-16 text-green-500 mb-2"></i>
-                    <h2 class="text-2xl font-black text-green-600">Caja Perfectamente Cuadrada</h2>
-                    <p class="text-slate-500 max-w-sm mt-1 text-sm">El monto físico y el monto del sistema coinciden con precisión milimétrica. No hay diferencias que justificar.</p>
-                </div>`;
+            setTimeout(() => {
+                const val1 = parseFloat(inputAmount1.value) || 0;
+                const val2 = parseFloat(inputAmount2.value) || 0;
+                const bcv = parseFloat(inputTasaBcv.value) || 0;
+
+                const missing = Math.abs(val1 - val2);
+                
+                if (missing === 0) {
+                    renderResult({ zero: true, missingBase: 0 });
+                    resetCalculateBtn();
+                    return;
+                }
+
+                const targetCents = Math.round(missing * 100);
+                const hasDecimals = targetCents % 100 !== 0;
+
+                // PRECIOS ACTUALIZADOS (Céntimos)
+                const coins = [
+                    { id: '12L', name: 'Botellón 12L', price: 18000 },
+                    { id: '8L', name: 'Botellón 8L', price: 9000 },
+                    { id: '5L', name: 'Botellón 5L', price: 8000 }
+                ];
+                
+                let capsUsed = false;
+                if (hasDecimals && bcv > 0) {
+                    const capPriceCents = Math.round(0.15 * bcv * 100);
+                    if (capPriceCents > 0) {
+                        coins.push({ id: 'Cap', name: 'Tapa de Silicón', price: capPriceCents });
+                        capsUsed = true;
+                    }
+                }
+
+                const price19L = 23000;
+                const max19L = Math.floor(targetCents / price19L);
+                const min19L = Math.max(0, max19L - 2); 
+
+                let best19L = 0;
+                let minRemainder = Infinity;
+                let bestBreakdown = {};
+                let bestR = 0;
+
+                for (let q19 = max19L; q19 >= min19L; q19--) {
+                    let R = targetCents - (q19 * price19L);
+                    let dp = new Int32Array(R + 1).fill(0);
+                    let choice = new Int32Array(R + 1).fill(-1);
+                    let itemCounts = new Int32Array(R + 1).fill(0);
+
+                    for (let i = 0; i <= R; i++) {
+                        for (let j = 0; j < coins.length; j++) {
+                            let p = coins[j].price;
+                            if (i >= p) {
+                                let prev = i - p;
+                                let newSum = dp[prev] + p;
+                                let newCount = itemCounts[prev] + 1;
+
+                                if (newSum > dp[i]) {
+                                    dp[i] = newSum; choice[i] = j; itemCounts[i] = newCount;
+                                } else if (newSum === dp[i] && newCount < itemCounts[i]) {
+                                    choice[i] = j; itemCounts[i] = newCount;
+                                }
+                            }
+                        }
+                    }
+
+                    let achievedDP = dp[R];
+                    let currentRemainder = R - achievedDP;
+
+                    if (currentRemainder < minRemainder) {
+                        minRemainder = currentRemainder;
+                        best19L = q19;
+                        bestR = R;
+                        bestBreakdown = {};
+                        coins.forEach(c => bestBreakdown[c.id] = 0);
+                        
+                        let curr = R;
+                        while (curr > 0 && choice[curr] !== -1) {
+                            let coinIdx = choice[curr];
+                            bestBreakdown[coins[coinIdx].id]++;
+                            curr = curr - coins[coinIdx].price;
+                        }
+                    }
+                    if (minRemainder === 0) break;
+                }
+
+                const finalBreakdown = { '19L': best19L, ...bestBreakdown };
+                let transactions = [];
+                const totalItems = Object.values(finalBreakdown).reduce((a, b) => a + b, 0);
+                if (totalItems > 0) transactions = generateTransactions(finalBreakdown, coins);
+
+                renderResult({
+                    zero: false,
+                    missingBase: missing,
+                    targetCents,
+                    achievedCents: targetCents - minRemainder,
+                    remainderCents: minRemainder,
+                    breakdown: finalBreakdown,
+                    transactions: transactions,
+                    coins: coins
+                });
+                resetCalculateBtn();
+            }, 100); 
+        });
+
+        const resetCalculateBtn = () => {
+            isCalculating = false;
+            document.getElementById('btnCalculateText').innerText = 'Generar Maquillaje';
+            document.getElementById('btnCalculateIcon').classList.remove('hidden');
+            checkCalcButton();
+        };
+
+        // Renderizado Dinámico
+        const renderResult = (data) => {
+            document.getElementById('initialState').classList.add('hidden');
+            const calcState = document.getElementById('calculatedState');
+            calcState.classList.remove('hidden');
+            calcState.classList.add('flex');
+
+            if (data.zero) {
+                calcState.innerHTML = `
+                    <div class="flex-1 flex flex-col items-center justify-center text-center p-8 bg-green-50 rounded-xl border border-green-100 fade-in">
+                        <i data-lucide="check-circle" class="w-20 h-20 text-green-500 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-green-800">Cuadre Perfecto</h2>
+                        <p class="text-green-600 mt-2">No necesitas maquillar nada, la caja está en cero.</p>
+                    </div>`;
                 lucide.createIcons();
                 return;
             }
 
-            const targetCents = Math.round(missing * 100);
-            const coins = [ 
-                { id: '12L', name: 'Botellón 12L', price: 18000 }, 
-                { id: '8L', name: 'Botellón 8L', price: 9000 }, 
-                { id: '5L', name: 'Botellón 5L', price: 8000 } 
-            ];
-            
-            // Si el residuo tiene decimales y hay tasa BCV válida, activamos la simulación de tapas
-            if (targetCents % 100 !== 0 && bcv > 0) {
-                const capPriceCents = Math.round(0.15 * bcv * 100);
-                if (capPriceCents > 0) coins.push({ id: 'Cap', name: 'Tapa', price: capPriceCents });
-            }
-
-            const price19L = 23000;
-            const max19L = Math.floor(targetCents / price19L);
-            const min19L = Math.max(0, max19L - 2); 
-
-            let best19L = 0, minRemainder = Infinity, bestBreakdown = {};
-
-            // Algoritmo de Mochila Dinámica (DP) para buscar la combinación más natural
-            for (let q19 = max19L; q19 >= min19L; q19--) {
-                let R = targetCents - (q19 * price19L);
-                let dp = new Int32Array(R + 1).fill(0);
-                let choice = new Int32Array(R + 1).fill(-1);
-                let itemCounts = new Int32Array(R + 1).fill(0);
-
-                for (let i = 0; i <= R; i++) {
-                    for (let j = 0; j < coins.length; j++) {
-                        let p = coins[j].price;
-                        if (i >= p) {
-                            let prev = i - p;
-                            let newSum = dp[prev] + p;
-                            let newCount = itemCounts[prev] + 1;
-
-                            if (newSum > dp[i] || (newSum === dp[i] && newCount < itemCounts[i])) {
-                                dp[i] = newSum; choice[i] = j; itemCounts[i] = newCount;
-                            }
-                        }
-                    }
+            // HTML Resumen
+            let chipsHtml = data.breakdown['19L'] > 0 ? `<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold border border-blue-200">${data.breakdown['19L']}x 19L</span>` : '';
+            data.coins.forEach(c => {
+                if(data.breakdown[c.id] > 0) {
+                    chipsHtml += `<span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full text-sm font-bold border border-slate-300">${data.breakdown[c.id]}x ${c.name.replace('Botellón ', '').replace('Tapa de Silicón', 'Tapas')}</span>`;
                 }
+            });
 
-                let currentRemainder = R - dp[R];
-                if (currentRemainder < minRemainder) {
-                    minRemainder = currentRemainder; best19L = q19;
-                    bestBreakdown = {}; coins.forEach(c => bestBreakdown[c.id] = 0);
-                    let curr = R;
-                    while (curr > 0 && choice[curr] !== -1) {
-                        bestBreakdown[coins[choice[curr]].id]++;
-                        curr = curr - coins[choice[curr]].price;
-                    }
-                }
-                if (minRemainder === 0) break;
-            }
-
-            const finalBreakdown = { '19L': best19L, ...bestBreakdown };
-            const txns = generateTransactions(finalBreakdown, coins);
-
-            // --- RENDERIZADO COMPLETO DE LOS RESULTADOS ---
-            let html = `
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-left space-y-5 fade-in">
-                
-                <div class="pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                    <div>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Monto a Justificar en Cuaderno</p>
-                        <h2 class="text-3xl font-black text-slate-800 tracking-tight">Bs. ${missing.toLocaleString('es-VE', {minimumFractionDigits: 2})}</h2>
+            // HTML Transacciones (Acrodion)
+            let txnsHtml = data.transactions.map((txn, idx) => `
+                <div class="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+                    <div class="bg-slate-100 px-4 py-2 flex justify-between items-center border-b border-slate-200">
+                        <span class="font-bold text-slate-600 text-sm flex items-center gap-1"><i data-lucide="receipt" class="w-4 h-4"></i> Cliente #${idx + 1}</span>
+                        <span class="font-black text-blue-800">Bs. ${(txn.total / 100).toFixed(2)}</span>
                     </div>
-                    <div class="p-3 rounded-xl flex items-center gap-3 border-2 ${minRemainder === 0 ? 'bg-green-50 border-green-200 text-green-700' : 'bg-amber-50 border-amber-200 text-amber-700'}">
+                    <div class="p-4 space-y-2">
+                        ${Object.entries(txn.items).map(([id, item]) => `
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-slate-700 min-w-[20px]">${item.qty}x</span>
+                                    <span class="${id === '19L' ? 'text-blue-700 font-semibold' : 'text-slate-600'}">${item.name}</span>
+                                </div>
+                                <span class="text-slate-500">Bs. ${((item.qty * item.pricePerUnit) / 100).toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            calcState.innerHTML = `
+                <div class="mb-6 pb-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-end justify-between gap-4 fade-in">
+                    <div>
+                        <p class="text-sm text-slate-500 font-bold uppercase tracking-wider mb-1">Diferencia Total a Justificar</p>
+                        <h2 class="text-4xl font-black text-slate-800">Bs. ${data.missingBase.toFixed(2)}</h2>
+                    </div>
+                    <div class="p-3 rounded-xl flex items-center gap-3 border-2 ${data.remainderCents === 0 ? 'bg-green-50 border-green-200 text-green-700' : 'bg-amber-50 border-amber-200 text-amber-700'}">
+                        <i data-lucide="${data.remainderCents === 0 ? 'check-circle' : 'alert-circle'}" class="w-6 h-6"></i>
                         <div>
-                            <p class="text-[9px] font-black uppercase tracking-widest">${minRemainder === 0 ? '✓ Ajuste Perfecto' : '⚠ Desviación Mínima'}</p>
-                            <p class="font-bold text-xs">${minRemainder === 0 ? 'Simulación exacta lograda' : 'Sobrante irreductible: Bs. ' + (minRemainder / 100).toFixed(2)}</p>
+                            <p class="text-xs font-bold uppercase">${data.remainderCents === 0 ? 'Cuadre a Cero' : 'Sobrante'}</p>
+                            ${data.remainderCents !== 0 ? `<p class="font-black text-lg">Bs. ${(data.remainderCents / 100).toFixed(2)}</p>` : ''}
                         </div>
                     </div>
                 </div>
-
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <h3 class="text-[10px] font-black mb-2 text-slate-500 uppercase tracking-wider">Total de Artículos Agregados</h3>
-                    <div class="flex flex-wrap gap-2">`;
-            
-            if(finalBreakdown['19L'] > 0) html += `<span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-black shadow-sm">${finalBreakdown['19L']}x Recarga 19L</span>`;
-            coins.forEach(c => { 
-                if(finalBreakdown[c.id] > 0) {
-                    const colorMap = c.id === '12L' ? 'bg-sky-100 text-sky-800 border-sky-200' : c.id === 'Cap' ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-slate-200 text-slate-700 border-slate-300';
-                    html += `<span class="${colorMap} px-3 py-1 rounded-full text-xs font-bold border">${finalBreakdown[c.id]}x ${c.name}</span>`;
-                }
-            });
-            
-            html += `
-                    </div>
-                </div>
-
-                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-                    <button id="btnToggleTxns" class="w-full bg-slate-100 hover:bg-slate-200/80 px-4 py-3 flex justify-between items-center font-bold text-slate-700 transition-colors text-sm">
-                        <span class="flex items-center gap-2"><i data-lucide="receipt" class="w-4 h-4 text-blue-600"></i> Desglose de Clientes (${txns.length})</span>
-                        <i data-lucide="chevron-down" id="iconTxnToggle" class="w-4 h-4 transition-transform"></i>
-                    </button>
-                    
-                    <div id="txnContent" class="hidden bg-slate-50/50 p-4 space-y-3 max-h-[400px] overflow-y-auto border-t">`;
-            
-            txns.forEach((txn, i) => {
-                html += `
-                        <div class="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
-                            <div class="bg-slate-100 px-3 py-1.5 flex justify-between items-center border-b font-black text-xs text-slate-600">
-                                <span>👤 Venta Simulada #${i+1}</span>
-                                <span class="text-blue-700">Bs. ${(txn.total/100).toLocaleString('es-VE', {minimumFractionDigits: 2})}</span>
-                            </div>
-                            <div class="p-3 space-y-1.5">`;
-                Object.entries(txn.items).forEach(([id, data]) => {
-                    html += `
-                                <div class="flex justify-between text-xs items-center">
-                                    <span class="font-bold text-slate-700">${data.qty}x ${data.name}</span>
-                                    <span class="text-slate-400 font-semibold">Bs. ${(data.qty * data.pricePerUnit / 100).toLocaleString('es-VE', {minimumFractionDigits: 2})}</span>
-                                </div>`;
-                });
-                html += `
-                            </div>
-                        </div>`;
-            });
-
-            html += `
-                    </div>
-                </div>
                 
-                <p id="pulseHint" class="text-center text-xs text-blue-600 font-black uppercase tracking-wider animate-pulse cursor-pointer py-1 bg-blue-50 rounded-lg border border-blue-100">
-                    Toca aquí para ver cómo anotar en el cuaderno 👇
-                </p>
-            </div>`;
-            
-            container.innerHTML = html;
+                <div class="flex-1 fade-in">
+                    <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">Resumen de Artículos</h3>
+                        <div class="flex flex-wrap gap-2">${chipsHtml}</div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button id="btnToggleTxns" class="w-full bg-white p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="users" class="w-5 h-5 text-blue-600"></i>
+                                <div class="text-left">
+                                    <h3 class="font-bold text-slate-800 text-lg">Facturación Sugerida</h3>
+                                    <p class="text-sm text-slate-500">${data.transactions.length} recibos generados (Max 5 items c/u)</p>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-down" id="iconTxnToggle" class="w-5 h-5 text-slate-400"></i>
+                        </button>
+
+                        <div id="txnContent" class="hidden bg-slate-50 border-t border-slate-200 p-4 space-y-4 max-h-[500px] overflow-y-auto">
+                            ${data.transactions.length > 0 ? txnsHtml : '<p class="text-center text-slate-500 py-4">No hay transacciones.</p>'}
+                        </div>
+                    </div>
+                    <p id="pulseHint" class="text-center text-sm text-blue-600 mt-2 animate-pulse cursor-pointer">
+                        Toca aquí para ver cómo anotar en el cuaderno 👇
+                    </p>
+                </div>
+            `;
             lucide.createIcons();
 
-            // Configuración dinámica del acordeón de transacciones
+            // Evento Accordion
             const btnToggleTxns = document.getElementById('btnToggleTxns');
             const txnContent = document.getElementById('txnContent');
             const pulseHint = document.getElementById('pulseHint');
             const iconTxnToggle = document.getElementById('iconTxnToggle');
 
-            const toggleLogic = () => {
+            btnToggleTxns.addEventListener('click', () => {
                 txnContent.classList.toggle('hidden');
                 pulseHint.classList.add('hidden');
                 iconTxnToggle.setAttribute('data-lucide', txnContent.classList.contains('hidden') ? 'chevron-down' : 'chevron-up');
                 lucide.createIcons();
-            };
+            });
+            pulseHint.addEventListener('click', () => btnToggleTxns.click());
+        };
 
-            btnToggleTxns.addEventListener('click', toggleLogic);
-            pulseHint.addEventListener('click', toggleLogic);
-        }
+        // Forzar chequeo inicial
+        checkCalcButton();
     </script>
 </body>
 </html>
