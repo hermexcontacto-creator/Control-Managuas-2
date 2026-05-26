@@ -6,9 +6,29 @@
     <title>Cuadre Perfecto - Managua</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .fade-in { animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
-    <div class="max-w-6xl mx-auto space-y-6">
+<body class="bg-slate-50 min-h-screen p-4 md:p-8 font-sans text-slate-800 relative">
+
+    <a href="index.html" class="fixed top-4 left-4 z-50 bg-slate-800 text-white p-3 rounded-full shadow-xl hover:bg-slate-900 transition-all flex items-center justify-center" title="Volver al Menú">
+        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+    </a>
+
+    <div class="max-w-7xl mx-auto space-y-6 mt-12 md:mt-0">
         
         <div class="bg-blue-800 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
@@ -22,7 +42,9 @@
         </div>
 
         <div class="grid lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-4 space-y-6">
+            
+            <div class="lg:col-span-5 space-y-6">
+                
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-lg font-semibold mb-4 text-slate-700 flex items-center gap-2">
                         <i data-lucide="calculator" class="w-5 h-5 text-blue-600"></i> Ingreso de Datos
@@ -31,97 +53,178 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-600 mb-1">Monto en Caja Físico</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Bs.</span>
-                                <input type="number" id="amount1" placeholder="0.00" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl outline-none" oninput="checkInputs()">
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 text-slate-400 font-medium text-sm">Bs.</span>
+                                <input type="number" id="amount1" step="0.01" placeholder="0.00" class="w-full pl-10 pr-24 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors font-bold text-slate-700" oninput="checkInputs()">
+                                <button onclick="toggleTool('panel-billetes')" class="absolute right-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-2 py-1 rounded-lg text-xs flex items-center gap-1 transition-colors">
+                                    <i data-lucide="wallet" class="w-3.5 h-3.5"></i> Billetes
+                                </button>
                             </div>
                         </div>
-                        <a href="index.html" class="fixed top-4 left-4 z-50 bg-slate-800 text-white p-3 rounded-full shadow-xl hover:bg-slate-900 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    </a>
 
                         <div>
                             <label class="block text-sm font-medium text-slate-600 mb-1">Monto del Sistema</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Bs.</span>
-                                <input type="number" id="amount2" placeholder="0.00" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl outline-none" oninput="checkInputs()">
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 text-slate-400 font-medium text-sm">Bs.</span>
+                                <input type="number" id="amount2" step="0.01" placeholder="0.00" class="w-full pl-10 pr-24 py-2.5 border border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors font-bold text-slate-700" oninput="checkInputs()">
+                                <button onclick="toggleTool('panel-digital')" class="absolute right-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-2 py-1 rounded-lg text-xs flex items-center gap-1 transition-colors">
+                                    <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Puntos
+                                </button>
                             </div>
                         </div>
 
-                        <div class="pt-3 border-t border-slate-100 mt-2">
+                        <div class="pt-2">
                             <div class="flex justify-between items-center mb-1">
                                 <label class="block text-sm font-medium text-slate-600">Tasa BCV del Día</label>
-                                <span id="bcv-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"></span>
+                                <span id="bcv-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-slate-100 text-slate-500">Cargando...</span>
                             </div>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
-                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36.50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-300 rounded-xl outline-none" onblur="saveTasa(this.value)">
+                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36,50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-200 rounded-xl outline-none focus:border-blue-500 font-black text-blue-600" oninput="handleTasaChange(this.value)">
                             </div>
                         </div>
 
-                        <button id="calc-btn" onclick="handleCalculate()" disabled class="w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                        <button id="calc-btn" onclick="handleCalculate()" disabled class="w-full mt-2 bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-base">
                             Generar Maquillaje <i data-lucide="arrow-right" class="w-5 h-5"></i>
                         </button>
                     </div>
                 </div>
 
-                <div class="bg-slate-100 p-5 rounded-2xl border border-slate-200">
-                    <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
-                        <i data-lucide="info" class="w-4 h-4 text-blue-600"></i> Precios Activos
-                    </h3>
-                    <ul class="space-y-2 text-sm text-slate-600">
-                        <li class="flex justify-between font-bold text-blue-800"><span>⭐ Botellón 19L</span> <span>Bs. 230.00</span></li>
-                        <li class="flex justify-between"><span>Botellón 12L</span> <span>Bs. 180.00</span></li>
-                        <li class="flex justify-between"><span>Botellón 8L</span> <span>Bs. 90.00</span></li>
-                        <li class="flex justify-between"><span>Botellón 5L</span> <span>Bs. 80.00</span></li>
-                    </ul>
+                <div id="panel-billetes" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-slate-200 fade-in">
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b">
+                        <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm">
+                            <i data-lucide="wallet" class="text-emerald-600 w-4 h-4"></i> Desglose de Efectivo (Bs.)
+                        </h3>
+                        <button onclick="clearBilletes()" class="text-rose-500 text-xs font-bold hover:underline">Limpiar</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-12 text-xs font-bold text-slate-500">100:</span>
+                            <input type="number" data-denom="100" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-12 text-xs font-bold text-slate-500">50:</span>
+                            <input type="number" data-denom="50" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-12 text-xs font-bold text-slate-500">20:</span>
+                            <input type="number" data-denom="20" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-12 text-xs font-bold text-slate-500">10:</span>
+                            <input type="number" data-denom="10" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-12 text-xs font-bold text-slate-500">5:</span>
+                            <input type="number" data-denom="5" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-12 text-xs font-bold text-slate-500">2:</span>
+                            <input type="number" data-denom="2" class="bill-input w-full bg-slate-50 border rounded-lg p-1 text-center font-bold text-sm" placeholder="0" oninput="sumarBilletes()">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-dashed">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Billetes</span>
+                            <span id="total-billetes-txt" class="font-black text-emerald-600 text-base">Bs. 0,00</span>
+                        </div>
+                        <button onclick="applyCash()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm transition-colors">
+                            Insertar en Caja
+                        </button>
+                    </div>
                 </div>
+
+                <div id="panel-digital" class="hidden bg-white p-5 rounded-2xl shadow-sm border border-slate-200 fade-in">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b">
+                        <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm">
+                            <i data-lucide="credit-card" class="text-indigo-600 w-4 h-4"></i> Suma de Transacciones (POS/Pago Móvil)
+                        </h3>
+                        <button onclick="clearDigital()" class="text-rose-500 text-xs font-bold hover:underline">Limpiar</button>
+                    </div>
+                    <div class="space-y-2 mb-4 max-h-[180px] overflow-y-auto pr-1" id="digital-inputs-container">
+                        <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 1" oninput="sumarDigital()">
+                        <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 2" oninput="sumarDigital()">
+                        <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 3" oninput="sumarDigital()">
+                    </div>
+                    <button onclick="addDigitalRow()" class="w-full border-2 border-dashed border-slate-200 hover:border-slate-300 text-slate-500 py-1 rounded-xl text-xs font-bold mb-3 flex items-center justify-center gap-1 transition-all">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i> Añadir otra casilla
+                    </button>
+                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-dashed">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-slate-400 block">Suma Digital</span>
+                            <span id="total-digital-txt" class="font-black text-indigo-600 text-base">Bs. 0,00</span>
+                        </div>
+                        <button onclick="applyDigital()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm transition-colors">
+                            Insertar en Sistema
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="lg:col-span-8" id="results-container">
+            <div class="lg:col-span-7" id="results-container">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col items-center justify-center text-center">
                     <i data-lucide="receipt" class="w-20 h-20 text-blue-100 mb-4"></i>
                     <h3 class="text-xl font-bold text-slate-700">Listo para cuadrar</h3>
-                    <p class="text-slate-500 mt-2">Ingresa los montos y presiona calcular.</p>
+                    <p class="text-slate-500 mt-2 max-w-md text-sm">
+                        Ingresa los montos. Puedes usar las herramientas laterales para sumar tus billetes y tus puntos de venta fácilmente. El sistema calculará la combinación exacta para tu cuaderno.
+                    </p>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script>
-        // Inicializar iconos
+        // Inicialización de Iconos Lucide
         lucide.createIcons();
 
-        // --- SISTEMA LOCALSTORAGE COMPARTIDO ---
+        let saveTimeout = null;
+        let globalCashTotal = 0;
+        let globalDigitalTotal = 0;
+
+        // --- MANEJO DE TASA BCV Y LOCALSTORAGE COMPARTIDO ---
         window.onload = () => {
             const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
             const savedDate = localStorage.getItem('MANAGUA_BCV_DATE');
             if(savedRate) {
                 document.getElementById('tasaBcv').value = savedRate.replace('.', ',');
                 checkDate(savedDate);
+            } else {
+                updateBcvBadge("Vacía", "bg-rose-100 text-rose-700");
             }
         };
 
-        function saveTasa(val) {
-            if(!val) return;
-            const cleanVal = val.replace(/,/g, '.');
-            localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
-            localStorage.setItem('MANAGUA_BCV_DATE', Date.now());
-            checkDate(Date.now());
+        function handleTasaChange(val) {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                if(!val) {
+                    updateBcvBadge("Vacía", "bg-rose-100 text-rose-700");
+                    return;
+                }
+                const cleanVal = val.replace(/,/g, '.');
+                localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
+                localStorage.setItem('MANAGUA_BCV_DATE', Date.now());
+                checkDate(Date.now());
+            }, 600);
         }
 
         function checkDate(timestamp) {
-            const statusBadge = document.getElementById('bcv-status');
+            if(!timestamp) return;
             const today = new Date().toLocaleDateString();
             const saved = new Date(parseInt(timestamp)).toLocaleDateString();
             
             if(today === saved) {
-                statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-green-100 text-green-700";
-                statusBadge.innerText = "Al día";
+                updateBcvBadge("Al día", "bg-green-100 text-green-700 border border-green-200");
             } else {
-                statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-orange-100 text-orange-700 animate-pulse";
-                statusBadge.innerText = "Desactualizada";
+                updateBcvBadge("Anterior", "bg-amber-100 text-amber-700 border border-amber-200 animate-pulse");
             }
+        }
+
+        function updateBcvBadge(text, classes) {
+            const el = document.getElementById('bcv-status');
+            el.className = `text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${classes}`;
+            el.innerText = text;
         }
 
         function checkInputs() {
@@ -130,7 +233,81 @@
             document.getElementById('calc-btn').disabled = (!a1 && !a2);
         }
 
-        // --- MOTOR MATEMÁTICO DE MAQUILLAJE ---
+        function toggleTool(panelId) {
+            const panel = document.getElementById(panelId);
+            panel.classList.toggle('hidden');
+        }
+
+        // --- FUNCIONES AUXILIARES: CALCULADORA DE BILLETES ---
+        function sumarBilletes() {
+            let total = 0;
+            document.querySelectorAll('.bill-input').forEach(input => {
+                const denom = parseFloat(input.getAttribute('data-denom')) || 0;
+                const qty = parseInt(input.value) || 0;
+                total += (denom * qty);
+            });
+            globalCashTotal = total;
+            document.getElementById('total-billetes-txt').innerText = `Bs. ${total.toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
+        }
+
+        function clearBilletes() {
+            document.querySelectorAll('.bill-input').forEach(i => i.value = '');
+            globalCashTotal = 0;
+            document.getElementById('total-billetes-txt').innerText = `Bs. 0,00`;
+        }
+
+        function applyCash() {
+            if(globalCashTotal > 0) {
+                document.getElementById('amount1').value = globalCashTotal.toFixed(2);
+                checkInputs();
+                document.getElementById('panel-billetes').classList.add('hidden');
+            }
+        }
+
+        // --- FUNCIONES AUXILIARES: SUMA DIGITAL ---
+        function addDigitalRow() {
+            const container = document.getElementById('digital-inputs-container');
+            const count = container.querySelectorAll('.digital-input').length + 1;
+            const input = document.createElement('input');
+            input.type = "number";
+            input.step = "0.01";
+            input.className = "digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm fade-in";
+            input.placeholder = `Monto transacción ${count}`;
+            input.oninput = sumarDigital;
+            container.appendChild(input);
+            lucide.createIcons();
+        }
+
+        function sumarDigital() {
+            let total = 0;
+            document.querySelectorAll('.digital-input').forEach(input => {
+                total += (parseFloat(input.value) || 0);
+            });
+            globalDigitalTotal = total;
+            document.getElementById('total-digital-txt').innerText = `Bs. ${total.toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
+        }
+
+        function clearDigital() {
+            const container = document.getElementById('digital-inputs-container');
+            container.innerHTML = `
+                <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 1" oninput="sumarDigital()">
+                <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 2" oninput="sumarDigital()">
+                <input type="number" step="0.01" class="digital-input w-full bg-slate-50 border rounded-lg p-1.5 text-right font-bold text-sm" placeholder="Monto transacción 3" oninput="sumarDigital()">
+            `;
+            globalDigitalTotal = 0;
+            document.getElementById('total-digital-txt').innerText = `Bs. 0,00`;
+        }
+
+        function applyDigital() {
+            if(globalDigitalTotal > 0) {
+                document.getElementById('amount2').value = globalDigitalTotal.toFixed(2);
+                checkInputs();
+                document.getElementById('panel-digital').classList.add('hidden');
+            }
+        }
+
+
+        // --- MOTOR MATEMÁTICO DEL MAQUILLAJE ---
         function generateTransactions(breakdown, coins) {
             let pool = [];
             if (breakdown['19L'] > 0) {
@@ -142,6 +319,7 @@
                 }
             });
 
+            // Algoritmo de desorden aleatorio (Fischer-Yates)
             for (let i = pool.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -151,6 +329,7 @@
             let clientCounter = 1;
 
             while (pool.length > 0) {
+                // Clientes compran entre 1 y 5 artículos a la vez
                 const itemsToTake = Math.min(Math.floor(Math.random() * 5) + 1, pool.length);
                 const currentClientItems = pool.splice(0, itemsToTake);
                 let receiptBreakdown = {};
@@ -171,19 +350,31 @@
         function handleCalculate() {
             const val1 = parseFloat(document.getElementById('amount1').value) || 0;
             const val2 = parseFloat(document.getElementById('amount2').value) || 0;
-            const bcv = parseFloat(document.getElementById('tasaBcv').value.replace(',','.')) || 0;
+            const bcvInput = document.getElementById('tasaBcv').value;
+            const bcv = parseFloat(bcvInput.replace(/,/g, '.')) || 0;
             
             const missing = Math.abs(val1 - val2);
             const container = document.getElementById('results-container');
 
             if (missing === 0) {
-                container.innerHTML = `<div class="bg-white p-6 rounded-2xl border border-green-200 text-center h-full flex flex-col justify-center"><h2 class="text-2xl font-bold text-green-600">Cuadre Perfecto</h2><p>La caja está en cero.</p></div>`;
+                container.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl border-2 border-green-200 text-center h-full flex flex-col justify-center items-center p-8">
+                    <i data-lucide="check-circle" class="w-16 h-16 text-green-500 mb-2"></i>
+                    <h2 class="text-2xl font-black text-green-600">Caja Perfectamente Cuadrada</h2>
+                    <p class="text-slate-500 max-w-sm mt-1 text-sm">El monto físico y el monto del sistema coinciden con precisión milimétrica. No hay diferencias que justificar.</p>
+                </div>`;
+                lucide.createIcons();
                 return;
             }
 
             const targetCents = Math.round(missing * 100);
-            const coins = [ { id: '12L', name: 'Botellón 12L', price: 18000 }, { id: '8L', name: 'Botellón 8L', price: 9000 }, { id: '5L', name: 'Botellón 5L', price: 8000 } ];
+            const coins = [ 
+                { id: '12L', name: 'Botellón 12L', price: 18000 }, 
+                { id: '8L', name: 'Botellón 8L', price: 9000 }, 
+                { id: '5L', name: 'Botellón 5L', price: 8000 } 
+            ];
             
+            // Si el residuo tiene decimales y hay tasa BCV válida, activamos la simulación de tapas
             if (targetCents % 100 !== 0 && bcv > 0) {
                 const capPriceCents = Math.round(0.15 * bcv * 100);
                 if (capPriceCents > 0) coins.push({ id: 'Cap', name: 'Tapa', price: capPriceCents });
@@ -195,6 +386,7 @@
 
             let best19L = 0, minRemainder = Infinity, bestBreakdown = {};
 
+            // Algoritmo de Mochila Dinámica (DP) para buscar la combinación más natural
             for (let q19 = max19L; q19 >= min19L; q19--) {
                 let R = targetCents - (q19 * price19L);
                 let dp = new Int32Array(R + 1).fill(0);
@@ -232,33 +424,94 @@
             const finalBreakdown = { '19L': best19L, ...bestBreakdown };
             const txns = generateTransactions(finalBreakdown, coins);
 
-            // Renderizar resultados
+            // --- RENDERIZADO COMPLETO DE LOS RESULTADOS ---
             let html = `
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <div class="mb-6 pb-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                    <div><p class="text-sm text-slate-500 font-bold uppercase tracking-wider">A Justificar</p><h2 class="text-4xl font-black text-slate-800">Bs. ${missing.toFixed(2)}</h2></div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-left space-y-5 fade-in">
+                
+                <div class="pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Monto a Justificar en Cuaderno</p>
+                        <h2 class="text-3xl font-black text-slate-800 tracking-tight">Bs. ${missing.toLocaleString('es-VE', {minimumFractionDigits: 2})}</h2>
+                    </div>
                     <div class="p-3 rounded-xl flex items-center gap-3 border-2 ${minRemainder === 0 ? 'bg-green-50 border-green-200 text-green-700' : 'bg-amber-50 border-amber-200 text-amber-700'}">
-                        <div><p class="text-xs font-bold uppercase">${minRemainder === 0 ? 'Cuadre Exacto' : 'Sobrante'}</p>
-                        ${minRemainder !== 0 ? `<p class="font-black text-lg">Bs. ${(minRemainder / 100).toFixed(2)}</p>` : ''}</div>
+                        <div>
+                            <p class="text-[9px] font-black uppercase tracking-widest">${minRemainder === 0 ? '✓ Ajuste Perfecto' : '⚠ Desviación Mínima'}</p>
+                            <p class="font-bold text-xs">${minRemainder === 0 ? 'Simulación exacta lograda' : 'Sobrante irreductible: Bs. ' + (minRemainder / 100).toFixed(2)}</p>
+                        </div>
                     </div>
                 </div>
-                <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200"><h3 class="text-sm font-bold mb-3 uppercase tracking-wider">Total de Artículos</h3><div class="flex flex-wrap gap-2">`;
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h3 class="text-[10px] font-black mb-2 text-slate-500 uppercase tracking-wider">Total de Artículos Agregados</h3>
+                    <div class="flex flex-wrap gap-2">`;
             
-            if(finalBreakdown['19L'] > 0) html += `<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold border border-blue-200">${finalBreakdown['19L']}x 19L</span>`;
-            coins.forEach(c => { if(finalBreakdown[c.id] > 0) html += `<span class="bg-slate-200 px-3 py-1 rounded-full text-sm font-bold border border-slate-300">${finalBreakdown[c.id]}x ${c.name}</span>`; });
+            if(finalBreakdown['19L'] > 0) html += `<span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-black shadow-sm">${finalBreakdown['19L']}x Recarga 19L</span>`;
+            coins.forEach(c => { 
+                if(finalBreakdown[c.id] > 0) {
+                    const colorMap = c.id === '12L' ? 'bg-sky-100 text-sky-800 border-sky-200' : c.id === 'Cap' ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-slate-200 text-slate-700 border-slate-300';
+                    html += `<span class="${colorMap} px-3 py-1 rounded-full text-xs font-bold border">${finalBreakdown[c.id]}x ${c.name}</span>`;
+                }
+            });
             
-            html += `</div></div><div class="space-y-3">`;
+            html += `
+                    </div>
+                </div>
+
+                <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                    <button id="btnToggleTxns" class="w-full bg-slate-100 hover:bg-slate-200/80 px-4 py-3 flex justify-between items-center font-bold text-slate-700 transition-colors text-sm">
+                        <span class="flex items-center gap-2"><i data-lucide="receipt" class="w-4 h-4 text-blue-600"></i> Desglose de Clientes (${txns.length})</span>
+                        <i data-lucide="chevron-down" id="iconTxnToggle" class="w-4 h-4 transition-transform"></i>
+                    </button>
+                    
+                    <div id="txnContent" class="hidden bg-slate-50/50 p-4 space-y-3 max-h-[400px] overflow-y-auto border-t">`;
             
             txns.forEach((txn, i) => {
-                html += `<div class="bg-white border border-slate-200 rounded-lg shadow-sm"><div class="bg-slate-100 px-4 py-2 flex justify-between items-center border-b font-bold text-sm text-slate-600"><span>Cliente #${i+1}</span><span class="text-blue-800">Bs. ${(txn.total/100).toFixed(2)}</span></div><div class="p-4 space-y-2">`;
+                html += `
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
+                            <div class="bg-slate-100 px-3 py-1.5 flex justify-between items-center border-b font-black text-xs text-slate-600">
+                                <span>👤 Venta Simulada #${i+1}</span>
+                                <span class="text-blue-700">Bs. ${(txn.total/100).toLocaleString('es-VE', {minimumFractionDigits: 2})}</span>
+                            </div>
+                            <div class="p-3 space-y-1.5">`;
                 Object.entries(txn.items).forEach(([id, data]) => {
-                    html += `<div class="flex justify-between text-sm"><span class="font-semibold">${data.qty}x ${data.name}</span><span class="text-slate-500">Bs. ${(data.qty*data.pricePerUnit/100).toFixed(2)}</span></div>`;
+                    html += `
+                                <div class="flex justify-between text-xs items-center">
+                                    <span class="font-bold text-slate-700">${data.qty}x ${data.name}</span>
+                                    <span class="text-slate-400 font-semibold">Bs. ${(data.qty * data.pricePerUnit / 100).toLocaleString('es-VE', {minimumFractionDigits: 2})}</span>
+                                </div>`;
                 });
-                html += `</div></div>`;
+                html += `
+                            </div>
+                        </div>`;
             });
 
-            html += `</div></div>`;
+            html += `
+                    </div>
+                </div>
+                
+                <p id="pulseHint" class="text-center text-xs text-blue-600 font-black uppercase tracking-wider animate-pulse cursor-pointer py-1 bg-blue-50 rounded-lg border border-blue-100">
+                    Toca aquí para ver cómo anotar en el cuaderno 👇
+                </p>
+            </div>`;
+            
             container.innerHTML = html;
+            lucide.createIcons();
+
+            // Configuración dinámica del acordeón de transacciones
+            const btnToggleTxns = document.getElementById('btnToggleTxns');
+            const txnContent = document.getElementById('txnContent');
+            const pulseHint = document.getElementById('pulseHint');
+            const iconTxnToggle = document.getElementById('iconTxnToggle');
+
+            const toggleLogic = () => {
+                txnContent.classList.toggle('hidden');
+                pulseHint.classList.add('hidden');
+                iconTxnToggle.setAttribute('data-lucide', txnContent.classList.contains('hidden') ? 'chevron-down' : 'chevron-up');
+                lucide.createIcons();
+            };
+
+            btnToggleTxns.addEventListener('click', toggleLogic);
+            pulseHint.addEventListener('click', toggleLogic);
         }
     </script>
 </body>
