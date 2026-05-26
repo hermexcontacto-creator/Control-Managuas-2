@@ -115,7 +115,7 @@
                             </div>
                         </div>
 
-                        <!-- 3. Tasa BCV -->
+                        <!-- 3. Tasa BCV (LOCALSTORAGE COMPARTIDO) -->
                         <div class="pt-3 border-t border-slate-100 mt-2">
                             <div class="flex justify-between items-center mb-1">
                                 <label class="block text-sm font-medium text-slate-600">Tasa BCV del Día</label>
@@ -178,59 +178,65 @@
         </div>
     </div>
 
-    <!-- Lógica de la Aplicación con LocalStorage -->
+    <!-- Lógica JavaScript (Vanilla) -->
     <script>
         // Inicializar Iconos
         lucide.createIcons();
 
-        // 1. Estado Global
+        // Estado Global
         let isCalculating = false;
         let bcvStatus = 'loading'; // current, old, empty
+        let saveTimeout = null;
         
         // Elementos DOM
         const inputAmount1 = document.getElementById('amount1');
         const inputAmount2 = document.getElementById('amount2');
         const inputTasaBcv = document.getElementById('tasaBcv');
         const btnCalculate = document.getElementById('btnCalculate');
-
-        // 2. Lógica de Tasa BCV usando LocalStorage ('MANAGUA_BCV_RATE' y 'MANAGUA_BCV_DATE')
-        const loadBcvData = () => {
-            try {
-                const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
-                const savedTimestamp = localStorage.getItem('MANAGUA_BCV_DATE');
-                
-                if (savedRate && savedTimestamp) {
-                    inputTasaBcv.value = savedRate;
-                    updateCapPriceDisplay();
-                    checkBcvDate(parseInt(savedTimestamp));
-                } else {
-                    setBcvStatus('empty');
-                }
-            } catch (error) {
-                console.error("Error cargando la tasa de localStorage:", error);
+        
+        // --- 1. LÓGICA LOCALSTORAGE (UNIÓN CON POS AGUA PRO) ---
+        
+        // Cargar datos al iniciar
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
+            const savedDate = localStorage.getItem('MANAGUA_BCV_DATE');
+            
+            if (savedRate) {
+                // Formateamos para mostrarlo igual que como se guarda (con punto)
+                inputTasaBcv.value = savedRate;
+                updateCapPriceDisplay();
+                checkBcvDate(savedDate);
+            } else {
                 setBcvStatus('empty');
             }
+            checkCalcButton();
+        });
+
+        // Guardar en LocalStorage
+        const saveBcvToLocal = (rate) => {
+            if (!rate) return;
+            const cleanVal = rate.replace(',', '.'); // Asegurar formato limpio
+            const now = Date.now();
+            
+            localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
+            localStorage.setItem('MANAGUA_BCV_DATE', now);
+            checkBcvDate(now);
         };
 
-        const saveBcvToLocalStorage = (rate) => {
-            if (!rate) return;
-            try {
-                const now = Date.now();
-                localStorage.setItem('MANAGUA_BCV_RATE', rate);
-                localStorage.setItem('MANAGUA_BCV_DATE', now.toString());
-                checkBcvDate(now);
-            } catch (error) {
-                console.error("Error guardando la tasa en localStorage:", error);
+        // Verificar la fecha (Igual que en la POS App)
+        const checkBcvDate = (timestamp) => {
+            if (!timestamp) return;
+            const today = new Date().toLocaleDateString();
+            const saved = new Date(parseInt(timestamp)).toLocaleDateString();
+            
+            if (today === saved) {
+                setBcvStatus('current');
+            } else {
+                setBcvStatus('old');
             }
         };
 
-        const checkBcvDate = (timestamp) => {
-            const options = { timeZone: 'America/Caracas', year: 'numeric', month: 'numeric', day: 'numeric' };
-            const savedDateStr = new Date(timestamp).toLocaleDateString('en-US', options);
-            const currentDateStr = new Date().toLocaleDateString('en-US', options);
-            setBcvStatus(savedDateStr === currentDateStr ? 'current' : 'old');
-        };
-
+        // UI de la Tasa
         const setBcvStatus = (status) => {
             bcvStatus = status;
             const container = document.getElementById('bcvStatusContainer');
@@ -254,17 +260,28 @@
             lucide.createIcons();
         };
 
+        // Manejar escritura (Auto-guardado con delay similar a POS app)
         inputTasaBcv.addEventListener('input', (e) => {
             let val = e.target.value.replace(/,/g, '.').replace(/[^0-9.]/g, '');
             const parts = val.split('.');
             if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
             e.target.value = val;
             updateCapPriceDisplay();
-            if (!val) setBcvStatus('empty');
+            
+            if (!val) {
+                setBcvStatus('empty');
+            } else {
+                // Auto guardado al escribir
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(() => {
+                    saveBcvToLocal(val);
+                }, 800);
+            }
         });
 
+        // Guardado al quitar el foco por seguridad
         inputTasaBcv.addEventListener('blur', () => {
-            if (inputTasaBcv.value) saveBcvToLocalStorage(inputTasaBcv.value);
+            if (inputTasaBcv.value) saveBcvToLocal(inputTasaBcv.value);
         });
 
         const updateCapPriceDisplay = () => {
@@ -273,7 +290,7 @@
             display.innerText = rate ? `Bs. ${(0.15 * rate).toFixed(2)}` : 'Requiere BCV';
         };
 
-        // UI Tools (Puntos y Efectivo)
+        // --- 2. UI TOOLS (PUNTOS Y EFECTIVO) ---
         const btnTogglePos = document.getElementById('btnTogglePos');
         const btnToggleCash = document.getElementById('btnToggleCash');
         const panelPos = document.getElementById('panelPos');
@@ -355,6 +372,7 @@
             btnUseCash.disabled = total === 0;
         };
 
+        document.querySelectorAll('.cash-input').addEventListener = () => {}; // Mock para event delegation
         cashInputsContainer.addEventListener('input', (e) => {
             if (e.target.classList.contains('cash-input')) {
                 if (e.target.value !== '' && !/^\d+$/.test(e.target.value)) {
@@ -379,7 +397,7 @@
         inputAmount1.addEventListener('input', checkCalcButton);
         inputAmount2.addEventListener('input', checkCalcButton);
 
-        // --- NÚCLEO MATEMÁTICO ---
+        // --- 3. NÚCLEO MATEMÁTICO INTACTO ---
         const generateTransactions = (breakdown, coins) => {
             let pool = [];
             if (breakdown['19L'] > 0) {
@@ -440,7 +458,6 @@
                 const targetCents = Math.round(missing * 100);
                 const hasDecimals = targetCents % 100 !== 0;
 
-                // PRECIOS ACTUALIZADOS (Céntimos)
                 const coins = [
                     { id: '12L', name: 'Botellón 12L', price: 18000 },
                     { id: '8L', name: 'Botellón 8L', price: 9000 },
@@ -552,7 +569,6 @@
                 return;
             }
 
-            // HTML Resumen
             let chipsHtml = data.breakdown['19L'] > 0 ? `<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold border border-blue-200">${data.breakdown['19L']}x 19L</span>` : '';
             data.coins.forEach(c => {
                 if(data.breakdown[c.id] > 0) {
@@ -560,7 +576,6 @@
                 }
             });
 
-            // HTML Transacciones (Accordion)
             let txnsHtml = data.transactions.map((txn, idx) => `
                 <div class="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
                     <div class="bg-slate-100 px-4 py-2 flex justify-between items-center border-b border-slate-200">
@@ -625,7 +640,6 @@
             `;
             lucide.createIcons();
 
-            // Evento Accordion
             const btnToggleTxns = document.getElementById('btnToggleTxns');
             const txnContent = document.getElementById('txnContent');
             const pulseHint = document.getElementById('pulseHint');
@@ -633,16 +647,12 @@
 
             btnToggleTxns.addEventListener('click', () => {
                 txnContent.classList.toggle('hidden');
-                pulseHint.classList.add('hidden');
+                if(pulseHint) pulseHint.classList.add('hidden');
                 iconTxnToggle.setAttribute('data-lucide', txnContent.classList.contains('hidden') ? 'chevron-down' : 'chevron-up');
                 lucide.createIcons();
             });
-            pulseHint.addEventListener('click', () => btnToggleTxns.click());
+            if(pulseHint) pulseHint.addEventListener('click', () => btnToggleTxns.click());
         };
-
-        // Forzar carga inicial de datos desde LocalStorage
-        loadBcvData();
-        checkCalcButton();
     </script>
 </body>
 </html>
