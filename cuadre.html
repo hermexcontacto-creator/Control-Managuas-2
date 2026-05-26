@@ -178,33 +178,12 @@
         </div>
     </div>
 
-    <!-- Firebase y Lógica JavaScript -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+    <!-- Lógica de la Aplicación con LocalStorage -->
+    <script>
         // Inicializar Iconos
         lucide.createIcons();
 
-        // 1. Configuración Firebase (La solicitada por el usuario + Fallback para entorno seguro)
-        const userConfig = {
-            apiKey: "AIzaSyB-xxxxxxxxx", // Nota: Esto fallará si se usa en local, requiere clave real
-            authDomain: "sistemas-managua.firebaseapp.com",
-            projectId: "sistemas-managua",
-            storageBucket: "sistemas-managua.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdefg"
-        };
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : userConfig;
-        
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-        // 2. Estado Global
-        let currentUser = null;
+        // 1. Estado Global
         let isCalculating = false;
         let bcvStatus = 'loading'; // current, old, empty
         
@@ -213,54 +192,35 @@
         const inputAmount2 = document.getElementById('amount2');
         const inputTasaBcv = document.getElementById('tasaBcv');
         const btnCalculate = document.getElementById('btnCalculate');
-        
-        // Firebase Auth y Carga
-        const initAuth = async () => {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Auth error:", error);
-            }
-        };
-        initAuth();
 
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) loadBcvData();
-        });
-
-        // Lógica de Tasa BCV
-        const loadBcvData = async () => {
-            if (!currentUser) return;
+        // 2. Lógica de Tasa BCV usando LocalStorage ('MANAGUA_BCV_RATE' y 'MANAGUA_BCV_DATE')
+        const loadBcvData = () => {
             try {
-                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'bcvData');
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    inputTasaBcv.value = data.rate;
+                const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
+                const savedTimestamp = localStorage.getItem('MANAGUA_BCV_DATE');
+                
+                if (savedRate && savedTimestamp) {
+                    inputTasaBcv.value = savedRate;
                     updateCapPriceDisplay();
-                    checkBcvDate(data.timestamp);
+                    checkBcvDate(parseInt(savedTimestamp));
                 } else {
                     setBcvStatus('empty');
                 }
             } catch (error) {
-                console.error("Error loading BCV:", error);
+                console.error("Error cargando la tasa de localStorage:", error);
+                setBcvStatus('empty');
             }
         };
 
-        const saveBcvToFirebase = async (rate) => {
-            if (!currentUser || !rate) return;
+        const saveBcvToLocalStorage = (rate) => {
+            if (!rate) return;
             try {
-                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'bcvData');
                 const now = Date.now();
-                await setDoc(docRef, { rate: rate, timestamp: now });
+                localStorage.setItem('MANAGUA_BCV_RATE', rate);
+                localStorage.setItem('MANAGUA_BCV_DATE', now.toString());
                 checkBcvDate(now);
             } catch (error) {
-                console.error("Error saving BCV:", error);
+                console.error("Error guardando la tasa en localStorage:", error);
             }
         };
 
@@ -304,7 +264,7 @@
         });
 
         inputTasaBcv.addEventListener('blur', () => {
-            if (inputTasaBcv.value) saveBcvToFirebase(inputTasaBcv.value);
+            if (inputTasaBcv.value) saveBcvToLocalStorage(inputTasaBcv.value);
         });
 
         const updateCapPriceDisplay = () => {
@@ -395,7 +355,6 @@
             btnUseCash.disabled = total === 0;
         };
 
-        document.querySelectorAll('.cash-input').addEventListener = () => {}; // Mock para event delegation
         cashInputsContainer.addEventListener('input', (e) => {
             if (e.target.classList.contains('cash-input')) {
                 if (e.target.value !== '' && !/^\d+$/.test(e.target.value)) {
@@ -601,7 +560,7 @@
                 }
             });
 
-            // HTML Transacciones (Acrodion)
+            // HTML Transacciones (Accordion)
             let txnsHtml = data.transactions.map((txn, idx) => `
                 <div class="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
                     <div class="bg-slate-100 px-4 py-2 flex justify-between items-center border-b border-slate-200">
@@ -681,7 +640,8 @@
             pulseHint.addEventListener('click', () => btnToggleTxns.click());
         };
 
-        // Forzar chequeo inicial
+        // Forzar carga inicial de datos desde LocalStorage
+        loadBcvData();
         checkCalcButton();
     </script>
 </body>
