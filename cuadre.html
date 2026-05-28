@@ -6,10 +6,26 @@
     <title>Cuadre Perfecto - Managua</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .fade-in { animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
-    <div class="max-w-6xl mx-auto space-y-6">
-        
+<body class="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800 relative">
+
+    <a href="index.html" class="fixed top-4 left-4 z-50 bg-slate-800 text-white p-3 rounded-full shadow-xl hover:bg-slate-900 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </a>
+
+    <div class="max-w-6xl mx-auto space-y-6 pt-12 md:pt-0">
         <div class="bg-blue-800 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-2">
@@ -29,11 +45,45 @@
                     </h2>
                     
                     <div class="space-y-4">
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="toggleHelper('efectivo')" class="flex items-center justify-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-2 px-3 rounded-xl border border-emerald-200 text-xs transition-colors">
+                                <i data-lucide="wallet" class="w-4 h-4"></i> Contar Efectivo
+                            </button>
+                            <button onclick="toggleHelper('puntos')" class="flex items-center justify-center gap-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 px-3 rounded-xl border border-indigo-200 text-xs transition-colors">
+                                <i data-lucide="credit-card" class="w-4 h-4"></i> Sumar Puntos
+                            </button>
+                        </div>
+
+                        <div id="panel-efectivo" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3 space-y-2 fade-in">
+                            <h4 class="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1">💵 Desglose de Billetes (Bs)</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">100</span><input type="number" id="b100" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
+                                <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">50</span><input type="number" id="b50" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
+                                <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">20</span><input type="number" id="b20" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
+                                <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">10</span><input type="number" id="b10" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
+                                <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">5</span><input type="number" id="b5" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
+                            </div>
+                            <div class="flex justify-between items-center pt-2 border-t border-emerald-200">
+                                <span class="text-xs font-black text-emerald-800">Total: Bs. <span id="total-cash-helper">0,00</span></span>
+                                <button onclick="applyCashHelper()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] uppercase px-2 py-1 rounded-lg transition-colors">Cargar</button>
+                            </div>
+                        </div>
+
+                        <div id="panel-puntos" class="hidden bg-indigo-50 border border-indigo-200 rounded-xl p-3 space-y-2 fade-in">
+                            <h4 class="text-xs font-bold text-indigo-800 uppercase tracking-wider flex items-center gap-1">💳 Suma de Puntos / Digital</h4>
+                            <textarea id="puntos-input" rows="2" class="w-full p-2 text-xs border rounded-lg outline-none focus:border-indigo-400 text-slate-700" placeholder="Escribe montos separados por espacios (Ej: 120 43.5 250)" oninput="calcPuntosHelper()"></textarea>
+                            <div class="flex justify-between items-center pt-1">
+                                <span class="text-xs font-black text-indigo-800">Total: Bs. <span id="total-puntos-helper">0,00</span></span>
+                                <button onclick="applyPuntosHelper()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] uppercase px-2 py-1 rounded-lg transition-colors">Cargar</button>
+                            </div>
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-slate-600 mb-1">Monto en Caja Físico</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Bs.</span>
-                                <input type="number" id="amount1" placeholder="0.00" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl outline-none" oninput="checkInputs()">
+                                <input type="number" id="amount1" placeholder="0.00" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors" oninput="checkInputs()">
                             </div>
                         </div>
 
@@ -41,7 +91,7 @@
                             <label class="block text-sm font-medium text-slate-600 mb-1">Monto del Sistema</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Bs.</span>
-                                <input type="number" id="amount2" placeholder="0.00" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl outline-none" oninput="checkInputs()">
+                                <input type="number" id="amount2" placeholder="0.00" class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors" oninput="checkInputs()">
                             </div>
                         </div>
 
@@ -52,7 +102,7 @@
                             </div>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
-                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36.50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-300 rounded-xl outline-none" onblur="saveTasa(this.value)">
+                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36.50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors" oninput="saveTasa(this.value)">
                             </div>
                         </div>
 
@@ -86,8 +136,9 @@
     </div>
 
     <script>
-        // Inicializar iconos
         lucide.createIcons();
+        let currentCashTotal = 0;
+        let currentPuntosTotal = 0;
 
         // --- SISTEMA LOCALSTORAGE COMPARTIDO ---
         window.onload = () => {
@@ -100,15 +151,18 @@
         };
 
         function saveTasa(val) {
-            if(!val) return;
-            const cleanVal = val.replace(/,/g, '.');
-            localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
-            localStorage.setItem('MANAGUA_BCV_DATE', Date.now());
-            checkDate(Date.now());
+            clearTimeout(window.tasaTimeout);
+            window.tasaTimeout = setTimeout(() => {
+                const cleanVal = val.replace(/,/g, '.');
+                localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
+                localStorage.setItem('MANAGUA_BCV_DATE', Date.now());
+                checkDate(Date.now());
+            }, 500);
         }
 
         function checkDate(timestamp) {
             const statusBadge = document.getElementById('bcv-status');
+            if(!statusBadge) return;
             const today = new Date().toLocaleDateString();
             const saved = new Date(parseInt(timestamp)).toLocaleDateString();
             
@@ -116,8 +170,8 @@
                 statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-green-100 text-green-700";
                 statusBadge.innerText = "Al día";
             } else {
-                statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-orange-100 text-orange-700 animate-pulse";
-                statusBadge.innerText = "Desactualizada";
+                statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-orange-100 text-orange-700";
+                statusBadge.innerText = "Tasa anterior";
             }
         }
 
@@ -125,6 +179,50 @@
             const a1 = document.getElementById('amount1').value;
             const a2 = document.getElementById('amount2').value;
             document.getElementById('calc-btn').disabled = (!a1 && !a2);
+        }
+
+        // --- MANEJO DE LOS PANELES DESPLEGABLES (HELPERS) ---
+        function toggleHelper(type) {
+            const panelCash = document.getElementById('panel-efectivo');
+            const panelPuntos = document.getElementById('panel-puntos');
+            if (type === 'efectivo') {
+                panelCash.classList.toggle('hidden');
+                panelPuntos.classList.add('hidden');
+            } else {
+                panelPuntos.classList.toggle('hidden');
+                panelCash.classList.add('hidden');
+            }
+        }
+
+        function calcCashHelper() {
+            const n100 = parseInt(document.getElementById('b100').value) || 0;
+            const n50 = parseInt(document.getElementById('b50').value) || 0;
+            const n20 = parseInt(document.getElementById('b20').value) || 0;
+            const n10 = parseInt(document.getElementById('b10').value) || 0;
+            const n5 = parseInt(document.getElementById('b5').value) || 0;
+            
+            currentCashTotal = (n100 * 100) + (n50 * 50) + (n20 * 20) + (n10 * 10) + (n5 * 5);
+            document.getElementById('total-cash-helper').innerText = currentCashTotal.toLocaleString('es-VE', { minimumFractionDigits: 2 });
+        }
+
+        function applyCashHelper() {
+            document.getElementById('amount1').value = currentCashTotal || '';
+            document.getElementById('panel-efectivo').classList.add('hidden');
+            checkInputs();
+        }
+
+        function calcPuntosHelper() {
+            const text = document.getElementById('puntos-input').value;
+            // Busca números enteros o decimales separados por espacios/saltos de línea
+            const numbers = text.replace(/,/g, '.').match(/[-+]?[0-9]*\.?[0-9]+/g) || [];
+            currentPuntosTotal = numbers.reduce((sum, num) => sum + parseFloat(num), 0);
+            document.getElementById('total-puntos-helper').innerText = currentPuntosTotal.toLocaleString('es-VE', { minimumFractionDigits: 2 });
+        }
+
+        function applyPuntosHelper() {
+            document.getElementById('amount2').value = currentPuntosTotal || '';
+            document.getElementById('panel-puntos').classList.add('hidden');
+            checkInputs();
         }
 
         // --- MOTOR MATEMÁTICO DE MAQUILLAJE ---
@@ -148,7 +246,7 @@
             let clientCounter = 1;
 
             while (pool.length > 0) {
-                const itemsToTake = Math.min(Math.floor(Math.random() * 5) + 1, pool.length);
+                const itemsToTake = Math.min(Math.floor(Math.random() * 4) + 1, pool.length);
                 const currentClientItems = pool.splice(0, itemsToTake);
                 let receiptBreakdown = {};
                 let receiptTotal = 0;
@@ -174,7 +272,8 @@
             const container = document.getElementById('results-container');
 
             if (missing === 0) {
-                container.innerHTML = `<div class="bg-white p-6 rounded-2xl border border-green-200 text-center h-full flex flex-col justify-center"><h2 class="text-2xl font-bold text-green-600">Cuadre Perfecto</h2><p>La caja está en cero.</p></div>`;
+                container.innerHTML = `<div class="bg-white p-6 rounded-2xl border border-green-200 text-center h-full flex flex-col justify-center items-center"><i data-lucide="check-circle" class="w-16 h-16 text-green-500 mb-3"></i><h2 class="text-2xl font-bold text-green-600">Cuadre Perfecto</h2><p class="text-slate-500 mt-1">Los montos coinciden exactamente en el sistema y la caja física.</p></div>`;
+                lucide.createIcons();
                 return;
             }
 
@@ -229,33 +328,56 @@
             const finalBreakdown = { '19L': best19L, ...bestBreakdown };
             const txns = generateTransactions(finalBreakdown, coins);
 
-            // Renderizar resultados
             let html = `
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 fade-in">
                 <div class="mb-6 pb-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                    <div><p class="text-sm text-slate-500 font-bold uppercase tracking-wider">A Justificar</p><h2 class="text-4xl font-black text-slate-800">Bs. ${missing.toFixed(2)}</h2></div>
+                    <div><p class="text-sm text-slate-500 font-bold uppercase tracking-wider">A Justificar en Cuaderno</p><h2 class="text-4xl font-black text-slate-800">Bs. ${missing.toFixed(2)}</h2></div>
                     <div class="p-3 rounded-xl flex items-center gap-3 border-2 ${minRemainder === 0 ? 'bg-green-50 border-green-200 text-green-700' : 'bg-amber-50 border-amber-200 text-amber-700'}">
-                        <div><p class="text-xs font-bold uppercase">${minRemainder === 0 ? 'Cuadre Exacto' : 'Sobrante'}</p>
+                        <div><p class="text-xs font-bold uppercase">${minRemainder === 0 ? 'Cuadre Exacto' : 'Sobrante Mínimo'}</p>
                         ${minRemainder !== 0 ? `<p class="font-black text-lg">Bs. ${(minRemainder / 100).toFixed(2)}</p>` : ''}</div>
                     </div>
                 </div>
-                <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200"><h3 class="text-sm font-bold mb-3 uppercase tracking-wider">Total de Artículos</h3><div class="flex flex-wrap gap-2">`;
+                <div class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200"><h3 class="text-sm font-bold mb-3 uppercase tracking-wider text-slate-600">Total de Artículos Combinados</h3><div class="flex flex-wrap gap-2">`;
             
             if(finalBreakdown['19L'] > 0) html += `<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold border border-blue-200">${finalBreakdown['19L']}x 19L</span>`;
             coins.forEach(c => { if(finalBreakdown[c.id] > 0) html += `<span class="bg-slate-200 px-3 py-1 rounded-full text-sm font-bold border border-slate-300">${finalBreakdown[c.id]}x ${c.name}</span>`; });
             
-            html += `</div></div><div class="space-y-3">`;
+            html += `</div></div>
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-4 flex justify-between items-center cursor-pointer" id="btnToggleTxns">
+                        <span class="text-xs font-black text-blue-800 uppercase tracking-wider flex items-center gap-2"><i data-lucide="receipt" class="w-4 h-4"></i> Ver Desglose por Clientes</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-blue-800" id="iconTxnToggle"></i>
+                    </div>
+                    <div class="space-y-3 hidden" id="txnContent">`;
             
             txns.forEach((txn, i) => {
-                html += `<div class="bg-white border border-slate-200 rounded-lg shadow-sm"><div class="bg-slate-100 px-4 py-2 flex justify-between items-center border-b font-bold text-sm text-slate-600"><span>Cliente #${i+1}</span><span class="text-blue-800">Bs. ${(txn.total/100).toFixed(2)}</span></div><div class="p-4 space-y-2">`;
+                html += `<div class="bg-white border border-slate-200 rounded-lg shadow-sm"><div class="bg-slate-50 px-4 py-2 flex justify-between items-center border-b font-bold text-xs text-slate-600"><span>Cliente #${i+1} (${txn.id})</span><span class="text-blue-800">Bs. ${(txn.total/100).toFixed(2)}</span></div><div class="p-3 space-y-1">`;
                 Object.entries(txn.items).forEach(([id, data]) => {
-                    html += `<div class="flex justify-between text-sm"><span class="font-semibold">${data.qty}x ${data.name}</span><span class="text-slate-500">Bs. ${(data.qty*data.pricePerUnit/100).toFixed(2)}</span></div>`;
+                    html += `<div class="flex justify-between text-xs"><span class="font-semibold">${data.qty}x ${data.name}</span><span class="text-slate-500">Bs. ${(data.qty*data.pricePerUnit/100).toFixed(2)}</span></div>`;
                 });
                 html += `</div></div>`;
             });
 
-            html += `</div></div>`;
+            html += `</div>
+                    <p id=\"pulseHint\" class=\"text-center text-sm text-blue-600 mt-2 animate-pulse cursor-pointer\">Toca arriba para ver cómo anotar en el cuaderno 👇</p>
+            </div>`;
+            
             container.innerHTML = html;
+            lucide.createIcons();
+
+            const btnToggleTxns = document.getElementById('btnToggleTxns');
+            const txnContent = document.getElementById('txnContent');
+            const pulseHint = document.getElementById('pulseHint');
+            const iconTxnToggle = document.getElementById('iconTxnToggle');
+
+            const toggleAction = () => {
+                txnContent.classList.toggle('hidden');
+                pulseHint.classList.add('hidden');
+                iconTxnToggle.setAttribute('data-lucide', txnContent.classList.contains('hidden') ? 'chevron-down' : 'chevron-up');
+                lucide.createIcons();
+            };
+
+            btnToggleTxns.addEventListener('click', toggleAction);
+            pulseHint.addEventListener('click', toggleAction);
         }
     </script>
 </body>
