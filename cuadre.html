@@ -21,11 +21,13 @@
 </head>
 <body class="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800 relative">
 
+    <!-- Botón de Retorno -->
     <a href="index.html" class="fixed top-4 left-4 z-50 bg-slate-800 text-white p-3 rounded-full shadow-xl hover:bg-slate-900 transition-all">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
     </a>
 
     <div class="max-w-6xl mx-auto space-y-6 pt-12 md:pt-0">
+        <!-- Header -->
         <div class="bg-blue-800 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-2">
@@ -38,6 +40,7 @@
         </div>
 
         <div class="grid lg:grid-cols-12 gap-6">
+            <!-- Columna de Entrada -->
             <div class="lg:col-span-4 space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <h2 class="text-lg font-semibold mb-4 text-slate-700 flex items-center gap-2">
@@ -46,6 +49,7 @@
                     
                     <div class="space-y-4">
                         
+                        <!-- BOTONES DE AYUDA -->
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="toggleHelper('efectivo')" class="flex items-center justify-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-2 px-3 rounded-xl border border-emerald-200 text-xs transition-colors">
                                 <i data-lucide="wallet" class="w-4 h-4"></i> Contar Efectivo
@@ -55,14 +59,16 @@
                             </button>
                         </div>
 
+                        <!-- PANEL DESPLEGABLE: CONTADOR DE EFECTIVO (Billetes Actualizados) -->
                         <div id="panel-efectivo" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3 space-y-2 fade-in">
                             <h4 class="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1">💵 Desglose de Billetes (Bs)</h4>
                             <div class="grid grid-cols-2 gap-2">
+                                <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">500</span><input type="number" id="b500" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
+                                <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">200</span><input type="number" id="b200" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
                                 <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">100</span><input type="number" id="b100" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
                                 <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">50</span><input type="number" id="b50" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
                                 <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">20</span><input type="number" id="b20" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
                                 <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">10</span><input type="number" id="b10" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
-                                <div class="flex items-center gap-1"><span class="text-xs font-bold w-8 text-emerald-600">5</span><input type="number" id="b5" class="w-full p-1 text-xs border rounded-lg text-center" placeholder="0" oninput="calcCashHelper()"></div>
                             </div>
                             <div class="flex justify-between items-center pt-2 border-t border-emerald-200">
                                 <span class="text-xs font-black text-emerald-800">Total: Bs. <span id="total-cash-helper">0,00</span></span>
@@ -70,15 +76,26 @@
                             </div>
                         </div>
 
+                        <!-- PANEL DESPLEGABLE: SUMADOR DE PUNTOS (Venezuela y Banesco) -->
                         <div id="panel-puntos" class="hidden bg-indigo-50 border border-indigo-200 rounded-xl p-3 space-y-2 fade-in">
-                            <h4 class="text-xs font-bold text-indigo-800 uppercase tracking-wider flex items-center gap-1">💳 Suma de Puntos / Digital</h4>
-                            <textarea id="puntos-input" rows="2" class="w-full p-2 text-xs border rounded-lg outline-none focus:border-indigo-400 text-slate-700" placeholder="Escribe montos separados por espacios (Ej: 120 43.5 250)" oninput="calcPuntosHelper()"></textarea>
-                            <div class="flex justify-between items-center pt-1">
+                            <h4 class="text-xs font-bold text-indigo-800 uppercase tracking-wider flex items-center gap-1">💳 Suma de Puntos</h4>
+                            <div class="grid grid-cols-2 gap-2 mt-2">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Venezuela</label>
+                                    <input type="number" id="p-venezuela" class="w-full p-2 text-xs border rounded-lg text-center outline-none focus:border-indigo-400 text-slate-700" placeholder="0.00" oninput="calcPuntosHelper()">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Banesco</label>
+                                    <input type="number" id="p-banesco" class="w-full p-2 text-xs border rounded-lg text-center outline-none focus:border-indigo-400 text-slate-700" placeholder="0.00" oninput="calcPuntosHelper()">
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-2 mt-1 border-t border-indigo-200">
                                 <span class="text-xs font-black text-indigo-800">Total: Bs. <span id="total-puntos-helper">0,00</span></span>
                                 <button onclick="applyPuntosHelper()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] uppercase px-2 py-1 rounded-lg transition-colors">Cargar</button>
                             </div>
                         </div>
 
+                        <!-- ENTRADAS PRINCIPALES -->
                         <div>
                             <label class="block text-sm font-medium text-slate-600 mb-1">Monto en Caja Físico</label>
                             <div class="relative">
@@ -102,7 +119,7 @@
                             </div>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
-                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36.50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors" oninput="saveTasa(this.value)">
+                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36.50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors" oninput="saveTasa(this.value)" onblur="saveTasa(this.value)">
                             </div>
                         </div>
 
@@ -125,6 +142,7 @@
                 </div>
             </div>
 
+            <!-- Columna de Resultados -->
             <div class="lg:col-span-8" id="results-container">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col items-center justify-center text-center">
                     <i data-lucide="receipt" class="w-20 h-20 text-blue-100 mb-4"></i>
@@ -136,12 +154,14 @@
     </div>
 
     <script>
+        // Inicializar iconos
         lucide.createIcons();
         let currentCashTotal = 0;
         let currentPuntosTotal = 0;
 
-        // --- SISTEMA LOCALSTORAGE COMPARTIDO ---
+        // --- SISTEMA LOCALSTORAGE COMPARTIDO (MÉTODO SEGURO DIRECTO) ---
         window.onload = () => {
+            lucide.createIcons();
             const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
             const savedDate = localStorage.getItem('MANAGUA_BCV_DATE');
             if(savedRate) {
@@ -151,13 +171,11 @@
         };
 
         function saveTasa(val) {
-            clearTimeout(window.tasaTimeout);
-            window.tasaTimeout = setTimeout(() => {
-                const cleanVal = val.replace(/,/g, '.');
-                localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
-                localStorage.setItem('MANAGUA_BCV_DATE', Date.now());
-                checkDate(Date.now());
-            }, 500);
+            if(!val) return;
+            const cleanVal = val.replace(/,/g, '.');
+            localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
+            localStorage.setItem('MANAGUA_BCV_DATE', Date.now());
+            checkDate(Date.now());
         }
 
         function checkDate(timestamp) {
@@ -170,8 +188,8 @@
                 statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-green-100 text-green-700";
                 statusBadge.innerText = "Al día";
             } else {
-                statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-orange-100 text-orange-700";
-                statusBadge.innerText = "Tasa anterior";
+                statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-orange-100 text-orange-700 animate-pulse";
+                statusBadge.innerText = "Desactualizada";
             }
         }
 
@@ -194,14 +212,16 @@
             }
         }
 
+        // Contador actualizado con el cono monetario vigente
         function calcCashHelper() {
+            const n500 = parseInt(document.getElementById('b500').value) || 0;
+            const n200 = parseInt(document.getElementById('b200').value) || 0;
             const n100 = parseInt(document.getElementById('b100').value) || 0;
-            const n50 = parseInt(document.getElementById('b50').value) || 0;
-            const n20 = parseInt(document.getElementById('b20').value) || 0;
-            const n10 = parseInt(document.getElementById('b10').value) || 0;
-            const n5 = parseInt(document.getElementById('b5').value) || 0;
+            const n50  = parseInt(document.getElementById('b50').value) || 0;
+            const n20  = parseInt(document.getElementById('b20').value) || 0;
+            const n10  = parseInt(document.getElementById('b10').value) || 0;
             
-            currentCashTotal = (n100 * 100) + (n50 * 50) + (n20 * 20) + (n10 * 10) + (n5 * 5);
+            currentCashTotal = (n500 * 500) + (n200 * 200) + (n100 * 100) + (n50 * 50) + (n20 * 20) + (n10 * 10);
             document.getElementById('total-cash-helper').innerText = currentCashTotal.toLocaleString('es-VE', { minimumFractionDigits: 2 });
         }
 
@@ -211,11 +231,12 @@
             checkInputs();
         }
 
+        // Sumador de Puntos actualizado (Venezuela y Banesco)
         function calcPuntosHelper() {
-            const text = document.getElementById('puntos-input').value;
-            // Busca números enteros o decimales separados por espacios/saltos de línea
-            const numbers = text.replace(/,/g, '.').match(/[-+]?[0-9]*\.?[0-9]+/g) || [];
-            currentPuntosTotal = numbers.reduce((sum, num) => sum + parseFloat(num), 0);
+            const v = parseFloat(document.getElementById('p-venezuela').value) || 0;
+            const b = parseFloat(document.getElementById('p-banesco').value) || 0;
+            
+            currentPuntosTotal = v + b;
             document.getElementById('total-puntos-helper').innerText = currentPuntosTotal.toLocaleString('es-VE', { minimumFractionDigits: 2 });
         }
 
@@ -225,7 +246,7 @@
             checkInputs();
         }
 
-        // --- MOTOR MATEMÁTICO DE MAQUILLAJE ---
+        // --- MOTOR MATEMÁTICO DE MAQUILLAJE (Intacto) ---
         function generateTransactions(breakdown, coins) {
             let pool = [];
             if (breakdown['19L'] > 0) {
@@ -358,7 +379,7 @@
             });
 
             html += `</div>
-                    <p id=\"pulseHint\" class=\"text-center text-sm text-blue-600 mt-2 animate-pulse cursor-pointer\">Toca arriba para ver cómo anotar en el cuaderno 👇</p>
+                    <p id="pulseHint" class="text-center text-sm text-blue-600 mt-2 animate-pulse cursor-pointer">Toca arriba para ver cómo anotar en el cuaderno 👇</p>
             </div>`;
             
             container.innerHTML = html;
