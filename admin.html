@@ -213,15 +213,26 @@
                 tapa: parseFloat(document.getElementById('precio_tapa').value)
             };
 
-            // AQUÍ IRÁ EL CÓDIGO FETCH HACIA GOOGLE APPS SCRIPT
-            console.log("Datos listos para enviar al Excel:", preciosNuevos);
+            // Pega tu enlace largo de Apps Script aquí adentro:
+            const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec"; 
 
-            // Simulación de éxito (esto lo cambiaremos cuando conectemos la BD)
-            setTimeout(() => {
-                alert("✅ Precios guardados exitosamente en la nube. Las demás aplicaciones se actualizarán automáticamente.");
+            console.log("Enviando datos al servidor...");
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(preciosNuevos)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("✅ Precios actualizados exitosamente en la Base de Datos Global.");
                 btn.innerHTML = textoOriginal;
                 btn.disabled = false;
-            }, 1500);
+            })
+            .catch(error => {
+                alert("❌ Hubo un error de conexión: " + error);
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+            });
         }
     </script>
 </body>
