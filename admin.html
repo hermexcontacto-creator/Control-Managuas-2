@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistemas Managua - Admin Precios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Quitar flechas de los inputs numéricos */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-50 flex flex-col items-center p-4 md:p-8 relative overflow-x-hidden selection:bg-cyan-500 selection:text-white pb-28">
+
+    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <a href="index.html" class="absolute top-4 left-4 glass-card p-3 rounded-xl flex items-center justify-center hover:bg-slate-800/90 transition-all z-20 active:scale-95 text-slate-300 hover:text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+        </svg>
+    </a>
+
+    <div class="w-full max-w-md relative z-10 flex flex-col mt-16 md:mt-4">
+        
+        <header class="text-center mb-8 fade-in-up">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-black tracking-tight mb-1">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-cyan-400">
+                    Panel de Precios
+                </span>
+            </h1>
+            <p class="text-[10px] font-bold tracking-[0.2em] text-cyan-500/80 uppercase">
+                Base de Datos Global
+            </p>
+        </header>
+
+        <div class="mb-6 fade-in-up" style="animation-delay: 100ms;">
+            <div class="flex items-center gap-2 mb-3 px-2">
+                <div class="h-px bg-slate-700 flex-1"></div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Recargas (Bs)</span>
+                <div class="h-px bg-slate-700 flex-1"></div>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-cyan-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🚰</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Recarga 19L</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-500 font-black text-sm">Bs.</span>
+                        <input type="number" id="precio_b19" value="230" class="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-cyan-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-cyan-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">💧</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Recarga 12L</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-500 font-black text-sm">Bs.</span>
+                        <input type="number" id="precio_b12" value="180" class="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-cyan-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-cyan-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🏺</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Recarga 8L</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-500 font-black text-sm">Bs.</span>
+                        <input type="number" id="precio_b8" value="90" class="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-cyan-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-cyan-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🥤</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Recarga 5L</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-500 font-black text-sm">Bs.</span>
+                        <input type="number" id="precio_b5" value="80" class="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-cyan-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-6 fade-in-up" style="animation-delay: 200ms;">
+            <div class="flex items-center gap-2 mb-3 px-2">
+                <div class="h-px bg-slate-700 flex-1"></div>
+                <span class="text-xs font-bold text-emerald-500 uppercase tracking-widest">Nuevos / Extras ($)</span>
+                <div class="h-px bg-slate-700 flex-1"></div>
+            </div>
+
+            <div class="space-y-3">
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-emerald-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">✨</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Nuevo 19L</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500 font-black text-sm">$</span>
+                        <input type="number" step="0.5" id="precio_n19" value="23.00" class="w-full pl-8 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-emerald-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-emerald-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🌟</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Nuevo 12L</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500 font-black text-sm">$</span>
+                        <input type="number" step="0.5" id="precio_n12" value="18.50" class="w-full pl-8 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-emerald-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-emerald-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🧊</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Hielo</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500 font-black text-sm">$</span>
+                        <input type="number" step="0.5" id="precio_hielo" value="2.50" class="w-full pl-8 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-emerald-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-emerald-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🛠️</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Mantenimiento</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500 font-black text-sm">$</span>
+                        <input type="number" step="0.5" id="precio_mantenimiento" value="3.50" class="w-full pl-8 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-emerald-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex justify-between items-center focus-within:border-emerald-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🔘</span>
+                        <span class="font-bold text-slate-200 text-sm tracking-wide">Tapa (Detal)</span>
+                    </div>
+                    <div class="relative w-28">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500 font-black text-sm">$</span>
+                        <input type="number" step="0.05" id="precio_tapa" value="0.15" class="w-full pl-8 pr-3 py-2 bg-slate-900/80 border border-slate-600 rounded-xl outline-none font-black text-white focus:border-emerald-400 transition-all text-right shadow-inner">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-6 w-full max-w-md px-6 fade-in-up z-50" style="animation-delay: 300ms;">
+        <button onclick="guardarPrecios()" id="btnGuardar" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-black py-4 rounded-2xl shadow-[0_0_30px_-5px_rgba(6,182,212,0.6)] transition-all duration-300 active:scale-95 flex items-center justify-center gap-3 tracking-wide">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+            </svg>
+            <span class="uppercase text-sm">Actualizar Base de Datos</span>
+        </button>
+    </div>
+
+    <script>
+        // Esta función capturará los datos para enviarlos a Apps Script
+        async function guardarPrecios() {
+            const btn = document.getElementById('btnGuardar');
+            const textoOriginal = btn.innerHTML;
+            
+            // Animación de carga
+            btn.innerHTML = `<svg class="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span class="uppercase text-sm">Sincronizando...</span>`;
+            btn.disabled = true;
+
+            // Recolectamos todos los valores de los inputs
+            const preciosNuevos = {
+                b19: parseFloat(document.getElementById('precio_b19').value),
+                b12: parseFloat(document.getElementById('precio_b12').value),
+                b8: parseFloat(document.getElementById('precio_b8').value),
+                b5: parseFloat(document.getElementById('precio_b5').value),
+                n19: parseFloat(document.getElementById('precio_n19').value),
+                n12: parseFloat(document.getElementById('precio_n12').value),
+                hielo: parseFloat(document.getElementById('precio_hielo').value),
+                mantenimiento: parseFloat(document.getElementById('precio_mantenimiento').value),
+                tapa: parseFloat(document.getElementById('precio_tapa').value)
+            };
+
+            // AQUÍ IRÁ EL CÓDIGO FETCH HACIA GOOGLE APPS SCRIPT
+            console.log("Datos listos para enviar al Excel:", preciosNuevos);
+
+            // Simulación de éxito (esto lo cambiaremos cuando conectemos la BD)
+            setTimeout(() => {
+                alert("✅ Precios guardados exitosamente en la nube. Las demás aplicaciones se actualizarán automáticamente.");
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
