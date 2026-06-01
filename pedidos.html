@@ -132,10 +132,39 @@
 
     <script>
         window.roundBs = (num) => +(Math.round(num + "e+2")  + "e-2");
-        const BS_PRICES = { b19: 230, b12: 180, b8: 90, b5: 80 };
-        const USD_PRICES = { n19: 23, n12: 18.5, hielo: 2.5, mantenimiento: 3.5, tapa: 0.15 };
+        let BS_PRICES = { b19: 230, b12: 180, b8: 90, b5: 80 };
+        let USD_PRICES = { n19: 23, n12: 18.5, hielo: 2.5, mantenimiento: 3.5, tapa: 0.15 };
         const CODES = { b19: 8, b12: 4, b8: "X", b5: 2, n19: 6, n12: 5, hielo: 7, tapa: "X", mantenimiento: "M" };
         const COMBO_CODES = { b19_tapa: 3, b12_tapa: 1 };
+
+        const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
+
+        async function sincronizarPrecios() {
+            try {
+                const response = await fetch(API_URL);
+                const preciosNube = await response.json();
+                
+                // Actualizamos las listas locales con lo que viene del Excel
+                if(preciosNube.b19) BS_PRICES.b19 = preciosNube.b19;
+                if(preciosNube.b12) BS_PRICES.b12 = preciosNube.b12;
+                if(preciosNube.b8) BS_PRICES.b8 = preciosNube.b8;
+                if(preciosNube.b5) BS_PRICES.b5 = preciosNube.b5;
+                
+                if(preciosNube.n19) USD_PRICES.n19 = preciosNube.n19;
+                if(preciosNube.n12) USD_PRICES.n12 = preciosNube.n12;
+                if(preciosNube.hielo) USD_PRICES.hielo = preciosNube.hielo;
+                if(preciosNube.mantenimiento) USD_PRICES.mantenimiento = preciosNube.mantenimiento;
+                if(preciosNube.tapa) USD_PRICES.tapa = preciosNube.tapa;
+
+                console.log("✅ Precios sincronizados desde la nube.");
+            } catch (error) {
+                console.warn("⚠️ No hay internet o falló la conexión. Usando precios locales de emergencia.", error);
+            }
+        }
+
+        // 3. Ejecutas la función apenas abra la app
+        sincronizarPrecios();
+
         
         let calcState = { qty: "", product: null, promo: false, cart: { b19:0, b12:0, b8:0, b5:0, n19:0, n12:0, hielo:0, tapa:0, mantenimiento:0 }, currentTotal: 0 };
         let saveTimeout = null;
