@@ -34,7 +34,7 @@
             }
         }
         
-        /* Efecto de cristal para las tarjetas */
+        /* Efecto de cristal para las tarjetas y botones */
         .glass-card {
             background: rgba(30, 41, 59, 0.6); /* Slate 800 con transparencia */
             backdrop-filter: blur(12px);
@@ -48,6 +48,14 @@
     <!-- Efectos de luz de fondo (Glows) para el toque premium -->
     <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <!-- BOTÓN DE ADMINISTRADOR -->
+    <button onclick="verificarAdmin()" class="absolute top-4 right-4 md:top-6 md:right-6 glass-card p-3 md:px-4 md:py-3 rounded-xl flex items-center gap-2 hover:bg-slate-800/90 hover:border-cyan-500/50 hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.4)] transition-all duration-300 z-20 group active:scale-95">
+        <svg class="w-5 h-5 text-cyan-500 group-hover:text-cyan-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+        </svg>
+        <span class="text-xs font-bold text-slate-300 group-hover:text-white uppercase tracking-wider hidden sm:block transition-colors">Admin</span>
+    </button>
 
     <!-- Contenedor principal -->
     <div class="w-full max-w-5xl relative z-10 flex flex-col items-center">
@@ -70,7 +78,6 @@
             <!-- Botón 1: Pedidos -->
             <a href="https://hermexcontacto-creator.github.io/Control-Managuas/pedidos.html" target="_self" 
                class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-100 relative overflow-hidden">
-                <!-- Borde superior luminoso on hover -->
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
@@ -111,8 +118,22 @@
     </div>
 
     <script>
-        // Evitar comportamiento por defecto de arrastrar los enlaces en móviles/desktop
-        // Esto previene que se seleccione o arrastre el componente, dando una sensación más de "App nativa"
+        // Lógica del botón de administrador
+        function verificarAdmin() {
+            // Se solicita la contraseña
+            const password = prompt("🔒 Ingrese la contraseña de Administrador:");
+            
+            // Verificamos si coincide
+            if (password === "Managua2026") {
+                // Si es correcta, redirige a la pantalla de configuración
+                window.location.href = "admin.html";
+            } else if (password !== null) {
+                // Si se equivocó y no le dio a "Cancelar"
+                alert("❌ Contraseña incorrecta. Acceso denegado.");
+            }
+        }
+
+        // Evitar comportamiento por defecto de arrastrar los enlaces
         document.querySelectorAll('a').forEach(anchor => {
             anchor.addEventListener('dragstart', (e) => e.preventDefault());
         });
