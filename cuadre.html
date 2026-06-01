@@ -299,14 +299,35 @@
             }
 
             const targetCents = Math.round(missing * 100);
-            const coins = [ { id: '12L', name: 'Botellón 12L', price: 18000 }, { id: '8L', name: 'Botellón 8L', price: 9000 }, { id: '5L', name: 'Botellón 5L', price: 8000 } ];
+            let coins = [ { id: '12L', name: 'Botellón 12L', price: 18000 }, { id: '8L', name: 'Botellón 8L', price: 9000 }, { id: '5L', name: 'Botellón 5L', price: 8000 } ];
+
+            const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
+
+        async function sincronizarPreciosCuadre() {
+            try {
+                const response = await fetch(API_URL);
+                const preciosNube = await response.json();
+                
+                // Sobrescribes tus variables con los IDs del Excel
+                if(preciosNube.b19) price19L = preciosNube.b19;
+                if(preciosNube.b12) price12L = preciosNube.b12;
+                // ... (enlazas el resto de variables de tu cuadre igual) ...
+
+            } catch (error) {
+                console.warn("⚠️ Usando precios locales.");
+            }
+        }
+
+        sincronizarPreciosCuadre();
+
+
             
             if (targetCents % 100 !== 0 && bcv > 0) {
                 const capPriceCents = Math.round(0.15 * bcv * 100);
                 if (capPriceCents > 0) coins.push({ id: 'Cap', name: 'Tapa', price: capPriceCents });
             }
 
-            const price19L = 23000;
+            let price19L = 23000;
             const max19L = Math.floor(targetCents / price19L);
             const min19L = Math.max(0, max19L - 2); 
 
