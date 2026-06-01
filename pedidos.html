@@ -26,6 +26,14 @@
     </style>
 </head>
 <body class="p-2 flex flex-col items-center min-h-screen relative">
+    <!-- Pantalla de carga para POS -->
+<div id="loader-pos" class="fixed inset-0 bg-[#f1f5f9]/90 backdrop-blur-sm z-[100] flex flex-col items-center justify-center transition-opacity duration-300">
+    <svg class="animate-spin h-14 w-14 text-blue-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <p class="text-blue-600 font-black tracking-widest text-[10px] uppercase animate-pulse">Sincronizando Base de Datos...</p>
+</div>
     
     <section class="w-full max-w-md mx-auto">
         <div class="sticky top-0 z-10 bg-[#f1f5f9] pb-2 pt-2">
@@ -140,27 +148,34 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
 
         async function sincronizarPrecios() {
-            try {
-                const response = await fetch(API_URL);
-                const preciosNube = await response.json();
-                
-                // Actualizamos las listas locales con lo que viene del Excel
-                if(preciosNube.b19) BS_PRICES.b19 = preciosNube.b19;
-                if(preciosNube.b12) BS_PRICES.b12 = preciosNube.b12;
-                if(preciosNube.b8) BS_PRICES.b8 = preciosNube.b8;
-                if(preciosNube.b5) BS_PRICES.b5 = preciosNube.b5;
-                
-                if(preciosNube.n19) USD_PRICES.n19 = preciosNube.n19;
-                if(preciosNube.n12) USD_PRICES.n12 = preciosNube.n12;
-                if(preciosNube.hielo) USD_PRICES.hielo = preciosNube.hielo;
-                if(preciosNube.mantenimiento) USD_PRICES.mantenimiento = preciosNube.mantenimiento;
-                if(preciosNube.tapa) USD_PRICES.tapa = preciosNube.tapa;
+    try {
+        const response = await fetch(API_URL);
+        const preciosNube = await response.json();
+        
+        // Actualizamos las listas locales con lo que viene del Excel
+        if(preciosNube.b19) BS_PRICES.b19 = preciosNube.b19;
+        if(preciosNube.b12) BS_PRICES.b12 = preciosNube.b12;
+        if(preciosNube.b8) BS_PRICES.b8 = preciosNube.b8;
+        if(preciosNube.b5) BS_PRICES.b5 = preciosNube.b5;
+        
+        if(preciosNube.n19) USD_PRICES.n19 = preciosNube.n19;
+        if(preciosNube.n12) USD_PRICES.n12 = preciosNube.n12;
+        if(preciosNube.hielo) USD_PRICES.hielo = preciosNube.hielo;
+        if(preciosNube.mantenimiento) USD_PRICES.mantenimiento = preciosNube.mantenimiento;
+        if(preciosNube.tapa) USD_PRICES.tapa = preciosNube.tapa;
 
-                console.log("✅ Precios sincronizados desde la nube.");
-            } catch (error) {
-                console.warn("⚠️ No hay internet o falló la conexión. Usando precios locales de emergencia.", error);
-            }
+        console.log("✅ Precios sincronizados desde la nube.");
+    } catch (error) {
+        console.warn("⚠️ No hay internet o falló la conexión. Usando precios locales de emergencia.", error);
+    } finally {
+        // Quitar la pantalla de carga al terminar
+        const loader = document.getElementById('loader-pos');
+        if(loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 300);
         }
+    }
+}
 
         // 3. Ejecutas la función apenas abra la app
         sincronizarPrecios();
