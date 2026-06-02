@@ -119,17 +119,36 @@
 
     <script>
         // Lógica del botón de administrador
-        function verificarAdmin() {
-            // Se solicita la contraseña
+        async function verificarAdmin() {
             const password = prompt("🔒 Ingrese la contraseña de Administrador:");
-            
-            // Verificamos si coincide
-            if (password === "Managua2026") {
-                // Si es correcta, redirige a la pantalla de configuración
-                window.location.href = "admin.html";
-            } else if (password !== null) {
-                // Si se equivocó y no le dio a "Cancelar"
-                alert("❌ Contraseña incorrecta. Acceso denegado.");
+            if (!password) return; // Si cancela o deja vacío, no hace nada
+
+            // Cambiamos el texto del botón mientras consulta al servidor
+            const btn = document.querySelector('button[onclick="verificarAdmin()"]');
+            const span = btn.querySelector('span');
+            const textoOriginal = span ? span.innerText : "ADMIN";
+            if (span) span.innerText = "VERIFICANDO...";
+            btn.disabled = true;
+
+            const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "login", password: password })
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    window.location.href = "admin.html";
+                } else {
+                    alert("❌ Contraseña incorrecta. Acceso denegado.");
+                }
+            } catch (error) {
+                alert("❌ Error de conexión al verificar credenciales.");
+            } finally {
+                if (span) span.innerText = textoOriginal;
+                btn.disabled = false;
             }
         }
 
