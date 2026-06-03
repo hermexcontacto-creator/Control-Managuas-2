@@ -8,15 +8,9 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .fade-in { animation: fadeIn 0.2s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800 relative">
@@ -53,7 +47,6 @@
                     </h2>
                     
                     <div class="space-y-4">
-                        
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="toggleHelper('efectivo')" class="flex items-center justify-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-2 px-3 rounded-xl border border-emerald-200 text-xs transition-colors">
                                 <i data-lucide="wallet" class="w-4 h-4"></i> Contar Efectivo
@@ -82,14 +75,8 @@
                         <div id="panel-puntos" class="hidden bg-indigo-50 border border-indigo-200 rounded-xl p-3 space-y-2 fade-in">
                             <h4 class="text-xs font-bold text-indigo-800 uppercase tracking-wider flex items-center gap-1">💳 Suma de Puntos</h4>
                             <div class="grid grid-cols-2 gap-2 mt-2">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Venezuela</label>
-                                    <input type="number" id="p-venezuela" class="w-full p-2 text-xs border rounded-lg text-center outline-none focus:border-indigo-400 text-slate-700" placeholder="0.00" oninput="calcPuntosHelper()">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Banesco</label>
-                                    <input type="number" id="p-banesco" class="w-full p-2 text-xs border rounded-lg text-center outline-none focus:border-indigo-400 text-slate-700" placeholder="0.00" oninput="calcPuntosHelper()">
-                                </div>
+                                <div><label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Venezuela</label><input type="number" id="p-venezuela" class="w-full p-2 text-xs border rounded-lg text-center outline-none focus:border-indigo-400 text-slate-700" placeholder="0.00" oninput="calcPuntosHelper()"></div>
+                                <div><label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Banesco</label><input type="number" id="p-banesco" class="w-full p-2 text-xs border rounded-lg text-center outline-none focus:border-indigo-400 text-slate-700" placeholder="0.00" oninput="calcPuntosHelper()"></div>
                             </div>
                             <div class="flex justify-between items-center pt-2 mt-1 border-t border-indigo-200">
                                 <span class="text-xs font-black text-indigo-800">Total: Bs. <span id="total-puntos-helper">0,00</span></span>
@@ -116,11 +103,11 @@
                         <div class="pt-3 border-t border-slate-100 mt-2">
                             <div class="flex justify-between items-center mb-1">
                                 <label class="block text-sm font-medium text-slate-600">Tasa BCV del Día</label>
-                                <span id="bcv-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"></span>
+                                <span id="bcv-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Cargando...</span>
                             </div>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
-                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36.50" class="w-full pl-10 pr-4 py-2 border-2 border-slate-300 rounded-xl outline-none focus:border-blue-500 transition-colors" oninput="saveTasa(this.value)" onblur="saveTasa(this.value)">
+                                <input type="text" id="tasaBcv" inputmode="decimal" placeholder="Ej. 36.50" class="w-full pl-10 pr-4 py-2 bg-slate-100 border border-slate-300 rounded-xl outline-none text-slate-500 cursor-not-allowed font-bold" readonly>
                             </div>
                         </div>
 
@@ -154,19 +141,16 @@
     </div>
 
     <script>
-        // Inicializar iconos
         lucide.createIcons();
         let currentCashTotal = 0;
         let currentPuntosTotal = 0;
 
-        // Variables de precios convertidas a 'let'
         let price19L = 230;
         let price12L = 180;
         let price8L = 90;
         let price5L = 80;
         let priceTapaUSD = 0.15;
 
-        // --- CONEXIÓN AL BACKEND ---
         const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
 
         async function sincronizarPreciosCuadre() {
@@ -174,14 +158,23 @@
                 const response = await fetch(API_URL);
                 const preciosNube = await response.json();
                 
-                // Actualizamos las variables locales con los datos del Excel
                 if(preciosNube.b19) price19L = preciosNube.b19;
                 if(preciosNube.b12) price12L = preciosNube.b12;
                 if(preciosNube.b8) price8L = preciosNube.b8;
                 if(preciosNube.b5) price5L = preciosNube.b5;
                 if(preciosNube.tapa) priceTapaUSD = preciosNube.tapa;
 
-                // Actualizamos la UI lateral
+                // ASIGNAR LA TASA Y BLOQUEARLA
+                if(preciosNube.tasa_bcv) {
+                    document.getElementById('tasaBcv').value = preciosNube.tasa_bcv.toString().replace('.', ',');
+                    const statusBadge = document.getElementById('bcv-status');
+                    statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-emerald-100 text-emerald-700";
+                    statusBadge.innerText = "Tasa Oficial";
+                    
+                    // Respaldo local
+                    localStorage.setItem('MANAGUA_BCV_RATE', preciosNube.tasa_bcv);
+                }
+
                 document.getElementById('ui-19l').innerText = `Bs. ${price19L.toFixed(2)}`;
                 document.getElementById('ui-12l').innerText = `Bs. ${price12L.toFixed(2)}`;
                 document.getElementById('ui-8l').innerText = `Bs. ${price8L.toFixed(2)}`;
@@ -189,12 +182,20 @@
 
             } catch (error) {
                 console.warn("⚠️ Usando precios locales de emergencia en Cuadre.");
+                
+                const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
+                if(savedRate) {
+                    document.getElementById('tasaBcv').value = savedRate.toString().replace('.', ',');
+                    const statusBadge = document.getElementById('bcv-status');
+                    statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-rose-100 text-rose-700";
+                    statusBadge.innerText = "Modo Offline";
+                }
+
                 document.getElementById('ui-19l').innerText = `Bs. ${price19L.toFixed(2)}`;
                 document.getElementById('ui-12l').innerText = `Bs. ${price12L.toFixed(2)}`;
                 document.getElementById('ui-8l').innerText = `Bs. ${price8L.toFixed(2)}`;
                 document.getElementById('ui-5l').innerText = `Bs. ${price5L.toFixed(2)}`;
             } finally {
-                // Quitar la pantalla de carga al terminar
                 const loader = document.getElementById('loader-cuadre');
                 if (loader) {
                     loader.style.opacity = '0';
@@ -205,47 +206,12 @@
 
         sincronizarPreciosCuadre();
 
-        // --- SISTEMA LOCALSTORAGE ---
-        window.onload = () => {
-            lucide.createIcons();
-            const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
-            const savedDate = localStorage.getItem('MANAGUA_BCV_DATE');
-            if(savedRate) {
-                document.getElementById('tasaBcv').value = savedRate.replace('.', ',');
-                checkDate(savedDate);
-            }
-        };
-
-        function saveTasa(val) {
-            if(!val) return;
-            const cleanVal = val.replace(/,/g, '.');
-            localStorage.setItem('MANAGUA_BCV_RATE', cleanVal);
-            localStorage.setItem('MANAGUA_BCV_DATE', Date.now());
-            checkDate(Date.now());
-        }
-
-        function checkDate(timestamp) {
-            const statusBadge = document.getElementById('bcv-status');
-            if(!statusBadge) return;
-            const today = new Date().toLocaleDateString();
-            const saved = new Date(parseInt(timestamp)).toLocaleDateString();
-            
-            if(today === saved) {
-                statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-green-100 text-green-700";
-                statusBadge.innerText = "Al día";
-            } else {
-                statusBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-orange-100 text-orange-700 animate-pulse";
-                statusBadge.innerText = "Desactualizada";
-            }
-        }
-
         function checkInputs() {
             const a1 = document.getElementById('amount1').value;
             const a2 = document.getElementById('amount2').value;
             document.getElementById('calc-btn').disabled = (!a1 && !a2);
         }
 
-        // --- MANEJO DE LOS PANELES DESPLEGABLES (HELPERS) ---
         function toggleHelper(type) {
             const panelCash = document.getElementById('panel-efectivo');
             const panelPuntos = document.getElementById('panel-puntos');
@@ -265,7 +231,6 @@
             const n50  = parseInt(document.getElementById('b50').value) || 0;
             const n20  = parseInt(document.getElementById('b20').value) || 0;
             const n10  = parseInt(document.getElementById('b10').value) || 0;
-            
             currentCashTotal = (n500 * 500) + (n200 * 200) + (n100 * 100) + (n50 * 50) + (n20 * 20) + (n10 * 10);
             document.getElementById('total-cash-helper').innerText = currentCashTotal.toLocaleString('es-VE', { minimumFractionDigits: 2 });
         }
@@ -279,7 +244,6 @@
         function calcPuntosHelper() {
             const v = parseFloat(document.getElementById('p-venezuela').value) || 0;
             const b = parseFloat(document.getElementById('p-banesco').value) || 0;
-            
             currentPuntosTotal = v + b;
             document.getElementById('total-puntos-helper').innerText = currentPuntosTotal.toLocaleString('es-VE', { minimumFractionDigits: 2 });
         }
@@ -290,12 +254,9 @@
             checkInputs();
         }
 
-        // --- MOTOR MATEMÁTICO DE MAQUILLAJE ---
         function generateTransactions(breakdown, coins) {
             let pool = [];
-            
             const currentPrice19L_cents = Math.round(price19L * 100);
-            
             if (breakdown['19L'] > 0) {
                 for (let i = 0; i < breakdown['19L']; i++) pool.push({ id: '19L', name: 'Botellón 19L', price: currentPrice19L_cents });
             }
