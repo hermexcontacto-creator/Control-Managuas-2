@@ -53,7 +53,6 @@
             justify-content: space-between;
         }
 
-        /* Contenedor fijo para que la interfaz no salte cuando el tanque cambie de tamaño */
         .tank-wrapper {
             height: 260px;
             width: 180px;
@@ -71,11 +70,9 @@
             overflow: hidden;
             position: relative;
             box-shadow: inset 0 10px 20px rgba(0,0,0,0.5), 0 10px 25px -5px rgba(0,0,0,0.1);
-            /* Transición fluida y elástica para el cambio de tanque */
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* Clase dinámica para el tanque TT (Más ancho y chato) */
         .tank-container.tank-wide {
             width: 180px;
             height: 160px;
@@ -191,9 +188,7 @@
 
         <main class="main-content">
             <div class="flex flex-col items-center gap-4">
-                <!-- Wrapper que mantiene la altura para que nada salte -->
                 <div class="tank-wrapper">
-                    <!-- Empieza con la clase tank-wide porque el primer tanque es el TT -->
                     <div class="tank-container tank-wide" id="sensor-area">
                         <div class="ruler-mark" style="bottom: 75%;"><span>3/4</span></div>
                         <div class="ruler-mark" style="bottom: 50%;"><span>1/2</span></div>
@@ -230,13 +225,12 @@
         </footer>
     </div>
 
+    <!-- Modal de Texto Original -->
     <div id="modal-overlay">
         <div id="modal-content">
             <div class="flex items-center gap-3 mb-4">
                 <div class="bg-blue-100 text-blue-600 p-2 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
                 </div>
                 <h2 class="text-xl font-bold text-slate-800">Copiado al Jefe</h2>
             </div>
@@ -245,6 +239,17 @@
                 CERRAR
             </button>
         </div>
+    </div>
+
+    <!-- NUEVO: Modal Infalible para la Imagen Generada -->
+    <div id="image-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[3000] hidden flex-col items-center justify-center p-6">
+        <div class="flex items-center justify-between w-full max-w-sm mb-4">
+            <h3 class="text-white font-bold text-[10px] tracking-widest uppercase text-cyan-400 bg-slate-900 px-3 py-2 rounded-lg border border-slate-700">Mantén presionada la imagen para guardar o compartir</h3>
+            <button onclick="cerrarImagenModal()" class="bg-slate-800 text-white p-2 rounded-full border border-slate-600 active:scale-90 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+        <img id="render-img-final" class="w-full max-w-sm rounded-3xl shadow-2xl border-4 border-slate-800 object-contain max-h-[75vh]" src="" />
     </div>
 
     <canvas id="canvas-report" width="1000" height="1400"></canvas>
@@ -294,8 +299,6 @@
         function onTouch(e) {
             e.preventDefault();
             const rect = sensor.getBoundingClientRect();
-            // La magia ocurre aquí: no importa si el tanque está en su forma ancha o alta,
-            // rect.height lee la altura actual exacta, manteniendo la matemática intocable.
             const y = e.touches ? e.touches[0].clientY : e.clientY;
             let p = 1 - ((y - rect.top) / rect.height);
             p = Math.max(0, Math.min(1, p));
@@ -318,7 +321,6 @@
                 document.getElementById(`btn-${t}`).classList.toggle('active', t === tank);
             });
             
-            // LÓGICA DE FORMA DINÁMICA: Aplica la clase 'tank-wide' solo si es TT
             if(tank === 'tt') {
                 sensor.classList.add('tank-wide');
             } else {
@@ -353,7 +355,20 @@
             document.getElementById('modal-overlay').classList.remove('active');
         }
 
-        function handleCameraClick() {
+        // FUNCIONES NUEVAS PARA EL MANEJO INFALIBLE DE LA IMAGEN
+        function mostrarImagenModal(dataUrl) {
+            document.getElementById('render-img-final').src = dataUrl;
+            document.getElementById('image-modal').classList.remove('hidden');
+            document.getElementById('image-modal').classList.add('flex');
+        }
+
+        function cerrarImagenModal() {
+            document.getElementById('image-modal').classList.add('hidden');
+            document.getElementById('image-modal').classList.remove('flex');
+        }
+
+        async function handleCameraClick() {
+            // 1. Copiar texto
             const text = getReportData();
             const el = document.createElement('textarea');
             el.value = text;
@@ -361,10 +376,31 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            generateHighEndImage();
+
+            // 2. Generar el Base64 de la imagen del Canvas
+            const dataUrl = generateHighEndImage();
+
+            try {
+                // 3. Intentar compartir de forma nativa (Ideal)
+                const res = await fetch(dataUrl);
+                const blob = await res.blob();
+                const file = new File([blob], `Estado_Planta_${Date.now()}.png`, { type: 'image/png' });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: 'Reporte de Planta',
+                        files: [file]
+                    });
+                } else {
+                    throw new Error("API Share no soportada");
+                }
+            } catch (error) {
+                // 4. FALLBACK: Si el dispositivo bloquea el menú nativo, mostramos el modal para guardado manual
+                mostrarImagenModal(dataUrl);
+            }
         }
 
-        // Esta función NO lee el CSS de la pantalla. Mantiene el estándar estricto y uniforme de los 3 tanques idénticos.
+        // Modificamos esta función para que RETORNE el Base64 en lugar de forzar un click de descarga
         function generateHighEndImage() {
             const canvas = document.getElementById('canvas-report');
             const ctx = canvas.getContext('2d');
@@ -471,10 +507,8 @@
             ctx.font = '900 110px Inter';
             ctx.fillText(`${calc.total.toLocaleString()} L`, W/2, boxY + 175);
 
-            const link = document.createElement('a');
-            link.download = `Estado_Planta_${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png', 1.0);
-            link.click();
+            // RETORNAMOS LA IMAGEN COMO BASE64 EN VEZ DE FORZAR DESCARGA
+            return canvas.toDataURL('image/png', 1.0);
         }
 
         function roundRect(ctx, x, y, w, h, r, fill, stroke) {
