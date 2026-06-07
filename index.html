@@ -6,37 +6,14 @@
     <title>Sistemas Managua - Portal de Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a; 
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; -webkit-tap-highlight-color: transparent; }
+        .fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .glass-card {
-            background: rgba(30, 41, 59, 0.6); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .glass-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
     </style>
 </head>
 <body class="min-h-screen text-slate-50 flex flex-col items-center justify-center p-6 relative overflow-x-hidden selection:bg-cyan-500 selection:text-white">
@@ -44,102 +21,123 @@
     <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-    <!-- BOTÓN DE ADMINISTRADOR -->
-    <button onclick="verificarAdmin()" class="absolute top-4 right-4 md:top-6 md:right-6 glass-card p-3 md:px-4 md:py-3 rounded-xl flex items-center gap-2 hover:bg-slate-800/90 hover:border-cyan-500/50 hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.4)] transition-all duration-300 z-20 group active:scale-95">
-        <svg class="w-5 h-5 text-cyan-500 group-hover:text-cyan-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-        </svg>
+    <button onclick="abrirModalAdmin()" class="absolute top-4 right-4 md:top-6 md:right-6 glass-card p-3 md:px-4 md:py-3 rounded-xl flex items-center gap-2 hover:bg-slate-800/90 hover:border-cyan-500/50 hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.4)] transition-all duration-300 z-20 group active:scale-95">
+        <svg class="w-5 h-5 text-cyan-500 group-hover:text-cyan-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
         <span class="text-xs font-bold text-slate-300 group-hover:text-white uppercase tracking-wider hidden sm:block transition-colors">Admin</span>
     </button>
 
     <div class="w-full max-w-5xl relative z-10 flex flex-col items-center">
-
         <header class="text-center mb-14 fade-in-up">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-3">
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-cyan-400">
-                    Sistemas Managua
-                </span>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-cyan-400">Sistemas Managua</span>
             </h1>
-            <p class="text-xs md:text-sm font-bold tracking-[0.25em] text-cyan-500/80 uppercase">
-                Portal de Control
-            </p>
+            <p class="text-xs md:text-sm font-bold tracking-[0.25em] text-cyan-500/80 uppercase">Portal de Control</p>
         </header>
 
         <main class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-[320px] md:max-w-none">
-            
-            <!-- Botón 1: Pedidos -->
-            <a href="https://hermexcontacto-creator.github.io/Control-Managuas-2/pedidos.html" target="_self" 
-               class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-100 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                    </svg>
-                </div>
-                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Pedidos Managuas</h2>
+            <a href="pedidos.html" target="_self" class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-100 relative overflow-hidden">
+                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg></div>
+                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white">Pedidos Managuas</h2>
             </a>
 
-            <!-- Botón 2: Tanques -->
-            <a href="https://hermexcontacto-creator.github.io/Control-Managuas-2/tanques.html" target="_self" 
-               class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-200 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
-                    </svg>
-                </div>
-                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Tanques Managuas</h2>
+            <a href="tanques.html" target="_self" class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-200 relative overflow-hidden">
+                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path></svg></div>
+                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white">Tanques Managuas</h2>
             </a>
 
-            <!-- Botón 3.1: Instrucciones (Visible por Defecto - La Fachada) -->
-            <a id="btn-instrucciones" href="instrucciones.html" target="_self" 
-               class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-300 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                    </svg>
-                </div>
-                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Cómo Usar la App</h2>
+            <a id="btn-instrucciones" href="instrucciones.html" target="_self" class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-300 relative overflow-hidden">
+                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></div>
+                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white">Cómo Usar la App</h2>
             </a>
 
-            <!-- Botón 3.2: Cuadre (Oculto - El Modo Élite) -->
-            <a id="btn-cuadre" href="https://hermexcontacto-creator.github.io/Control-Managuas-2/cuadre.html" target="_self" 
-               class="glass-card group flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-300 relative overflow-hidden"
-               style="display: none;"> <!-- Oculto por CSS en línea -->
-                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                    </svg>
-                </div>
-                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Cuadre Managuas</h2>
+            <a id="btn-cuadre" href="cuadre.html" target="_self" class="hidden glass-card group flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-300 relative overflow-hidden">
+                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></div>
+                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white">Cuadre Managuas</h2>
             </a>
-
         </main>
     </div>
 
+    <div id="admin-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="glass-card p-8 rounded-3xl w-[90%] max-w-sm flex flex-col items-center transform scale-95 transition-transform duration-300" id="admin-modal-card">
+            <div class="w-16 h-16 bg-cyan-500/10 text-cyan-400 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <h3 class="text-white font-black text-xl mb-1">Acceso Seguro</h3>
+            <p class="text-slate-400 text-xs font-semibold mb-6 uppercase tracking-wider">Ingrese su credencial</p>
+            
+            <input type="password" id="admin-password" placeholder="••••••••" class="w-full bg-slate-900/50 border-2 border-slate-700 rounded-xl px-4 py-3 text-white font-bold mb-2 focus:outline-none focus:border-cyan-500 transition-colors text-center text-xl tracking-widest shadow-inner">
+            <p id="error-msg" class="text-rose-500 text-xs font-bold h-4 mb-4 opacity-0 transition-opacity">Contraseña incorrecta</p>
+            
+            <div class="flex gap-3 w-full">
+                <button onclick="cerrarModal()" class="flex-1 py-3 rounded-xl text-slate-300 font-bold hover:bg-slate-800 transition-colors border border-slate-700">Cancelar</button>
+                <button onclick="procesarLogin()" id="btn-login" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-black py-3 rounded-xl transition-all shadow-[0_0_15px_-3px_rgba(6,182,212,0.4)] active:scale-95 flex justify-center items-center">
+                    <span>Entrar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // PEGA AQUÍ LA URL NUEVA DE TU APP SCRIPT CUANDO PUBLIQUES LA NUEVA VERSIÓN
+        // PEGA AQUÍ LA URL DE TU APP SCRIPT (Actualízala si generaste una nueva implementación)
         const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
 
-        // Verifica si ya eres "Élite" al cargar la página
+        // Verifica si ya eres "Élite" al cargar la página para mantener el botón visible
         window.onload = () => {
             if (localStorage.getItem("modo_elite") === "activado") {
-                document.getElementById("btn-instrucciones").style.display = "none";
-                document.getElementById("btn-cuadre").style.display = "flex";
+                document.getElementById("btn-instrucciones").classList.add("hidden");
+                document.getElementById("btn-instrucciones").classList.remove("flex");
+                
+                document.getElementById("btn-cuadre").classList.remove("hidden");
+                document.getElementById("btn-cuadre").classList.add("flex");
             }
         };
 
-        async function verificarAdmin() {
-            const password = prompt("🔒 Ingrese la contraseña de Administrador:");
-            if (!password) return;
+        // Control del Modal
+        function abrirModalAdmin() {
+            const modal = document.getElementById('admin-modal');
+            const card = document.getElementById('admin-modal-card');
+            const passInput = document.getElementById('admin-password');
+            const errorMsg = document.getElementById('error-msg');
+            
+            modal.classList.remove('hidden');
+            void modal.offsetWidth; // Reflow
+            modal.classList.remove('opacity-0');
+            card.classList.remove('scale-95');
+            
+            passInput.value = '';
+            errorMsg.classList.add('opacity-0');
+            errorMsg.classList.remove('text-cyan-400');
+            errorMsg.classList.add('text-rose-500');
+            errorMsg.innerText = "Contraseña incorrecta";
+            
+            setTimeout(() => passInput.focus(), 100);
+        }
 
-            const btn = document.querySelector('button[onclick="verificarAdmin()"]');
-            const span = btn.querySelector('span');
-            const textoOriginal = span ? span.innerText : "ADMIN";
-            if (span) span.innerText = "VERIFICANDO...";
+        function cerrarModal() {
+            const modal = document.getElementById('admin-modal');
+            const card = document.getElementById('admin-modal-card');
+            
+            modal.classList.add('opacity-0');
+            card.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // Lógica de Login Dual
+        async function procesarLogin() {
+            const password = document.getElementById('admin-password').value;
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (!password) {
+                errorMsg.innerText = "Escribe una contraseña";
+                errorMsg.classList.remove('opacity-0');
+                return;
+            }
+
+            const btn = document.getElementById('btn-login');
+            const textoOriginal = btn.innerHTML;
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
             btn.disabled = true;
+            errorMsg.classList.add('opacity-0');
 
             try {
                 const response = await fetch(API_URL, {
@@ -149,24 +147,47 @@
                 const result = await response.json();
                 
                 if (result.success && result.role === "admin") {
-                    // Acceso normal para el jefe
+                    // Acceso de Jefe
                     window.location.href = "admin.html";
                 } else if (result.success && result.role === "elite") {
-                    // ¡Modo Élite Desbloqueado!
-                    localStorage.setItem("modo_elite", "activado"); // Guarda el estado
-                    document.getElementById("btn-instrucciones").style.display = "none";
-                    document.getElementById("btn-cuadre").style.display = "flex";
-                    alert("⚡ MODO ÉLITE DESBLOQUEADO.\nSistema de Cuadre operativo.");
+                    // Acceso Oculto tuyo
+                    localStorage.setItem("modo_elite", "activado");
+                    
+                    document.getElementById("btn-instrucciones").classList.add("hidden");
+                    document.getElementById("btn-instrucciones").classList.remove("flex");
+                    
+                    document.getElementById("btn-cuadre").classList.remove("hidden");
+                    document.getElementById("btn-cuadre").classList.add("flex");
+
+                    // Efecto visual de hackeo en el modal
+                    errorMsg.innerText = "⚡ MODO ÉLITE DESBLOQUEADO";
+                    errorMsg.classList.remove('text-rose-500');
+                    errorMsg.classList.add('text-cyan-400');
+                    errorMsg.classList.remove('opacity-0');
+                    
+                    setTimeout(cerrarModal, 1500); // Cierra el modal solo después de que veas el mensaje
                 } else {
-                    alert("❌ Contraseña incorrecta. Acceso denegado.");
+                    errorMsg.innerText = "❌ Contraseña incorrecta";
+                    errorMsg.classList.add('text-rose-500');
+                    errorMsg.classList.remove('text-cyan-400');
+                    errorMsg.classList.remove('opacity-0');
                 }
             } catch (error) {
-                alert("❌ Error de conexión al verificar credenciales.");
+                errorMsg.innerText = "❌ Error de red. Intenta de nuevo.";
+                errorMsg.classList.remove('opacity-0');
             } finally {
-                if (span) span.innerText = textoOriginal;
+                btn.innerHTML = textoOriginal;
                 btn.disabled = false;
             }
         }
+
+        // Enter para login rápido
+        document.getElementById("admin-password").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                procesarLogin();
+            }
+        });
 
         document.querySelectorAll('a').forEach(anchor => {
             anchor.addEventListener('dragstart', (e) => e.preventDefault());
