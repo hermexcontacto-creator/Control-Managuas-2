@@ -10,7 +10,7 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
+            background-color: #0f172a; 
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -32,7 +32,7 @@
         }
         
         .glass-card {
-            background: rgba(30, 41, 59, 0.6);
+            background: rgba(30, 41, 59, 0.6); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -44,6 +44,7 @@
     <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
+    <!-- BOTÓN DE ADMINISTRADOR -->
     <button onclick="verificarAdmin()" class="absolute top-4 right-4 md:top-6 md:right-6 glass-card p-3 md:px-4 md:py-3 rounded-xl flex items-center gap-2 hover:bg-slate-800/90 hover:border-cyan-500/50 hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.4)] transition-all duration-300 z-20 group active:scale-95">
         <svg class="w-5 h-5 text-cyan-500 group-hover:text-cyan-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
@@ -70,7 +71,6 @@
             <a href="https://hermexcontacto-creator.github.io/Control-Managuas-2/pedidos.html" target="_self" 
                class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-100 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
                 <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
@@ -83,7 +83,6 @@
             <a href="https://hermexcontacto-creator.github.io/Control-Managuas-2/tanques.html" target="_self" 
                class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-200 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
                 <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
@@ -92,72 +91,55 @@
                 <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Tanques Managuas</h2>
             </a>
 
-            <!-- Botón 3: CÓMO USAR LA APP (FACHADA) -->
-            <!-- Le he agregado IDs (btn-camaleon, icon-camaleon, text-camaleon) para poder transformarlo con JS -->
-            <a id="btn-camaleon" href="guia.html" target="_self" 
+            <!-- Botón 3.1: Instrucciones (Visible por Defecto - La Fachada) -->
+            <a id="btn-instrucciones" href="instrucciones.html" target="_self" 
                class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-300 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                <div id="icon-camaleon" class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-                    <!-- Icono de Libro por defecto -->
+                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                     </svg>
                 </div>
-                <h2 id="text-camaleon" class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors text-center">Cómo Usar la App</h2>
+                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Cómo Usar la App</h2>
+            </a>
+
+            <!-- Botón 3.2: Cuadre (Oculto - El Modo Élite) -->
+            <a id="btn-cuadre" href="https://hermexcontacto-creator.github.io/Control-Managuas-2/cuadre.html" target="_self" 
+               class="glass-card group flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-300 relative overflow-hidden"
+               style="display: none;"> <!-- Oculto por CSS en línea -->
+                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Cuadre Managuas</h2>
             </a>
 
         </main>
     </div>
 
     <script>
+        // PEGA AQUÍ LA URL NUEVA DE TU APP SCRIPT CUANDO PUBLIQUES LA NUEVA VERSIÓN
+        const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
+
+        // Verifica si ya eres "Élite" al cargar la página
+        window.onload = () => {
+            if (localStorage.getItem("modo_elite") === "activado") {
+                document.getElementById("btn-instrucciones").style.display = "none";
+                document.getElementById("btn-cuadre").style.display = "flex";
+            }
+        };
+
         async function verificarAdmin() {
             const password = prompt("🔒 Ingrese la contraseña de Administrador:");
             if (!password) return;
 
-            // ==========================================
-            // CHEAT CODE: DESBLOQUEO DEL CUADRE
-            // ==========================================
-            if (password === "Managua.Elite.07") {
-                const btnCamaleon = document.getElementById('btn-camaleon');
-                const iconCamaleon = document.getElementById('icon-camaleon');
-                const textCamaleon = document.getElementById('text-camaleon');
-
-                // 1. Cambiamos la ruta a la del Cuadre
-                btnCamaleon.href = "https://hermexcontacto-creator.github.io/Control-Managuas-2/cuadre.html";
-                
-                // 2. Cambiamos el texto
-                textCamaleon.innerText = "Cuadre Managuas";
-                
-                // 3. Cambiamos el icono SVG por la calculadora
-                iconCamaleon.innerHTML = `
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                    </svg>`;
-
-                // 4. Efecto visual de parpadeo/confirmación
-                btnCamaleon.classList.remove('delay-300');
-                btnCamaleon.style.transform = "scale(1.05)";
-                btnCamaleon.style.boxShadow = "0 0 40px rgba(6,182,212,0.8)";
-                
-                setTimeout(() => {
-                    btnCamaleon.style.transform = "";
-                    btnCamaleon.style.boxShadow = "";
-                }, 500);
-
-                alert("🔓 Acceso VIP: Panel de Cuadre desbloqueado.");
-                return; // IMPORTANTE: Cortamos aquí para que no haga la validación en Google
-            }
-            // ==========================================
-
-            // Lógica normal para el panel de Administrador
             const btn = document.querySelector('button[onclick="verificarAdmin()"]');
             const span = btn.querySelector('span');
             const textoOriginal = span ? span.innerText : "ADMIN";
             if (span) span.innerText = "VERIFICANDO...";
             btn.disabled = true;
-
-            const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
 
             try {
                 const response = await fetch(API_URL, {
@@ -166,8 +148,15 @@
                 });
                 const result = await response.json();
                 
-                if (result.success) {
+                if (result.success && result.role === "admin") {
+                    // Acceso normal para el jefe
                     window.location.href = "admin.html";
+                } else if (result.success && result.role === "elite") {
+                    // ¡Modo Élite Desbloqueado!
+                    localStorage.setItem("modo_elite", "activado"); // Guarda el estado
+                    document.getElementById("btn-instrucciones").style.display = "none";
+                    document.getElementById("btn-cuadre").style.display = "flex";
+                    alert("⚡ MODO ÉLITE DESBLOQUEADO.\nSistema de Cuadre operativo.");
                 } else {
                     alert("❌ Contraseña incorrecta. Acceso denegado.");
                 }
