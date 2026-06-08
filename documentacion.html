@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistemas Managua - Documentación Oficial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 p-4 md:p-8 relative overflow-x-hidden selection:bg-cyan-500 selection:text-white">
+
+    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[40%] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[40%] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
+
+    <div class="w-full max-w-4xl mx-auto relative z-10">
+        
+        <a href="index.html" class="inline-flex items-center gap-2 mb-8 glass-card px-4 py-2 rounded-xl text-sm font-semibold text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/30 transition-all active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Volver al Portal
+        </a>
+
+        <header class="mb-12 text-center md:text-left fade-in-up">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-cyan-400">
+                    Manual de Operaciones
+                </span>
+            </h1>
+            <p class="text-sm text-slate-400">Guía interactiva de inducción y uso de las aplicaciones de control interno.</p>
+        </header>
+
+        <section class="glass-card rounded-[2rem] p-6 md:p-8 mb-8 fade-in-up">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-white">1. Aplicación: Tanques Managuas</h2>
+                    <p class="text-xs text-cyan-400 font-semibold uppercase tracking-wider">Monitoreo de Inventario Hídrico</p>
+                </div>
+            </div>
+
+            <p class="text-slate-300 text-sm md:text-base mb-6 leading-relaxed">
+                Esta herramienta automatiza el cálculo de litros disponibles en la planta mediante estimaciones visuales. Reemplaza el uso de cálculos manuales propensos a errores y unifica los reportes diarios.
+            </p>
+
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 md:p-6 mb-6">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">Esquema de Distribución de la Planta</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="border border-slate-800 bg-slate-900/40 p-3 rounded-xl flex flex-col items-center">
+                        <span class="text-xs font-bold text-amber-400 mb-2">Reserva Principal (TT)</span>
+                        <div class="flex gap-1 justify-center mb-2">
+                            <div class="w-8 h-10 border-2 border-cyan-500/40 rounded-t-lg bg-cyan-500/10 flex items-end"><div class="w-full h-[70%] bg-cyan-500/30"></div></div>
+                            <div class="w-8 h-10 border-2 border-cyan-500/40 rounded-t-lg bg-cyan-500/10 flex items-end"><div class="w-full h-[70%] bg-cyan-500/30"></div></div>
+                            <div class="w-8 h-10 border-2 border-cyan-500/40 rounded-t-lg bg-cyan-500/10 flex items-end"><div class="w-full h-[70%] bg-cyan-500/30"></div></div>
+                        </div>
+                        <span class="text-xs text-white font-semibold">3 Tanques × 5.000 L</span>
+                        <span class="text-[10px] text-slate-400">Total: 15.000 Litros</span>
+                    </div>
+
+                    <div class="border border-slate-800 bg-slate-900/40 p-3 rounded-xl flex flex-col items-center">
+                        <span class="text-xs font-bold text-rose-400 mb-2">Agua Cruda</span>
+                        <div class="flex gap-1 justify-center mb-2">
+                            <div class="w-7 h-10 border-2 border-blue-500/40 rounded-t-lg bg-blue-500/10 flex items-end"><div class="w-full h-[50%] bg-blue-500/30"></div></div>
+                            <div class="w-7 h-10 border-2 border-blue-500/40 rounded-t-lg bg-blue-500/10 flex items-end"><div class="w-full h-[50%] bg-blue-500/30"></div></div>
+                        </div>
+                        <span class="text-xs text-white font-semibold">2 Tanques × 1.000 L</span>
+                        <span class="text-[10px] text-slate-400">Sin filtrar / Total: 2.000 L</span>
+                    </div>
+
+                    <div class="border border-slate-800 bg-slate-900/40 p-3 rounded-xl flex flex-col items-center">
+                        <span class="text-xs font-bold text-emerald-400 mb-2">Agua Tratada</span>
+                        <div class="flex gap-1 justify-center mb-2">
+                            <div class="w-7 h-10 border-2 border-emerald-500/40 rounded-t-lg bg-emerald-500/10 flex items-end"><div class="w-full h-[90%] bg-emerald-500/30"></div></div>
+                            <div class="w-7 h-10 border-2 border-emerald-500/40 rounded-t-lg bg-emerald-500/10 flex items-end"><div class="w-full h-[90%] bg-emerald-500/30"></div></div>
+                        </div>
+                        <span class="text-xs text-white font-semibold">2 Tanques × 1.000 L</span>
+                        <span class="text-[10px] text-slate-400">Para Clientes / Total: 2.000 L</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Instrucciones de Uso:
+            </h3>
+            
+            <ol class="space-y-3 text-sm text-slate-300 pl-2 list-decimal list-inside mb-6">
+                <li><strong class="text-white">Inspección Visual:</strong> Observa los niveles físicos marcados en la pizarra o directamente en los tanques de la planta.</li>
+                <li><strong class="text-white">Deslizar Controles:</strong> En la aplicación, arrastra los deslizadores (<span class="text-cyan-400 font-mono">Sliders</span>) de cada sección hasta emparejar el porcentaje visual observado.</li>
+                <li><strong class="text-white">Lectura en Tiempo Real:</strong> El sistema calculará de forma automática los litros individuales y la sumatoria en la tarjeta de <span class="text-cyan-400">Disponibilidad Total</span>.</li>
+                <li><strong class="text-white">Envío de Reportes:</strong> 
+                    <ul class="pl-6 list-disc mt-1 space-y-1 text-slate-400">
+                        <li>Usa el botón <strong class="text-slate-200">"Enviar Imagen"</strong> para descargar un gráfico unificado de alta definición optimizado para enviar al supervisor.</li>
+                        <li>Usa el botón <strong class="text-slate-200">"Copiar Texto"</strong> para guardar el formato estructurado en el portapapeles y pegarlo en el chat de mensajería rápido.</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <section class="glass-card rounded-[2rem] p-6 md:p-8 mb-8 fade-in-up">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-white">2. Aplicación: Pedidos Managuas</h2>
+                    <p class="text-xs text-blue-400 font-semibold uppercase tracking-wider">Punto de Venta (POS) y Caja</p>
+                </div>
+            </div>
+
+            <p class="text-slate-300 text-sm md:text-base mb-6 leading-relaxed">
+                Diseñada específicamente para agilizar la atención al cliente y eliminar errores matemáticos humanos. Garantiza que cualquier operador, sin importar su experiencia previa, efectúe cobros exactos por unidad de forma rápida.
+            </p>
+
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 mb-6">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 text-center">Flujo de Cobro en Caja</h3>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-2 text-center text-xs">
+                    <div class="p-2.5 bg-slate-800 border border-slate-700 rounded-xl w-full sm:w-32 font-medium">1. Seleccionar Producto</div>
+                    <div class="text-blue-400 hidden sm:block">➔</div>
+                    <div class="p-2.5 bg-slate-800 border border-slate-700 rounded-xl w-full sm:w-32 font-medium">2. Indicar Unidades</div>
+                    <div class="text-blue-400 hidden sm:block">➔</div>
+                    <div class="p-2.5 bg-blue-500/20 border border-blue-500/40 text-blue-300 rounded-xl w-full sm:w-32 font-bold">3. Ver Total Bs.</div>
+                    <div class="text-blue-400 hidden sm:block">➔</div>
+                    <div class="p-2.5 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 rounded-xl w-full sm:w-32 font-bold">4. Calcular Vuelto</div>
+                </div>
+            </div>
+
+            <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> Funciones Clave de la Caja:
+            </h3>
+
+            <div class="space-y-4 text-sm text-slate-300 mb-6">
+                <div class="border-l-2 border-blue-500/40 pl-4">
+                    <h4 class="text-white font-semibold mb-1">🛒 Registro de Ítems</h4>
+                    <p class="text-slate-400 text-xs">Al pulsar sobre un producto del catálogo táctil, se abre la calculadora de unidades. El sistema multiplica los precios vigentes extraídos automáticamente de la base de datos central en la nube.</p>
+                </div>
+                
+                <div class="border-l-2 border-blue-500/40 pl-4">
+                    <h4 class="text-white font-semibold mb-1">💵 Módulo de Vuelto Dinámico</h4>
+                    <p class="text-slate-400 text-xs">Al proceder al pago en el modal flotante, ingresa el dinero entregado por el cliente. La app evaluará instantáneamente el escenario:</p>
+                    <ul class="list-disc pl-5 mt-1 space-y-0.5 text-[11px] text-slate-400">
+                        <li><strong class="text-emerald-400">Vuelto a Entregar:</strong> Si el monto pagado supera el costo de la compra (efectivo con billetes altos).</li>
+                        <li><strong class="text-rose-400">Resta por Pagar:</strong> Si el dinero ingresado es insuficiente o si el cliente pagará usando cuentas separadas o métodos mixtos.</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-2 border-blue-500/40 pl-4">
+                    <h4 class="text-white font-semibold mb-1">💳 Pagos Mixtos y Cuentas Separadas</h4>
+                    <p class="text-slate-400 text-xs">Permite desglosar el pago dividiendo el monto entre <span class="text-slate-200">Efectivo</span> y <span class="text-slate-200">Pago Digital</span>. La aplicación realiza el balance cruzado de manera automática evitando confusiones contables.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-[2rem] p-6 md:p-8 mb-8 fade-in-up">
+            <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                Políticas de Respaldo Contable e Interfaz Central
+            </h3>
+            <p class="text-slate-300 text-xs md:text-sm leading-relaxed">
+                Los precios de los productos y las autorizaciones del sistema están vinculados directamente a la hoja de cálculo <strong class="text-white">Google Spreadsheets</strong> del negocio. Cualquier modificación en los valores del inventario realizada desde el menú del administrador se verá reflejada en tiempo real en los dispositivos de venta de la planta tras actualizar el navegador.
+            </p>
+        </section>
+
+        <footer class="text-center text-xs text-slate-500 pb-12">
+            © 2026 Sistemas Managua • Desarrollado para optimización de procesos internos comerciales.
+        </footer>
+
+    </div>
+
+</body>
+</html>
