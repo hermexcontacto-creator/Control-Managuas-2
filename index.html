@@ -53,11 +53,14 @@
     </div>
 
     <script>
-        // Al cargar la página, verificamos si ya eres "Élite"
+        const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
+
+        // Al cargar la página, verificamos si ya eres "Élite" para mostrar el botón
         window.onload = () => {
             if (localStorage.getItem("modo_elite") === "true") {
-                document.getElementById("btn-cuadre").classList.remove("hidden");
-                document.getElementById("btn-cuadre").classList.add("flex");
+                const btnCuadre = document.getElementById("btn-cuadre");
+                btnCuadre.classList.remove("hidden");
+                btnCuadre.classList.add("flex");
             }
         };
 
@@ -71,9 +74,6 @@
             if (span) span.innerText = "VERIFICANDO...";
             btn.disabled = true;
 
-            // --- PEGA AQUÍ TU URL (la que obtuviste en la Nueva Implementación) ---
-            const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
-
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
@@ -83,20 +83,18 @@
                 
                 if (result.success) {
                     if (result.role === "elite") {
-                        // Desbloqueo Élite
                         localStorage.setItem("modo_elite", "true");
                         document.getElementById("btn-cuadre").classList.remove("hidden");
                         document.getElementById("btn-cuadre").classList.add("flex");
                         alert("✅ Modo Élite Activado");
                     } else {
-                        // Acceso Administrador normal
                         window.location.href = "admin.html";
                     }
                 } else {
                     alert("❌ Contraseña incorrecta.");
                 }
             } catch (error) {
-                alert("❌ Error de conexión.");
+                alert("❌ Error de conexión: " + error.message);
             } finally {
                 if (span) span.innerText = textoOriginal;
                 btn.disabled = false;
