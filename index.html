@@ -6,26 +6,24 @@
     <title>Sistemas Managua - Portal de Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Tipografía moderna e importación de Inter */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Slate 900 */
+            background-color: #0f172a; 
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Animación suave de entrada general */
         .fade-in-up {
             animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
             transform: translateY(20px);
         }
         
-        /* Retrasos escalonados para la entrada de las tarjetas */
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
 
         @keyframes fadeInUp {
             to {
@@ -34,9 +32,8 @@
             }
         }
         
-        /* Efecto de cristal para las tarjetas y botones */
         .glass-card {
-            background: rgba(30, 41, 59, 0.6); /* Slate 800 con transparencia */
+            background: rgba(30, 41, 59, 0.6); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -68,12 +65,11 @@
             </p>
         </header>
 
-        <main class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-[320px] md:max-w-none">
+        <main class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-[320px] md:max-w-none place-content-center">
             
             <a href="https://hermexcontacto-creator.github.io/Control-Managuas-2/pedidos.html" target="_self" 
                class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-100 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
                 <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
@@ -85,7 +81,6 @@
             <a href="https://hermexcontacto-creator.github.io/Control-Managuas-2/tanques.html" target="_self" 
                class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-200 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
                 <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
@@ -94,10 +89,20 @@
                 <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Tanques Managuas</h2>
             </a>
 
-            <a href="https://hermexcontacto-creator.github.io/Control-Managuas-2/cuadre.html" target="_self" 
+            <a href="documentacion.html" target="_self" 
                class="glass-card group flex flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-300 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
+                <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <h2 class="text-lg md:text-xl font-semibold tracking-wide text-slate-100 group-hover:text-white transition-colors">Documentación</h2>
+            </a>
+
+            <a href="https://hermexcontacto-creator.github.io/Control-Managuas-2/cuadre.html" target="_self" id="btnCuadre"
+               class="hidden glass-card group flex-col items-center justify-center p-8 rounded-[2rem] transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:bg-slate-800/90 hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.4)] active:scale-95 fade-in-up delay-400 relative overflow-hidden md:col-start-2">
+                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
@@ -118,7 +123,7 @@
                 </svg>
             </div>
             
-            <h3 class="text-xl font-bold text-white mb-6 text-center">Acceso Admin</h3>
+            <h3 class="text-xl font-bold text-white mb-6 text-center">Acceso Especial</h3>
             
             <input type="password" id="adminPasswordInput" placeholder="Contraseña..." class="w-full bg-slate-900/80 border border-slate-700 text-white text-center rounded-xl px-4 py-3 mb-2 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors" autocomplete="off">
             
@@ -132,7 +137,6 @@
     </div>
 
     <script>
-        // === LÓGICA DEL MODAL DE ADMINISTRADOR ===
         const adminModal = document.getElementById('adminModal');
         const adminModalContent = document.getElementById('adminModalContent');
         const adminPasswordInput = document.getElementById('adminPasswordInput');
@@ -144,14 +148,13 @@
             adminModal.classList.remove('opacity-0', 'pointer-events-none');
             adminModalContent.classList.remove('scale-95');
             adminModalContent.classList.add('scale-100');
-            adminPasswordInput.value = ''; // Limpiar input al abrir
-            adminErrorText.classList.add('opacity-0'); // Ocultar errores previos
-            // Pequeño delay para asegurar que la animación permita el focus
+            adminPasswordInput.value = '';
+            adminErrorText.classList.add('opacity-0'); 
             setTimeout(() => adminPasswordInput.focus(), 100); 
         }
 
         function cerrarAdminModal() {
-            if (isAuthenticating) return; // Bloquear cierre si está verificando
+            if (isAuthenticating) return; 
             adminModal.classList.add('opacity-0', 'pointer-events-none');
             adminModalContent.classList.remove('scale-100');
             adminModalContent.classList.add('scale-95');
@@ -165,15 +168,15 @@
             }
 
             isAuthenticating = true;
-            adminErrorText.classList.add('opacity-0'); // Limpiar errores
+            adminErrorText.classList.add('opacity-0'); 
             
-            // Estado de carga en el botón
             const textoOriginal = btnSubmitAdmin.innerText;
             btnSubmitAdmin.innerText = "Verificando...";
             btnSubmitAdmin.disabled = true;
             btnSubmitAdmin.classList.add('opacity-75', 'cursor-not-allowed');
 
-            const API_URL = "https://script.google.com/macros/s/AKfycbyRbNWYVtixYXYAG4xPCWOlXmz3CcLQfGiAo4dN7CbL98lHRqv0wcqvOufq6hzcdq0k/exec";
+            // Asegúrate de que esta URL coincida con el Nuevo Despliegue de tu Apps Script
+            const API_URL = "https://script.google.com/macros/s/AKfycbyGEyoymql7PZvKK7hmNN9XkJKXbT7ItjHKpkbK9xQ0wH8sb69y3bYHPpgo6jXB9icU/exec";
 
             try {
                 const response = await fetch(API_URL, {
@@ -183,14 +186,28 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    window.location.href = "admin.html";
+                    if (result.role === "admin") {
+                        // Flujo de administrador
+                        window.location.href = "admin.html";
+                    } else if (result.role === "cuadre") {
+                        // Flujo de desbloqueo de Cuadre
+                        const btnCuadre = document.getElementById('btnCuadre');
+                        btnCuadre.classList.remove('hidden'); // Quitar lo oculto
+                        btnCuadre.classList.add('flex'); // Reestablecer la estructura flex
+                        
+                        // Forzar el redibujado de la animación para que entre suavemente
+                        btnCuadre.classList.remove('fade-in-up');
+                        void btnCuadre.offsetWidth; 
+                        btnCuadre.classList.add('fade-in-up');
+                        
+                        cerrarAdminModal();
+                    }
                 } else {
                     mostrarError("❌ Contraseña incorrecta");
                 }
             } catch (error) {
                 mostrarError("❌ Error de conexión");
             } finally {
-                // Restaurar botón
                 btnSubmitAdmin.innerText = textoOriginal;
                 btnSubmitAdmin.disabled = false;
                 btnSubmitAdmin.classList.remove('opacity-75', 'cursor-not-allowed');
@@ -201,25 +218,18 @@
         function mostrarError(mensaje) {
             adminErrorText.innerText = mensaje;
             adminErrorText.classList.remove('opacity-0');
-            adminPasswordInput.classList.add('border-red-500'); // Borde rojo temporal
+            adminPasswordInput.classList.add('border-red-500'); 
             setTimeout(() => adminPasswordInput.classList.remove('border-red-500'), 2000);
         }
 
-        // Permitir iniciar sesión presionando la tecla Enter
         adminPasswordInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                procesarAdminLogin();
-            }
+            if (e.key === 'Enter') procesarAdminLogin();
         });
 
-        // Cerrar el modal al tocar fuera de él
         adminModal.addEventListener('click', function(e) {
-            if(e.target === adminModal) {
-                cerrarAdminModal();
-            }
+            if(e.target === adminModal) cerrarAdminModal();
         });
 
-        // Evitar comportamiento por defecto de arrastrar los enlaces
         document.querySelectorAll('a').forEach(anchor => {
             anchor.addEventListener('dragstart', (e) => e.preventDefault());
         });
