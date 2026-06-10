@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,7 +12,6 @@
             font-family: 'Inter', sans-serif;
             background-color: #0f172a; /* Slate 900 */
             -webkit-tap-highlight-color: transparent;
-            scroll-behavior: smooth;
         }
 
         .fade-in-up {
@@ -39,7 +38,16 @@
             text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
         }
 
-        /* Estilos para los diagramas visuales generados en CSS */
+        /* Nav links para móviles */
+        .nav-btn {
+            background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Estilos para diagramas CSS */
         .mockup-tank {
             background: #0f172a;
             border: 4px solid #334155;
@@ -51,212 +59,202 @@
             bottom: 0;
             width: 100%;
             background: linear-gradient(180deg, #38bdf8 0%, #0369a1 100%);
-            border-top: 2px solid rgba(255,255,255,0.5);
+            border-top: 2px dashed rgba(255,255,255,0.7);
+        }
+        .fraction-line {
+            position: absolute;
+            width: 100%;
+            border-top: 1px dashed rgba(255,255,255,0.2);
+            z-index: 10;
         }
     </style>
 </head>
-<body class="min-h-screen text-slate-300 relative overflow-x-hidden selection:bg-cyan-500 selection:text-white pb-20">
+<body class="min-h-screen text-slate-300 relative overflow-x-hidden selection:bg-cyan-500 selection:text-white pb-24">
 
+    <!-- Efectos de luz de fondo -->
     <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
 
+    <!-- Botón de regreso al Inicio -->
     <a href="index.html" class="fixed top-4 left-4 z-50 glass-card p-3 rounded-xl flex items-center justify-center hover:bg-slate-800 transition-colors group">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-500 group-hover:-translate-x-1 transition-transform"><path d="m15 18-6-6 6-6"/></svg>
     </a>
 
-    <div class="w-full max-w-4xl mx-auto relative z-10 px-6 pt-20">
+    <div class="w-full max-w-4xl mx-auto relative z-10 px-4 md:px-6 pt-20">
         
-        <header class="text-center mb-16 fade-in-up">
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white text-glow">
+        <!-- Cabecera -->
+        <header class="text-center mb-10 fade-in-up">
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-4 text-white text-glow">
                 Manual de Operaciones
             </h1>
             <p class="text-sm md:text-base font-medium text-cyan-400 max-w-2xl mx-auto leading-relaxed">
-                Guía completa para el uso de las herramientas digitales de Sistemas Managua. Este documento explica detalladamente cómo utilizar los módulos de control de inventario y facturación para garantizar la máxima eficiencia en el día a día.
+                Guía completa para el uso del sistema POS y el controlador de inventario de planta.
             </p>
         </header>
 
-        <section class="glass-card rounded-[2rem] p-8 md:p-10 mb-12 fade-in-up" style="animation-delay: 100ms;">
+        <!-- Menú de Navegación Interna -->
+        <div class="grid grid-cols-2 gap-4 mb-16 fade-in-up" style="animation-delay: 50ms;">
+            <a href="#pedidos" class="nav-btn text-white font-bold py-4 px-6 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                <span class="text-2xl">🛒</span>
+                <span class="text-sm">Ir a Pedidos</span>
+            </a>
+            <a href="#tanques" class="nav-btn text-white font-bold py-4 px-6 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                <span class="text-2xl">🚰</span>
+                <span class="text-sm">Ir a Tanques</span>
+            </a>
+        </div>
+
+        <!-- SECCIÓN 1: PEDIDOS / PUNTO DE VENTA -->
+        <section id="pedidos" class="glass-card rounded-[2rem] p-6 md:p-10 mb-12 fade-in-up scroll-mt-24" style="animation-delay: 100ms;">
             <div class="flex items-center gap-4 mb-8 border-b border-slate-700 pb-6">
-                <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path></svg>
+                <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+                    <span class="text-2xl">🛒</span>
                 </div>
                 <div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">Módulo de Tanques</h2>
-                    <p class="text-slate-400 text-sm font-medium">Medición visual y reporte de niveles de agua.</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-1">Módulo de Pedidos</h2>
+                    <p class="text-slate-400 text-xs md:text-sm font-medium">Facturación automatizada, catálogo y cobros.</p>
                 </div>
             </div>
 
-            <div class="space-y-6 text-base leading-relaxed text-slate-300">
+            <div class="space-y-6 text-sm md:text-base leading-relaxed text-slate-300">
                 <p>
-                    El Módulo de Tanques es la herramienta diseñada para abandonar las antiguas anotaciones manuales y los cálculos engorrosos de litros. Su propósito principal es permitir a cualquier empleado realizar un inventario rápido y exacto del recurso hídrico disponible en la planta con solo deslizar el dedo por la pantalla.
+                    El Módulo de Pedidos funciona como nuestra calculadora y caja registradora principal. En la parte superior, siempre visualizarás la <strong>TASA OFICIAL</strong> del día, seguida del gran indicador <strong>TOTAL BS.</strong> y la cantidad de artículos (<strong>CANT.</strong>).
                 </p>
 
-                <h3 class="text-xl font-semibold text-white mt-8 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold text-white mt-8 mb-4 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
-                    Estructura del Almacenamiento
+                    Armar un Ticket de Venta
                 </h3>
                 <p>
-                    Para utilizar la aplicación correctamente, es fundamental comprender cómo se divide el agua en nuestras instalaciones. La planta cuenta con tres reservas principales que deben medirse por separado:
+                    El catálogo central incluye todos nuestros productos categorizados: <strong>R. 19L, R. 12L, R. 8L, B. 5L</strong> (Recargas), <strong>TAPA, HIELO</strong>, envases nuevos (<strong>N. 19L, N. 12L</strong>) y <strong>MANTEN.</strong> (Mantenimiento). Para registrar una venta:
                 </p>
-                <ul class="list-none space-y-4 my-6 bg-slate-900/50 p-6 rounded-2xl border border-slate-700/50">
-                    <li class="flex gap-4">
-                        <div class="mt-1 font-black text-cyan-500 tracking-widest text-sm">TT</div>
-                        <div><strong class="text-white">Tanques Traseros:</strong> Representan nuestra mayor reserva estratégica. Consisten en 3 tanques de 5.000 litros cada uno, sumando una capacidad total de 15.000 litros.</div>
-                    </li>
-                    <li class="flex gap-4">
-                        <div class="mt-1 font-black text-blue-400 tracking-widest text-sm">CRUDA</div>
-                        <div><strong class="text-white">Agua Cruda:</strong> Es el agua que aún no ha pasado por el sistema de filtros y purificación. Se almacena en 2 tanques de 1.000 litros cada uno, sumando 2.000 litros en total.</div>
-                    </li>
-                    <li class="flex gap-4">
-                        <div class="mt-1 font-black text-emerald-400 tracking-widest text-sm">TRATADA</div>
-                        <div><strong class="text-white">Agua Tratada:</strong> Es el producto final, completamente filtrado y listo para ser despachado a los botellones de nuestros clientes. Se almacena en 2 tanques de 1.000 litros cada uno, totalizando 2.000 litros de capacidad.</div>
-                    </li>
-                </ul>
+                <ol class="list-decimal pl-5 space-y-3 mt-4 mb-8 bg-slate-900/50 p-6 rounded-2xl border border-slate-700/50">
+                    <li>Selecciona el producto en el catálogo superior.</li>
+                    <li>Digita la cantidad exacta en el teclado numérico. Si te equivocas, pulsa la <strong class="text-red-400">C</strong> roja para limpiar la cantidad ingresada.</li>
+                    <li>Pulsa el botón azul <strong class="text-blue-400">OK</strong>. El sistema consultará el precio (ej. si una recarga de 8L vale 90 Bs) y sumará automáticamente el importe al TOTAL BS.</li>
+                    <li>Si el cliente desiste de un artículo que ya cargaste, usa el botón <strong class="text-red-400">BORRAR</strong> para eliminar el último ingreso del carrito.</li>
+                </ol>
 
-                <h3 class="text-xl font-semibold text-white mt-8 mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
-                    ¿Cómo realizar la medición?
-                </h3>
-                <p>
-                    El proceso de medición ha sido simplificado para que sea netamente visual. No es necesario realizar multiplicaciones ni usar calculadoras externas. El empleado encargado debe seguir estos pasos precisos:
-                </p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8 items-center">
-                    <div class="space-y-4">
-                        <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 rounded-full bg-cyan-500 text-slate-900 font-bold flex items-center justify-center shrink-0 mt-0.5">1</div>
-                            <p><strong>Observación física:</strong> Dirígete físicamente a la zona donde se encuentran los tanques. Observa detenidamente el nivel real del agua a través de las paredes de los recipientes.</p>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 rounded-full bg-cyan-500 text-slate-900 font-bold flex items-center justify-center shrink-0 mt-0.5">2</div>
-                            <p><strong>Selección en la App:</strong> Abre el módulo y utiliza los botones inferiores (TT, CRUDA, TRATADA) para seleccionar qué reserva estás midiendo en ese momento.</p>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 rounded-full bg-cyan-500 text-slate-900 font-bold flex items-center justify-center shrink-0 mt-0.5">3</div>
-                            <p><strong>Ajuste táctil:</strong> Coloca tu dedo sobre la figura del tanque en la pantalla y deslízalo hacia arriba o hacia abajo. Haz que el dibujo del agua coincida visualmente con la proporción real que acabas de observar en los tanques físicos.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-700 flex flex-col items-center justify-center gap-4">
-                        <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Simulación Visual</span>
-                        <div class="flex gap-4 items-end h-40">
-                            <div class="mockup-tank w-24 h-32 rounded-xl"><div class="mockup-water h-[75%]"></div></div>
-                            <div class="mockup-tank w-16 h-40 rounded-xl"><div class="mockup-water h-[40%] bg-gradient-to-t from-blue-700 to-blue-400"></div></div>
-                            <div class="mockup-tank w-16 h-40 rounded-xl"><div class="mockup-water h-[90%] bg-gradient-to-t from-emerald-600 to-emerald-400"></div></div>
-                        </div>
-                        <div class="flex gap-4 w-full justify-center mt-2 text-[10px] font-black tracking-widest">
-                            <span class="text-cyan-400 w-24 text-center">TT</span>
-                            <span class="text-blue-400 w-16 text-center">CRUDA</span>
-                            <span class="text-emerald-400 w-16 text-center">TRATADA</span>
-                        </div>
-                    </div>
+                <div class="bg-gradient-to-r from-amber-900/40 to-orange-900/20 border border-amber-500/30 p-5 rounded-2xl mt-6">
+                    <h4 class="text-amber-400 font-bold mb-2 flex items-center gap-2">
+                        <span>🗓️</span> La Oferta de los Jueves (Botón OFERTA)
+                    </h4>
+                    <p class="text-sm">
+                        Existe una promoción fija en el negocio: <strong>Llevas 4 recargas de 19L y pagas solo 3</strong>. Para agilizar esto, la calculadora cuenta con el botón <strong>OFERTA</strong>. Este botón se activa de forma totalmente automática los días Jueves, aplicando el descuento por sí solo. Sin embargo, el empleado tiene la libertad de pulsarlo para activarlo o desactivarlo manualmente cualquier otro día si existe una autorización especial.
+                    </p>
                 </div>
 
-                <p>
-                    A medida que deslizas el nivel en la aplicación, el sistema calculará automática y silenciosamente la cantidad exacta de litros en base a las fórmulas matemáticas preestablecidas. Sabrás si el tanque está a "3/4", "1/2", o cualquier otra fracción sin hacer cálculos mentales.
-                </p>
-
-                <h3 class="text-xl font-semibold text-white mt-8 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold text-white mt-8 mb-4 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
-                    Generación de Reportes
+                    El Proceso de Cobro y Vuelto
                 </h3>
                 <p>
-                    Una vez que hayas ajustado los tres niveles, la aplicación compilará toda la información. Tienes dos formas de extraer este reporte para enviarlo a la administración:
+                    El gran botón verde de <strong class="text-emerald-400">COBRAR</strong> <strong class="text-red-400 underline decoration-red-400/50">NO debe usarse en todas las ventas</strong>. Únicamente se debe presionar cuando ocurra alguna de estas tres situaciones:
                 </p>
-                <div class="space-y-4 mt-4">
-                    <div class="p-4 rounded-xl bg-slate-800 border border-slate-600">
-                        <strong class="text-white block mb-1">Botón "Copiar Pizarra"</strong>
-                        Este botón extrae un resumen en texto plano con emojis. Se llama así porque reemplaza la necesidad de escribir manualmente la información en la antigua pizarra física. Al pulsarlo, el texto se copia a tu portapapeles y está listo para ser pegado en un mensaje de texto o chat.
-                    </div>
-                    <div class="p-4 rounded-xl bg-slate-800 border border-slate-600">
-                        <strong class="text-white block mb-1">Botón de Cámara (Exportación Premium)</strong>
-                        Al pulsar el icono redondo de la cámara ubicado en la parte superior derecha, la aplicación generará una imagen de alta resolución, sumamente estética y profesional, con gráficos de barras precisos de cada tanque y la sumatoria total en litros. Al mismo tiempo, copiará el texto al portapapeles. La imagen se descargará automáticamente a tu galería.
-                    </div>
+                <ul class="list-disc pl-5 space-y-2 mb-6">
+                    <li>El cliente va a pagar con dinero físico (Efectivo).</li>
+                    <li>El cliente entrega un billete grande y necesitas que el sistema calcule el vuelto exacto.</li>
+                    <li>El cliente realizará un pago mixto (cuentas separadas: una parte en efectivo y otra por punto/pago móvil).</li>
+                </ul>
+                
+                <div class="bg-slate-800 p-5 rounded-2xl border border-slate-600">
+                    <p class="text-sm mb-4">Al pulsar COBRAR, se abrirá la ventana de <strong>Pagos y Vuelto</strong> con el Total del Ticket. Deberás rellenar los campos según corresponda:</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-emerald-900/50 rounded flex items-center justify-center shrink-0">💵</div>
+                            <span><strong>EFECTIVO RECIBIDO (BS):</strong> Anota los billetes físicos entregados.</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-900/50 rounded flex items-center justify-center shrink-0">💳</div>
+                            <span><strong>PUNTO / PAGO MÓVIL (BS):</strong> Anota el monto transferido o pasado por punto.</span>
+                        </li>
+                    </ul>
+                    <p class="mt-4 pt-4 border-t border-slate-700 text-sm">
+                        El recuadro inferior de color cambiará dinámicamente. Si el cliente pagó de más, se pondrá verde indicando el <strong>VUELTO</strong>. Si falta dinero, se pondrá rojo indicando la <strong>RESTA POR PAGAR</strong>. Solo cuando la deuda esté cubierta, presiona <strong class="text-emerald-400">COMPLETAR VENTA</strong>.
+                    </p>
                 </div>
             </div>
         </section>
 
-        <section class="glass-card rounded-[2rem] p-8 md:p-10 mb-12 fade-in-up" style="animation-delay: 200ms;">
+        <!-- SECCIÓN 2: TANQUES -->
+        <section id="tanques" class="glass-card rounded-[2rem] p-6 md:p-10 mb-12 fade-in-up scroll-mt-24" style="animation-delay: 200ms;">
             <div class="flex items-center gap-4 mb-8 border-b border-slate-700 pb-6">
-                <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+                    <span class="text-2xl">🚰</span>
                 </div>
                 <div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">Módulo de Pedidos</h2>
-                    <p class="text-slate-400 text-sm font-medium">Facturación automatizada, calculadora y gestión de cobros.</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-1">Módulo de Tanques</h2>
+                    <p class="text-slate-400 text-xs md:text-sm font-medium">Medición visual y reporte de niveles de agua.</p>
                 </div>
             </div>
 
-            <div class="space-y-6 text-base leading-relaxed text-slate-300">
+            <div class="space-y-6 text-sm md:text-base leading-relaxed text-slate-300">
                 <p>
-                    El Módulo de Pedidos opera como un Punto de Venta (POS) digital avanzado. Ha sido implementado para resolver una de las mayores dificultades en la atención al cliente: el margen de error humano en los cálculos matemáticos bajo presión. Gracias a esta aplicación, cualquier empleado, independientemente de su habilidad o rapidez con los números, puede operar la caja con total confianza y exactitud.
+                    La aplicación "CONTROL PRO - SUMA EXACTA" elimina los cálculos matemáticos de tu rutina. En la parte inferior siempre visualizarás la <strong>CAPACIDAD TOTAL</strong> (ej. 16.580 L), que suma en tiempo real la cantidad de agua disponible en toda la planta.
                 </p>
 
-                <h3 class="text-xl font-semibold text-white mt-8 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold text-white mt-8 mb-4 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
-                    Dinámica de Uso (Armando el Ticket)
+                    Dinámica de Medición Visual
                 </h3>
                 <p>
-                    La pantalla principal cuenta con un catálogo de botones visuales que representan todos nuestros productos y servicios (Recargas de diversas capacidades, botellones nuevos, tapas, hielo, mantenimiento).
+                    La interfaz te presenta tres botones principales que representan nuestras reservas. Selecciona uno para medirlo:
                 </p>
-                
-                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-700 my-6">
-                    <span class="text-xs font-bold uppercase tracking-widest text-slate-500 block text-center mb-4">Ejemplo de Interfaz de Productos</span>
-                    <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto">
-                        <div class="bg-slate-800 border-2 border-slate-600 rounded-xl h-12 flex flex-col items-center justify-center"><span class="text-lg">🚰</span></div>
-                        <div class="bg-slate-800 border-2 border-slate-600 rounded-xl h-12 flex flex-col items-center justify-center"><span class="text-lg">💧</span></div>
-                        <div class="bg-cyan-600 border-2 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)] rounded-xl h-12 flex flex-col items-center justify-center"><span class="text-lg">🏺</span></div>
-                        <div class="bg-slate-800 border-2 border-slate-600 rounded-xl h-12 flex flex-col items-center justify-center"><span class="text-lg">🥤</span></div>
+                <div class="flex gap-2 mb-6">
+                    <span class="px-3 py-1 bg-slate-800 border border-slate-600 rounded-lg text-xs font-bold text-white">TT</span>
+                    <span class="px-3 py-1 bg-slate-900 border border-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.3)] rounded-lg text-xs font-bold text-white">CRUDA</span>
+                    <span class="px-3 py-1 bg-slate-800 border border-slate-600 rounded-lg text-xs font-bold text-white">TRATADA</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 items-center">
+                    <div class="space-y-4">
+                        <p><strong>Paso a paso:</strong></p>
+                        <ol class="list-decimal pl-5 space-y-2">
+                            <li>Observa físicamente el nivel del agua en los recipientes reales.</li>
+                            <li>Toca en la pantalla el gráfico del tanque azul.</li>
+                            <li>Sube o baja el nivel con el dedo. Notarás que el sistema ajusta el agua a fracciones precisas marcadas con líneas punteadas (<strong>1/8, 1/4, 1/2, 3/4, LLENO</strong>).</li>
+                            <li>Bajo el tanque, un botón te confirmará la fracción exacta seleccionada (ej. "1/4 ARRIBA").</li>
+                        </ol>
                     </div>
-                    <p class="text-center text-xs text-cyan-400 mt-4">El botón iluminado indica que se ha seleccionado la Recarga de 8L.</p>
+                    
+                    <!-- Simulación visual reducida -->
+                    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-700 flex flex-col items-center justify-center">
+                        <div class="mockup-tank w-24 h-40 rounded-[2rem] flex flex-col justify-end pb-2 px-1 relative">
+                            <!-- Lineas de fraccion -->
+                            <div class="fraction-line top-[25%]"><span class="absolute right-2 -top-4 text-[10px] text-slate-400 font-bold">3/4</span></div>
+                            <div class="fraction-line top-[50%]"><span class="absolute right-2 -top-4 text-[10px] text-slate-400 font-bold">1/2</span></div>
+                            <div class="fraction-line top-[75%]"><span class="absolute right-2 -top-4 text-[10px] text-slate-400 font-bold">1/4</span></div>
+                            <div class="fraction-line top-[87.5%]"><span class="absolute right-2 -top-4 text-[10px] text-slate-400 font-bold">1/8</span></div>
+                            
+                            <div class="mockup-water h-[25%] rounded-b-[1.5rem]"></div>
+                        </div>
+                    </div>
                 </div>
 
-                <p>
-                    Para registrar una compra, la secuencia es estrictamente la siguiente:
-                </p>
-                <ol class="list-decimal pl-5 space-y-3 mt-4 mb-8">
-                    <li><strong>Selecciona el producto:</strong> Toca el recuadro correspondiente al artículo solicitado por el cliente.</li>
-                    <li><strong>Ingresa la cantidad:</strong> Utiliza el teclado numérico digital que aparece en pantalla para indicar cuántas unidades desea el cliente.</li>
-                    <li><strong>Confirma:</strong> Pulsa el botón "OK". Inmediatamente, la aplicación consultará el precio actualizado (por ejemplo, si la recarga de 8L está establecida en 90 bolívares) y lo añadirá a la lista de compras o "Carrito".</li>
-                    <li><strong>Repite el proceso</strong> si el cliente requiere artículos adicionales. El gran panel superior irá sumando el total en Bolívares en tiempo real.</li>
-                </ol>
-
-                <h3 class="text-xl font-semibold text-white mt-8 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold text-white mt-8 mb-4 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
-                    El Proceso de Cobro (Cálculo de Vuelto)
+                    Exportación del Reporte
                 </h3>
                 <p>
-                    Una vez que el pedido está completo, debes presionar el botón verde de <strong>COBRAR</strong>. Esto desplegará una pantalla emergente crucial para finalizar la transacción sin errores.
+                    Una vez ajustados los tres tanques, dispones de dos herramientas en la pantalla para extraer la información y enviarla:
                 </p>
-                <p>
-                    Este apartado está diseñado para manejar escenarios de pagos mixtos (cuando un cliente paga una parte en efectivo y otra por punto o pago móvil) o cuando entrega billetes de alta denominación y necesita cambio exacto.
-                </p>
-                
-                <div class="bg-slate-800/50 p-6 rounded-2xl border-l-4 border-cyan-500 mt-6">
-                    <h4 class="text-white font-bold mb-2">¿Cómo funciona la ventana de cobro?</h4>
-                    <p class="mb-4">Verás dos campos de entrada de texto:</p>
-                    <ul class="space-y-3">
-                        <li class="flex items-start gap-2">
-                            <span class="text-lg">💵</span>
-                            <div>
-                                <strong class="text-white block">Efectivo Recibido:</strong> Aquí escribes la cantidad de bolívares físicos que el cliente te está entregando.
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-lg">💳</span>
-                            <div>
-                                <strong class="text-white block">Punto / Pago Móvil:</strong> Aquí anotas el monto exacto de la transferencia o pago electrónico.
-                            </div>
-                        </li>
-                    </ul>
-                    <p class="mt-4 pt-4 border-t border-slate-700">
-                        La aplicación restará los montos ingresados del total de la factura. Si el cliente pagó de más con un billete grande, la pantalla te indicará en un recuadro verde exactamente cuánto <strong>Vuelto a Entregar</strong> debes darle. Si el monto ingresado no alcanza a cubrir la factura, te mostrará en un recuadro rojo la <strong>Resta por Pagar</strong>.
-                    </p>
+                <div class="space-y-4 mt-4">
+                    <div class="p-4 rounded-xl bg-slate-800 border border-slate-600">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-3 py-1 bg-slate-900 text-white font-bold text-xs rounded">COPIAR PIZARRA</span>
+                        </div>
+                        Ubicado en la parte inferior derecha. Al presionarlo, compila silenciosamente los datos y los copia a tu portapapeles en formato de texto plano con emojis, listo para pegar en un chat.
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-800 border border-slate-600">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center">📷</span>
+                            <strong class="text-white">Icono de Cámara (Superior Derecha)</strong>
+                        </div>
+                        <p class="text-sm">
+                            Genera una captura visual estética de los tanques. <strong>Aviso importante sobre compatibilidad:</strong> En teléfonos móviles muy obsoletos, el navegador puede no tener capacidad gráfica para generar y descargar la imagen en la galería. Si esto ocurre, la aplicación detectará la limitación y funcionará como respaldo copiando automáticamente los niveles de los tanques en formato de texto para que no pierdas el reporte.
+                        </p>
+                    </div>
                 </div>
-                
-                <p class="mt-6">
-                    Al terminar la transacción, simplemente se presiona "Completar Venta" para vaciar el carrito y dejar el sistema listo para el siguiente cliente en la fila, agilizando enormemente el flujo de trabajo en el mostrador.
-                </p>
             </div>
         </section>
 
