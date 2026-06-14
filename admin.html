@@ -210,7 +210,7 @@
 
             fetch(API_URL, {
                 method: 'POST',
-                body: JSON.stringify({ action: "changePassword", newPassword: nuevaClave })
+                body: JSON.stringify({ token: "Managua2026_Seguro_FirmaX", action: "changePassword", newPassword: nuevaClave })
             })
             .then(response => response.json())
             .then(data => {
