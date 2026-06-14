@@ -176,12 +176,12 @@
             btnSubmitAdmin.classList.add('opacity-75', 'cursor-not-allowed');
 
             // Asegúrate de que esta URL coincida con el Nuevo Despliegue de tu Apps Script
-            const API_URL = "https://script.google.com/macros/s/AKfycbyGEyoymql7PZvKK7hmNN9XkJKXbT7ItjHKpkbK9xQ0wH8sb69y3bYHPpgo6jXB9icU/exec";
+            const API_URL = "https://script.google.com/macros/s/AKfycby9UyLSHWS4mtvN3y_DuCh7Ly722kteXUgY6xJ1fln_zgjDLsPu5k2g6LDxXOawNOGT/exec?token=Managua2026_Seguro_FirmaX";
 
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "login", password: password })
+                    body: JSON.stringify({ token: "Managua2026_Seguro_FirmaX", action: "login", password: password })
                 });
                 const result = await response.json();
                 
