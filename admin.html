@@ -61,7 +61,8 @@
                 <div><label class="block text-xs font-semibold text-slate-400 mb-1">Nuevo 12L</label><input type="number" id="precio_n12" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all"></div>
                 <div><label class="block text-xs font-semibold text-slate-400 mb-1">Hielo</label><input type="number" id="precio_hielo" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all"></div>
                 <div><label class="block text-xs font-semibold text-slate-400 mb-1">Mantenimiento</label><input type="number" id="precio_mantenimiento" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all"></div>
-                <div><label class="block text-xs font-semibold text-slate-400 mb-1">Tapa Nueva</label><input type="number" id="precio_tapa" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all"></div>
+                <div><label class="block text-xs font-semibold text-slate-400 mb-1">Tapa Sin Aro</label><input type="number" id="precio_tapa" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all"></div>
+                <div><label class="block text-xs font-semibold text-slate-400 mb-1">Tapa Con Aro</label><input type="number" id="precio_tapa_aro" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all"></div>
             </div>
         </div>
 
@@ -147,6 +148,7 @@
                 if(data.hielo) document.getElementById('precio_hielo').value = data.hielo;
                 if(data.mantenimiento) document.getElementById('precio_mantenimiento').value = data.mantenimiento;
                 if(data.tapa) document.getElementById('precio_tapa').value = data.tapa;
+                if(data.tapa_aro) document.getElementById('precio_tapa_aro').value = data.tapa_aro; // Nuevo
                 
             } catch (error) {
                 console.error("Error cargando los precios:", error);
@@ -176,7 +178,8 @@
                 n12: parseFloat(document.getElementById('precio_n12').value) || 0,
                 hielo: parseFloat(document.getElementById('precio_hielo').value) || 0,
                 mantenimiento: parseFloat(document.getElementById('precio_mantenimiento').value) || 0,
-                tapa: parseFloat(document.getElementById('precio_tapa').value) || 0
+                tapa: parseFloat(document.getElementById('precio_tapa').value) || 0,
+                tapa_aro: parseFloat(document.getElementById('precio_tapa_aro').value) || 0 // Nuevo
             };
 
             fetch(API_URL, {
