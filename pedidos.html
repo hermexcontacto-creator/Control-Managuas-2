@@ -23,7 +23,7 @@
         #bcv-rate { @apply bg-slate-200 border-2 border-slate-300 rounded-lg px-2 py-1 text-center font-black text-emerald-600 outline-none w-32 text-base cursor-not-allowed; }
         
         .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        #checkout-modal { backdrop-filter: blur(4px); }
+        #checkout-modal, #tapa-modal { backdrop-filter: blur(4px); }
     </style>
 </head>
 <body class="p-2 flex flex-col items-center min-h-screen relative">
@@ -57,7 +57,7 @@
                 </div>
             </div>
             
-            <a href="index.html" class="fixed top-3 left-3 z-50 bg-slate-800/80 text-white p-2 rounded-full shadow-lg backdrop-blur-sm hover:bg-slate-900 transition-all">
+            <a href="index.html" class="fixed top-3 left-3 z-40 bg-slate-800/80 text-white p-2 rounded-full shadow-lg backdrop-blur-sm hover:bg-slate-900 transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
             </a>
             
@@ -65,14 +65,13 @@
                 <p id="promo-msg" class="text-[10px] font-black text-amber-700"></p>
             </div>
 
-            <!-- Cuadrícula adaptada para 11 botones -->
             <div class="grid grid-cols-5 gap-1.5 mb-3">
                 <button onclick="selectProduct('b19')" id="btn-b19" class="toy-btn h-11"><span class="text-lg">🚰</span><span class="text-[6px] font-black uppercase">R. 19L</span></button>
                 <button onclick="selectProduct('b12')" id="btn-b12" class="toy-btn h-11"><span class="text-lg">💧</span><span class="text-[6px] font-black uppercase">R. 12L</span></button>
                 <button onclick="selectProduct('b8')" id="btn-b8" class="toy-btn h-11"><span class="text-lg">🏺</span><span class="text-[6px] font-black uppercase">R. 8L</span></button>
                 <button onclick="selectProduct('b5')" id="btn-b5" class="toy-btn h-11"><span class="text-lg">🥤</span><span class="text-[6px] font-black uppercase">B. 5L</span></button>
-                <button onclick="selectProduct('tapa')" id="btn-tapa" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">🔘</span><span class="text-[6px] font-black uppercase">Tapa S/A</span></button>
-                <button onclick="selectProduct('tapa_aro')" id="btn-tapa_aro" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">⭕</span><span class="text-[6px] font-black uppercase">Tapa C/A</span></button>
+                <!-- BOTÓN DE TAPA MODIFICADO PARA ABRIR MODAL -->
+                <button onclick="openTapaModal()" id="btn-tapa" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">🔘</span><span class="text-[6px] font-black uppercase">Tapa</span></button>
                 <button onclick="selectProduct('hielo')" id="btn-hielo" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">🧊</span><span class="text-[6px] font-black uppercase">Hielo</span></button>
                 <button onclick="selectProduct('n19')" id="btn-n19" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">✨</span><span class="text-[6px] font-black uppercase">N. 19L</span></button>
                 <button onclick="selectProduct('n12')" id="btn-n12" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">🌟</span><span class="text-[6px] font-black uppercase">N. 12L</span></button>
@@ -107,6 +106,25 @@
         </div>
     </section>
 
+    <!-- MODAL DE SELECCIÓN DE TAPA -->
+    <div id="tapa-modal" class="hidden fixed inset-0 z-[60] bg-slate-900/60 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-xs shadow-2xl transform transition-all text-center">
+            <h3 class="text-lg font-black text-slate-800 mb-4 tracking-tight">Seleccionar Tipo</h3>
+            <div class="space-y-3">
+                <button onclick="selectTapaType('tapa')" class="w-full bg-blue-50 border-2 border-blue-200 text-blue-700 hover:bg-blue-100 font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-sm">
+                    <span class="text-2xl">🔘</span> Tapa Sencilla
+                </button>
+                <button onclick="selectTapaType('tapa_aro')" class="w-full bg-indigo-50 border-2 border-indigo-200 text-indigo-700 hover:bg-indigo-100 font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-sm">
+                    <span class="text-2xl">💠</span> Tapa con Aro
+                </button>
+            </div>
+            <button onclick="closeTapaModal()" class="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest py-2 px-4 rounded-lg hover:bg-slate-50 transition-colors">
+                Cancelar
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE COBRO (Igual que antes) -->
     <div id="checkout-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex flex-col justify-end">
         <div class="bg-white rounded-t-3xl p-5 shadow-2xl transition-transform duration-300 translate-y-full" id="checkout-content">
             <div class="flex justify-between items-center mb-4">
@@ -146,10 +164,18 @@
     <script>
         window.roundBs = (num) => +(Math.round(num + "e+2")  + "e-2");
         let BS_PRICES = { b19: 230, b12: 180, b8: 90, b5: 80 };
-        // Variables actualizadas con tapa_aro
+        // Agregado el precio por defecto de tapa_aro
         let USD_PRICES = { n19: 23, n12: 18.5, hielo: 2.5, mantenimiento: 3.5, tapa: 0.15, tapa_aro: 0.20 };
-        const CODES = { b19: 8, b12: 4, b8: "X", b5: 2, n19: 6, n12: 5, hielo: 7, tapa: "X", tapa_aro: "XA", mantenimiento: "M" };
-        const COMBO_CODES = { b19_tapa: 3, b12_tapa: 1 };
+        
+        // --- AQUÍ DEBES CAMBIAR LOS CÓDIGOS DE LA TAPA CON ARO CUANDO LOS RECUERDES ---
+        const CODES = { b19: 8, b12: 4, b8: "X", b5: 2, n19: 6, n12: 5, hielo: 7, tapa: "X", tapa_aro: "COD_TAPA_ARO", mantenimiento: "M" };
+        const COMBO_CODES = { 
+            b19_tapa: 3, 
+            b12_tapa: 1,
+            b19_tapa_aro: "COD_19_ARO", // Cambia esto 
+            b12_tapa_aro: "COD_12_ARO"  // Cambia esto
+        };
+        // -----------------------------------------------------------------------------
 
         const API_URL = "https://script.google.com/macros/s/AKfycby9UyLSHWS4mtvN3y_DuCh7Ly722kteXUgY6xJ1fln_zgjDLsPu5k2g6LDxXOawNOGT/exec?token=Managua2026_Seguro_FirmaX";
 
@@ -168,8 +194,7 @@
                 if(preciosNube.hielo) USD_PRICES.hielo = preciosNube.hielo;
                 if(preciosNube.mantenimiento) USD_PRICES.mantenimiento = preciosNube.mantenimiento;
                 if(preciosNube.tapa) USD_PRICES.tapa = preciosNube.tapa;
-                // Nueva petición a la base de datos
-                if(preciosNube.tapa_aro) USD_PRICES.tapa_aro = preciosNube.tapa_aro; 
+                if(preciosNube.tapa_aro) USD_PRICES.tapa_aro = preciosNube.tapa_aro; // Extrae Tapa con Aro
 
                 if(preciosNube.tasa_bcv) {
                     const cleanRate = preciosNube.tasa_bcv.toString().replace('.', ',');
@@ -177,11 +202,9 @@
                     updateTasaLabel("Tasa Oficial", "text-emerald-500");
                     localStorage.setItem('MANAGUA_BCV_RATE', preciosNube.tasa_bcv);
                 }
-
                 renderCart();
             } catch (error) {
-                console.warn("⚠️ No hay internet o falló la conexión. Usando datos locales de emergencia.", error);
-                
+                console.warn("⚠️ Usando datos locales de emergencia.");
                 const savedRate = localStorage.getItem('MANAGUA_BCV_RATE');
                 if(savedRate) {
                     document.getElementById('bcv-rate').value = savedRate.toString().replace('.', ',');
@@ -190,34 +213,54 @@
                 }
             } finally {
                 const loader = document.getElementById('loader-pos');
-                if(loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 300);
-                }
+                if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 300); }
             }
         }
 
         sincronizarPrecios();
 
-        // Estado adaptado para tapa_aro
+        // Agregado tapa_aro al estado inicial
         let calcState = { qty: "", product: null, promo: false, cart: { b19:0, b12:0, b8:0, b5:0, n19:0, n12:0, hielo:0, tapa:0, tapa_aro:0, mantenimiento:0 }, currentTotal: 0 };
 
-        window.onload = () => {
-            if (new Date().getDay() === 4) togglePromo(true); 
-        };
+        window.onload = () => { if (new Date().getDay() === 4) togglePromo(true); };
 
         function updateTasaLabel(t, c) { 
-            const l = document.getElementById('tasa-label'); 
-            l.innerText = t; 
-            l.className = `text-[8px] font-black uppercase mb-1 ${c}`; 
+            const l = document.getElementById('tasa-label'); l.innerText = t; l.className = `text-[8px] font-black uppercase mb-1 ${c}`; 
         }
+
+        // --- NUEVA LÓGICA DE MODAL DE TAPAS ---
+        window.openTapaModal = () => {
+            document.getElementById('tapa-modal').classList.remove('hidden');
+        };
+        
+        window.closeTapaModal = () => {
+            document.getElementById('tapa-modal').classList.add('hidden');
+        };
+
+        window.selectTapaType = (type) => {
+            closeTapaModal();
+            calcState.product = type; // Asigna 'tapa' o 'tapa_aro'
+            
+            // Remueve activos y activa el botón de tapa físico
+            document.querySelectorAll('.toy-btn').forEach(b => { if(b.id !== 'btn-promo') b.classList.remove('btn-active'); });
+            const btnTapa = document.getElementById('btn-tapa');
+            btnTapa.classList.add('btn-active');
+            
+            // Cambia el nombre temporalmente para indicar qué seleccionó
+            const textSpan = btnTapa.querySelector('span:nth-child(2)');
+            textSpan.innerText = type === 'tapa_aro' ? 'T. ARO' : 'TAPA';
+        };
 
         window.selectProduct = (id) => {
             calcState.product = id;
             document.querySelectorAll('.toy-btn').forEach(b => { if(b.id !== 'btn-promo') b.classList.remove('btn-active'); });
             const target = document.getElementById(`btn-${id}`);
             if(target) target.classList.add('btn-active');
+            
+            // Restaurar el texto original de la tapa si tocamos otra cosa
+            document.querySelector('#btn-tapa span:nth-child(2)').innerText = 'TAPA';
         };
+        // --------------------------------------
         
         window.appendQty = (n) => { if(calcState.qty.length < 3) calcState.qty += n; document.getElementById('qty-display').innerText = calcState.qty || "1"; };
         window.clearQty = () => { calcState.qty = ""; document.getElementById('qty-display').innerText = "1"; };
@@ -229,7 +272,13 @@
         };
         
         window.resetCart = () => { calcState.cart = { b19:0, b12:0, b8:0, b5:0, n19:0, n12:0, hielo:0, tapa:0, tapa_aro:0, mantenimiento:0 }; renderCart(); };
-        window.addToCart = () => { if(!calcState.product) return; calcState.cart[calcState.product] += parseInt(calcState.qty) || 1; window.clearQty(); renderCart(); };
+        
+        window.addToCart = () => { 
+            if(!calcState.product) return; 
+            calcState.cart[calcState.product] += parseInt(calcState.qty) || 1; 
+            window.clearQty(); 
+            renderCart(); 
+        };
 
         window.renderCart = () => {
             const list = document.getElementById('cart-list');
@@ -238,20 +287,36 @@
             let totalBs = 0; let itemsUI = []; let tempCart = { ...calcState.cart };
             
             const tapaPriceBs = window.roundBs(USD_PRICES.tapa * rate);
-            // La lógica de combo consume primero las tapas sin aro
-            let tapasRestantes = tempCart.tapa;
+            const tapaAroPriceBs = window.roundBs(USD_PRICES.tapa_aro * rate); // Tapa con Aro en Bs
             
+            let tapasRestantes = tempCart.tapa;
+            let tapasAroRestantes = tempCart.tapa_aro;
+            
+            // 1. Unir Botellones con Tapas Sencillas
             ['b19', 'b12'].forEach(b => {
                 let combos = Math.min(tempCart[b], tapasRestantes);
                 if(combos > 0) {
                     const priceCombo = window.roundBs(BS_PRICES[b] + tapaPriceBs);
                     const sub = window.roundBs(combos * priceCombo);
                     totalBs = window.roundBs(totalBs + sub);
-                    itemsUI.push({ name: `${b.slice(1)}L + Tapa S/A`, qty: combos, price: priceCombo, sub: sub, code: COMBO_CODES[`${b}_tapa`] });
+                    itemsUI.push({ name: `${b.slice(1)}L + Tapa`, qty: combos, price: priceCombo, sub: sub, code: COMBO_CODES[`${b}_tapa`] });
                     tempCart[b] -= combos; tapasRestantes -= combos;
                 }
             });
 
+            // 2. Unir Botellones Restantes con Tapas con Aro
+            ['b19', 'b12'].forEach(b => {
+                let combosAro = Math.min(tempCart[b], tapasAroRestantes);
+                if(combosAro > 0) {
+                    const priceComboAro = window.roundBs(BS_PRICES[b] + tapaAroPriceBs);
+                    const sub = window.roundBs(combosAro * priceComboAro);
+                    totalBs = window.roundBs(totalBs + sub);
+                    itemsUI.push({ name: `${b.slice(1)}L + T. Aro`, qty: combosAro, price: priceComboAro, sub: sub, code: COMBO_CODES[`${b}_tapa_aro`] });
+                    tempCart[b] -= combosAro; tapasAroRestantes -= combosAro;
+                }
+            });
+
+            // 3. Procesar Ofertas (Usando los de 19L que sobraron sin armar combos)
             let p19 = tempCart.b19; let paid19 = p19; let saved19 = 0;
             if(calcState.promo && p19 >= 4) {
                 saved19 = Math.floor(p19 / 4); paid19 -= saved19;
@@ -264,27 +329,26 @@
                 itemsUI.push({ name: "Recarga 19L", qty: p19, price: BS_PRICES.b19, sub: sub, code: CODES.b19 });
             }
 
+            // 4. Agregar Botellones pequeños restantes sin tapa
             ['b12', 'b8', 'b5'].forEach(k => { if(tempCart[k]>0){
                 const sub = window.roundBs(tempCart[k]*BS_PRICES[k]); totalBs = window.roundBs(totalBs+sub);
                 itemsUI.push({ name: `Recarga ${k.slice(1)}L`, qty: tempCart[k], price: BS_PRICES[k], sub: sub, code: CODES[k] });
             }});
 
+            // 5. Agregar Tapas Sueltas (Sencillas y con Aro)
             if(tapasRestantes > 0) {
                 const sub = window.roundBs(tapasRestantes * tapaPriceBs); totalBs = window.roundBs(totalBs+sub);
-                itemsUI.push({ name: "Tapa S/A", qty: tapasRestantes, price: tapaPriceBs, sub: sub, code: CODES.tapa });
+                itemsUI.push({ name: "Tapa Sencilla", qty: tapasRestantes, price: tapaPriceBs, sub: sub, code: CODES.tapa });
+            }
+            if(tapasAroRestantes > 0) {
+                const sub = window.roundBs(tapasAroRestantes * tapaAroPriceBs); totalBs = window.roundBs(totalBs+sub);
+                itemsUI.push({ name: "Tapa con Aro", qty: tapasAroRestantes, price: tapaAroPriceBs, sub: sub, code: CODES.tapa_aro });
             }
 
-            // Agregado tapa_aro a los productos sueltos
-            ['n19', 'n12', 'hielo', 'mantenimiento', 'tapa_aro'].forEach(k => { if(tempCart[k]>0){
-                const priceBs = window.roundBs(USD_PRICES[k] * rate); 
-                const sub = window.roundBs(tempCart[k] * priceBs); 
-                totalBs = window.roundBs(totalBs + sub);
-                
-                let displayName = k.toUpperCase();
-                if(k === 'mantenimiento') displayName = 'Manten.';
-                if(k === 'tapa_aro') displayName = 'Tapa C/A';
-                
-                itemsUI.push({ name: displayName, qty: tempCart[k], price: priceBs, sub: sub, code: CODES[k] });
+            // 6. Demás productos
+            ['n19', 'n12', 'hielo', 'mantenimiento'].forEach(k => { if(tempCart[k]>0){
+                const priceBs = window.roundBs(USD_PRICES[k] * rate); const sub = window.roundBs(tempCart[k] * priceBs); totalBs = window.roundBs(totalBs + sub);
+                itemsUI.push({ name: k === 'mantenimiento' ? 'Manten.' : k.toUpperCase(), qty: tempCart[k], price: priceBs, sub: sub, code: CODES[k] });
             }});
 
             calcState.currentTotal = totalBs;
