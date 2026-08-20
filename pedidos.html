@@ -20,7 +20,6 @@
         .btn-green-solid { background-color: #10b981 !important; border-color: #047857 !important; color: white !important; }
         .glass-display { @apply bg-white rounded-3xl p-3 text-center border-b-4 border-blue-100 shadow-sm mb-2; }
         
-        /* Candado visual a la Tasa BCV */
         #bcv-rate { @apply bg-slate-200 border-2 border-slate-300 rounded-lg px-2 py-1 text-center font-black text-emerald-600 outline-none w-32 text-base cursor-not-allowed; }
         
         .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -66,12 +65,14 @@
                 <p id="promo-msg" class="text-[10px] font-black text-amber-700"></p>
             </div>
 
+            <!-- Cuadrícula adaptada para 11 botones -->
             <div class="grid grid-cols-5 gap-1.5 mb-3">
                 <button onclick="selectProduct('b19')" id="btn-b19" class="toy-btn h-11"><span class="text-lg">🚰</span><span class="text-[6px] font-black uppercase">R. 19L</span></button>
                 <button onclick="selectProduct('b12')" id="btn-b12" class="toy-btn h-11"><span class="text-lg">💧</span><span class="text-[6px] font-black uppercase">R. 12L</span></button>
                 <button onclick="selectProduct('b8')" id="btn-b8" class="toy-btn h-11"><span class="text-lg">🏺</span><span class="text-[6px] font-black uppercase">R. 8L</span></button>
                 <button onclick="selectProduct('b5')" id="btn-b5" class="toy-btn h-11"><span class="text-lg">🥤</span><span class="text-[6px] font-black uppercase">B. 5L</span></button>
-                <button onclick="selectProduct('tapa')" id="btn-tapa" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">🔘</span><span class="text-[6px] font-black uppercase">Tapa</span></button>
+                <button onclick="selectProduct('tapa')" id="btn-tapa" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">🔘</span><span class="text-[6px] font-black uppercase">Tapa S/A</span></button>
+                <button onclick="selectProduct('tapa_aro')" id="btn-tapa_aro" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">⭕</span><span class="text-[6px] font-black uppercase">Tapa C/A</span></button>
                 <button onclick="selectProduct('hielo')" id="btn-hielo" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">🧊</span><span class="text-[6px] font-black uppercase">Hielo</span></button>
                 <button onclick="selectProduct('n19')" id="btn-n19" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">✨</span><span class="text-[6px] font-black uppercase">N. 19L</span></button>
                 <button onclick="selectProduct('n12')" id="btn-n12" class="toy-btn h-11 btn-blue-outline"><span class="text-lg">🌟</span><span class="text-[6px] font-black uppercase">N. 12L</span></button>
@@ -145,8 +146,9 @@
     <script>
         window.roundBs = (num) => +(Math.round(num + "e+2")  + "e-2");
         let BS_PRICES = { b19: 230, b12: 180, b8: 90, b5: 80 };
-        let USD_PRICES = { n19: 23, n12: 18.5, hielo: 2.5, mantenimiento: 3.5, tapa: 0.15 };
-        const CODES = { b19: 8, b12: 4, b8: "X", b5: 2, n19: 6, n12: 5, hielo: 7, tapa: "X", mantenimiento: "M" };
+        // Variables actualizadas con tapa_aro
+        let USD_PRICES = { n19: 23, n12: 18.5, hielo: 2.5, mantenimiento: 3.5, tapa: 0.15, tapa_aro: 0.20 };
+        const CODES = { b19: 8, b12: 4, b8: "X", b5: 2, n19: 6, n12: 5, hielo: 7, tapa: "X", tapa_aro: "XA", mantenimiento: "M" };
         const COMBO_CODES = { b19_tapa: 3, b12_tapa: 1 };
 
         const API_URL = "https://script.google.com/macros/s/AKfycby9UyLSHWS4mtvN3y_DuCh7Ly722kteXUgY6xJ1fln_zgjDLsPu5k2g6LDxXOawNOGT/exec?token=Managua2026_Seguro_FirmaX";
@@ -156,7 +158,6 @@
                 const response = await fetch(API_URL);
                 const preciosNube = await response.json();
                 
-                // Actualizamos las listas locales con lo que viene del Excel
                 if(preciosNube.b19) BS_PRICES.b19 = preciosNube.b19;
                 if(preciosNube.b12) BS_PRICES.b12 = preciosNube.b12;
                 if(preciosNube.b8) BS_PRICES.b8 = preciosNube.b8;
@@ -167,14 +168,13 @@
                 if(preciosNube.hielo) USD_PRICES.hielo = preciosNube.hielo;
                 if(preciosNube.mantenimiento) USD_PRICES.mantenimiento = preciosNube.mantenimiento;
                 if(preciosNube.tapa) USD_PRICES.tapa = preciosNube.tapa;
+                // Nueva petición a la base de datos
+                if(preciosNube.tapa_aro) USD_PRICES.tapa_aro = preciosNube.tapa_aro; 
 
-                // ASIGNAR LA TASA DESDE LA NUBE Y BLOQUEARLA VISUALMENTE
                 if(preciosNube.tasa_bcv) {
                     const cleanRate = preciosNube.tasa_bcv.toString().replace('.', ',');
                     document.getElementById('bcv-rate').value = cleanRate;
                     updateTasaLabel("Tasa Oficial", "text-emerald-500");
-                    
-                    // Guardamos respaldo local por si falla el internet luego
                     localStorage.setItem('MANAGUA_BCV_RATE', preciosNube.tasa_bcv);
                 }
 
@@ -189,7 +189,6 @@
                     renderCart();
                 }
             } finally {
-                // Quitar la pantalla de carga al terminar
                 const loader = document.getElementById('loader-pos');
                 if(loader) {
                     loader.style.opacity = '0';
@@ -200,7 +199,8 @@
 
         sincronizarPrecios();
 
-        let calcState = { qty: "", product: null, promo: false, cart: { b19:0, b12:0, b8:0, b5:0, n19:0, n12:0, hielo:0, tapa:0, mantenimiento:0 }, currentTotal: 0 };
+        // Estado adaptado para tapa_aro
+        let calcState = { qty: "", product: null, promo: false, cart: { b19:0, b12:0, b8:0, b5:0, n19:0, n12:0, hielo:0, tapa:0, tapa_aro:0, mantenimiento:0 }, currentTotal: 0 };
 
         window.onload = () => {
             if (new Date().getDay() === 4) togglePromo(true); 
@@ -228,7 +228,7 @@
             renderCart(); 
         };
         
-        window.resetCart = () => { calcState.cart = { b19:0, b12:0, b8:0, b5:0, n19:0, n12:0, hielo:0, tapa:0, mantenimiento:0 }; renderCart(); };
+        window.resetCart = () => { calcState.cart = { b19:0, b12:0, b8:0, b5:0, n19:0, n12:0, hielo:0, tapa:0, tapa_aro:0, mantenimiento:0 }; renderCart(); };
         window.addToCart = () => { if(!calcState.product) return; calcState.cart[calcState.product] += parseInt(calcState.qty) || 1; window.clearQty(); renderCart(); };
 
         window.renderCart = () => {
@@ -236,7 +236,9 @@
             const rateInput = document.getElementById('bcv-rate').value;
             const rate = parseFloat(rateInput.replace(',', '.')) || 0;
             let totalBs = 0; let itemsUI = []; let tempCart = { ...calcState.cart };
+            
             const tapaPriceBs = window.roundBs(USD_PRICES.tapa * rate);
+            // La lógica de combo consume primero las tapas sin aro
             let tapasRestantes = tempCart.tapa;
             
             ['b19', 'b12'].forEach(b => {
@@ -245,7 +247,7 @@
                     const priceCombo = window.roundBs(BS_PRICES[b] + tapaPriceBs);
                     const sub = window.roundBs(combos * priceCombo);
                     totalBs = window.roundBs(totalBs + sub);
-                    itemsUI.push({ name: `${b.slice(1)}L + Tapa`, qty: combos, price: priceCombo, sub: sub, code: COMBO_CODES[`${b}_tapa`] });
+                    itemsUI.push({ name: `${b.slice(1)}L + Tapa S/A`, qty: combos, price: priceCombo, sub: sub, code: COMBO_CODES[`${b}_tapa`] });
                     tempCart[b] -= combos; tapasRestantes -= combos;
                 }
             });
@@ -269,12 +271,20 @@
 
             if(tapasRestantes > 0) {
                 const sub = window.roundBs(tapasRestantes * tapaPriceBs); totalBs = window.roundBs(totalBs+sub);
-                itemsUI.push({ name: "Tapa", qty: tapasRestantes, price: tapaPriceBs, sub: sub, code: CODES.tapa });
+                itemsUI.push({ name: "Tapa S/A", qty: tapasRestantes, price: tapaPriceBs, sub: sub, code: CODES.tapa });
             }
 
-            ['n19', 'n12', 'hielo', 'mantenimiento'].forEach(k => { if(tempCart[k]>0){
-                const priceBs = window.roundBs(USD_PRICES[k] * rate); const sub = window.roundBs(tempCart[k] * priceBs); totalBs = window.roundBs(totalBs + sub);
-                itemsUI.push({ name: k === 'mantenimiento' ? 'Manten.' : k.toUpperCase(), qty: tempCart[k], price: priceBs, sub: sub, code: CODES[k] });
+            // Agregado tapa_aro a los productos sueltos
+            ['n19', 'n12', 'hielo', 'mantenimiento', 'tapa_aro'].forEach(k => { if(tempCart[k]>0){
+                const priceBs = window.roundBs(USD_PRICES[k] * rate); 
+                const sub = window.roundBs(tempCart[k] * priceBs); 
+                totalBs = window.roundBs(totalBs + sub);
+                
+                let displayName = k.toUpperCase();
+                if(k === 'mantenimiento') displayName = 'Manten.';
+                if(k === 'tapa_aro') displayName = 'Tapa C/A';
+                
+                itemsUI.push({ name: displayName, qty: tempCart[k], price: priceBs, sub: sub, code: CODES[k] });
             }});
 
             calcState.currentTotal = totalBs;
