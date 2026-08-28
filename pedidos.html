@@ -23,11 +23,12 @@
         #bcv-rate { @apply bg-slate-200 border-2 border-slate-300 rounded-lg px-2 py-1 text-center font-black text-emerald-600 outline-none w-32 text-base cursor-not-allowed; }
         
         .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        #checkout-modal, #tapa-modal { backdrop-filter: blur(4px); }
+        #checkout-modal, #tapa-modal, #new-customer-modal { backdrop-filter: blur(4px); }
     </style>
 </head>
 <body class="p-2 flex flex-col items-center min-h-screen relative">
     
+    <!-- LOADER -->
     <div id="loader-pos" class="fixed inset-0 bg-[#f1f5f9]/90 backdrop-blur-sm z-[100] flex flex-col items-center justify-center transition-opacity duration-300">
         <svg class="animate-spin h-14 w-14 text-blue-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -37,6 +38,7 @@
     </div>
     
     <section class="w-full max-w-md mx-auto">
+        <!-- CABECERA Y BOTONES DE PRODUCTOS -->
         <div class="sticky top-0 z-10 bg-[#f1f5f9] pb-2 pt-2">
             <div class="glass-display">
                 <div class="flex justify-between items-start mb-1">
@@ -65,6 +67,7 @@
                 <p id="promo-msg" class="text-[10px] font-black text-amber-700"></p>
             </div>
 
+            <!-- BOTONES DE PRODUCTOS -->
             <div class="grid grid-cols-5 gap-1.5 mb-3">
                 <button onclick="selectProduct('b19')" id="btn-b19" class="toy-btn h-11"><span class="text-lg">🚰</span><span class="text-[6px] font-black uppercase">R. 19L</span></button>
                 <button onclick="selectProduct('b12')" id="btn-b12" class="toy-btn h-11"><span class="text-lg">💧</span><span class="text-[6px] font-black uppercase">R. 12L</span></button>
@@ -78,6 +81,7 @@
                 <button onclick="togglePromo()" id="btn-promo" class="toy-btn h-11 btn-promo"><span class="text-lg">📅</span><span class="text-[6px] font-black uppercase">Oferta</span></button>
             </div>
             
+            <!-- TECLADO NUMÉRICO -->
             <div class="bg-blue-50/80 p-3 rounded-[2rem] border-2 border-blue-100 shadow-inner">
                 <div class="numpad-grid mb-3">
                     <button onclick="appendQty(1)" class="toy-btn h-12 text-xl">1</button>
@@ -100,6 +104,7 @@
             </div>
         </div>
         
+        <!-- CARRITO -->
         <div id="cart-list" class="space-y-2 mt-4 pb-10">
             <div class="text-center p-8 text-slate-300 font-bold italic text-sm">Carrito vacío</div>
         </div>
@@ -107,6 +112,7 @@
 
     <!-- MODAL DE SELECCIÓN DE TAPA -->
     <div id="tapa-modal" class="hidden fixed inset-0 z-[60] bg-slate-900/60 flex items-center justify-center p-4">
+        <!-- (Contenido intacto) -->
         <div class="bg-white rounded-3xl p-6 w-full max-w-xs shadow-2xl transform transition-all text-center">
             <h3 class="text-lg font-black text-slate-800 mb-4 tracking-tight">Seleccionar Tipo</h3>
             <div class="space-y-3">
@@ -117,44 +123,84 @@
                     <span class="text-2xl">💠</span> Tapa con Aro
                 </button>
             </div>
-            <button onclick="closeTapaModal()" class="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest py-2 px-4 rounded-lg hover:bg-slate-50 transition-colors">
-                Cancelar
-            </button>
+            <button onclick="closeTapaModal()" class="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest py-2 px-4 rounded-lg hover:bg-slate-50 transition-colors">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE REGISTRO DE NUEVO CLIENTE (NUEVO) -->
+    <div id="new-customer-modal" class="hidden fixed inset-0 z-[70] bg-slate-900/80 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl">
+            <h3 class="text-xl font-black text-slate-800 mb-1">Nuevo Cliente</h3>
+            <p class="text-xs text-slate-500 mb-4">La cédula no está registrada. Ingresa los datos para continuar.</p>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[10px] font-black text-slate-500 uppercase">Cédula</label>
+                    <input type="text" id="new-client-cedula" class="w-full bg-slate-100 border-2 border-slate-200 rounded-xl px-3 py-2 font-black text-slate-600 outline-none cursor-not-allowed" readonly>
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-500 uppercase">Nombre y Apellido *</label>
+                    <input type="text" id="new-client-nombre" class="w-full bg-white border-2 border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 outline-none focus:border-blue-400" autocomplete="off">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-500 uppercase">Residencia (Ej. Villa Brasil)</label>
+                    <input type="text" id="new-client-residencia" class="w-full bg-white border-2 border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 outline-none focus:border-blue-400" autocomplete="off">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-500 uppercase">Teléfono</label>
+                    <input type="tel" id="new-client-telefono" class="w-full bg-white border-2 border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 outline-none focus:border-blue-400" autocomplete="off">
+                </div>
+            </div>
+            <div class="flex gap-2 mt-5">
+                <button onclick="closeNewCustomerModal()" class="w-1/3 py-3 text-xs font-black text-slate-500 border-2 border-slate-200 rounded-xl hover:bg-slate-50">Cancelar</button>
+                <button onclick="saveNewCustomer()" id="btn-save-client" class="w-2/3 py-3 text-xs font-black text-white bg-blue-600 border-2 border-blue-700 rounded-xl shadow-md hover:bg-blue-700 transition-colors">Guardar y Usar</button>
+            </div>
         </div>
     </div>
 
     <!-- MODAL DE COBRO ACTUALIZADO -->
     <div id="checkout-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex flex-col justify-end">
-        <div class="bg-white rounded-t-3xl p-5 shadow-2xl transition-transform duration-300 translate-y-full max-h-[90vh] overflow-y-auto" id="checkout-content">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-black text-slate-800 tracking-tight">Pagos y Vuelto</h2>
-                <button onclick="closeCheckout()" class="text-slate-400 font-bold text-lg px-3 py-1 bg-slate-100 rounded-full">✕</button>
+        <div class="bg-white rounded-t-3xl p-5 shadow-2xl transition-transform duration-300 translate-y-full max-h-[95vh] overflow-y-auto" id="checkout-content">
+            
+            <!-- HEADER CON BUSCADOR (MODIFICADO) -->
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black text-slate-800 tracking-tight shrink-0 mr-2">Pagos</h2>
+                <div class="flex flex-grow bg-slate-100 rounded-full p-1 border-2 border-slate-200">
+                    <input type="number" id="search-cedula" placeholder="Buscar cédula..." class="w-full bg-transparent outline-none px-3 text-sm font-bold text-slate-700" autocomplete="off">
+                    <button onclick="searchCustomer()" id="btn-search-client" class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-blue-600 transition-colors shadow-sm shrink-0">
+                        🔍
+                    </button>
+                </div>
+                <button onclick="closeCheckout()" class="text-slate-400 font-bold text-lg px-2 py-1 bg-slate-100 rounded-full ml-2">✕</button>
+            </div>
+
+            <!-- INDICADOR DE CLIENTE SELECCIONADO -->
+            <div id="customer-info" class="hidden mb-3 text-center transition-all">
+                <span class="text-[11px] font-black text-emerald-700 bg-emerald-100 border-2 border-emerald-200 px-4 py-1.5 rounded-full inline-flex items-center gap-2">
+                    👤 Cliente: <span id="customer-name-display" class="uppercase"></span>
+                    <button onclick="clearCustomer()" class="text-rose-500 hover:text-rose-700 ml-1 bg-rose-100 rounded-full w-4 h-4 flex items-center justify-center">✖</button>
+                </span>
             </div>
             
-            <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 text-center mb-4">
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-3 text-center mb-4">
                 <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-1">Total del Ticket</span>
                 <span id="co-total-display" class="text-4xl font-black text-blue-700 tracking-tighter">0,00</span>
                 <span class="text-xs font-bold text-blue-500 ml-1">Bs.</span>
             </div>
 
-            <!-- GRID PARA LOS METODOS DE PAGO -->
+            <!-- GRID PARA LOS MÉTODOS DE PAGO -->
             <div class="grid grid-cols-2 gap-3 mb-4">
-                <!-- Efectivo Bs -->
                 <div>
                     <label class="text-[9px] font-black text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><span class="text-sm">💵</span> Efectivo (Bs)</label>
                     <input type="number" step="0.01" id="pay-cash" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-2 py-2 text-base font-black text-slate-800 outline-none focus:border-emerald-400 focus:bg-white transition-colors" placeholder="0" oninput="calculateChange()">
                 </div>
-                <!-- Divisas USD -->
                 <div>
                     <label class="text-[9px] font-black text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><span class="text-sm">💲</span> Divisas ($)</label>
                     <input type="number" step="0.01" id="pay-usd" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-2 py-2 text-base font-black text-slate-800 outline-none focus:border-green-400 focus:bg-white transition-colors" placeholder="0" oninput="calculateChange()">
                 </div>
-                <!-- Punto -->
                 <div>
                     <label class="text-[9px] font-black text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><span class="text-sm">💳</span> Punto (Bs)</label>
                     <input type="number" step="0.01" id="pay-punto" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-2 py-2 text-base font-black text-slate-800 outline-none focus:border-indigo-400 focus:bg-white transition-colors" placeholder="0" oninput="calculateChange()">
                 </div>
-                <!-- Pago Móvil -->
                 <div>
                     <label class="text-[9px] font-black text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1"><span class="text-sm">📱</span> Pago Móvil (Bs)</label>
                     <input type="number" step="0.01" id="pay-pagomovil" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-2 py-2 text-base font-black text-slate-800 outline-none focus:border-violet-400 focus:bg-white transition-colors" placeholder="0" oninput="calculateChange()">
@@ -167,7 +213,10 @@
                 <span class="text-xs font-bold ml-1">Bs.</span>
             </div>
             
-            <button onclick="completeSale()" class="w-full toy-btn btn-green-solid h-14 text-lg font-black uppercase tracking-widest">✅ Completar Venta</button>
+            <!-- BOTÓN COMPLETAR (MODIFICADO CON ID Y DESHABILITADO POR DEFECTO) -->
+            <button id="btn-complete-sale" disabled onclick="completeSale()" class="w-full toy-btn bg-slate-200 text-slate-400 border-slate-300 h-14 text-lg font-black uppercase tracking-widest cursor-not-allowed">
+                🔒 BUSCAR CLIENTE PRIMERO
+            </button>
         </div>
     </div>
 
@@ -177,17 +226,14 @@
         let USD_PRICES = { n19: 23, n12: 18.5, hielo: 2.5, mantenimiento: 3.5, tapa: 0.15, tapa_aro: 0.20 };
         
         const CODES = { b19: 8, b12: 4, b8: "X", b5: 2, n19: 6, n12: 5, hielo: 7, tapa: "X", tapa_aro: "COD_TAPA_ARO", mantenimiento: "M" };
-        const COMBO_CODES = { 
-            b19_tapa: 3, 
-            b12_tapa: 1,
-            b19_tapa_aro: "COD_19_ARO",
-            b12_tapa_aro: "COD_12_ARO" 
-        };
+        const COMBO_CODES = { b19_tapa: 3, b12_tapa: 1, b19_tapa_aro: "COD_19_ARO", b12_tapa_aro: "COD_12_ARO" };
 
-        // NUEVAS VARIABLES DE ENLACE Y SEGURIDAD
         const API_URL_BASE = "https://script.google.com/macros/s/AKfycbz2wZCOD43miyMwO6S02zCXW2zyQHH-ERcMo_pCmORdX1smDn17mwAnZK35a1T0mimD/exec";
         const SECURITY_TOKEN = "Managua2026_Seguro_FirmaX";
         const API_URL_GET = `${API_URL_BASE}?token=${SECURITY_TOKEN}`;
+
+        // ESTADO GLOBAL DEL CLIENTE ACTUAL
+        let currentClient = null;
 
         async function sincronizarPrecios() {
             try {
@@ -198,7 +244,6 @@
                 if(preciosNube.b12) BS_PRICES.b12 = preciosNube.b12;
                 if(preciosNube.b8) BS_PRICES.b8 = preciosNube.b8;
                 if(preciosNube.b5) BS_PRICES.b5 = preciosNube.b5;
-                
                 if(preciosNube.n19) USD_PRICES.n19 = preciosNube.n19;
                 if(preciosNube.n12) USD_PRICES.n12 = preciosNube.n12;
                 if(preciosNube.hielo) USD_PRICES.hielo = preciosNube.hielo;
@@ -239,7 +284,6 @@
 
         window.openTapaModal = () => { document.getElementById('tapa-modal').classList.remove('hidden'); };
         window.closeTapaModal = () => { document.getElementById('tapa-modal').classList.add('hidden'); };
-
         window.selectTapaType = (type) => {
             closeTapaModal();
             calcState.product = type; 
@@ -268,7 +312,6 @@
         };
         
         window.resetCart = () => { calcState.cart = { b19:0, b12:0, b8:0, b5:0, n19:0, n12:0, hielo:0, tapa:0, tapa_aro:0, mantenimiento:0 }; renderCart(); };
-        
         window.addToCart = () => { 
             if(!calcState.product) return; 
             calcState.cart[calcState.product] += parseInt(calcState.qty) || 1; 
@@ -285,8 +328,7 @@
             const tapaPriceBs = window.roundBs(USD_PRICES.tapa * rate);
             const tapaAroPriceBs = window.roundBs(USD_PRICES.tapa_aro * rate); 
             
-            let tapasRestantes = tempCart.tapa;
-            let tapasAroRestantes = tempCart.tapa_aro;
+            let tapasRestantes = tempCart.tapa; let tapasAroRestantes = tempCart.tapa_aro;
             
             ['b19', 'b12'].forEach(b => {
                 let combos = Math.min(tempCart[b], tapasRestantes);
@@ -297,9 +339,6 @@
                     itemsUI.push({ name: `${b.slice(1)}L + Tapa`, qty: combos, price: priceCombo, sub: sub, code: COMBO_CODES[`${b}_tapa`] });
                     tempCart[b] -= combos; tapasRestantes -= combos;
                 }
-            });
-
-            ['b19', 'b12'].forEach(b => {
                 let combosAro = Math.min(tempCart[b], tapasAroRestantes);
                 if(combosAro > 0) {
                     const priceComboAro = window.roundBs(BS_PRICES[b] + tapaAroPriceBs);
@@ -354,8 +393,26 @@
                 </div>`).join('') || '<div class="text-center p-8 text-slate-300 italic text-sm">Carrito vacío</div>';
         };
 
+        // MANEJO DE ESTADOS DEL BOTON COMPLETAR
+        window.disableCompleteBtn = () => {
+            const btn = document.getElementById('btn-complete-sale');
+            btn.disabled = true;
+            btn.className = "w-full toy-btn bg-slate-200 text-slate-400 border-slate-300 h-14 text-lg font-black uppercase tracking-widest cursor-not-allowed";
+            btn.innerHTML = '🔒 BUSCAR CLIENTE PRIMERO';
+        };
+
+        window.enableCompleteBtn = () => {
+            const btn = document.getElementById('btn-complete-sale');
+            btn.disabled = false;
+            btn.className = "w-full toy-btn btn-green-solid h-14 text-lg font-black uppercase tracking-widest";
+            btn.innerHTML = '✅ Completar Venta';
+        };
+
+        // AL ABRIR EL CHECKOUT, REINICIAMOS EL CLIENTE
         window.openCheckout = () => { 
             if(calcState.currentTotal === 0) return;
+            
+            clearCustomer(); // Limpiamos cliente previo
             document.getElementById('checkout-modal').classList.remove('hidden');
             setTimeout(() => document.getElementById('checkout-content').classList.remove('translate-y-full'), 10);
             document.getElementById('co-total-display').innerText = calcState.currentTotal.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -371,7 +428,6 @@
             const total = calcState.currentTotal;
             const rateInput = document.getElementById('bcv-rate').value;
             const rate = parseFloat(rateInput.replace(',', '.')) || 0;
-
             const cash = parseFloat(document.getElementById('pay-cash').value) || 0;
             const usd = parseFloat(document.getElementById('pay-usd').value) || 0;
             const punto = parseFloat(document.getElementById('pay-punto').value) || 0;
@@ -396,24 +452,100 @@
             }
         };
 
-        // NUEVA FUNCIÓN COMPLETE SALE (ENVIANDO DATOS A GOOGLE SHEETS)
-        window.completeSale = async () => { 
-            if(calcState.currentTotal === 0) return;
+        // ==========================================
+        // NUEVAS FUNCIONES DE CLIENTES
+        // ==========================================
+        window.clearCustomer = () => {
+            currentClient = null;
+            document.getElementById('search-cedula').value = "";
+            document.getElementById('customer-info').classList.add('hidden');
+            disableCompleteBtn();
+        };
 
-            // 1. Convertir el carrito en un texto para el Detalle del Pedido
+        window.searchCustomer = async () => {
+            const cedula = document.getElementById('search-cedula').value.trim();
+            if(!cedula) return alert("⚠️ Ingresa una cédula para buscar.");
+
+            const btn = document.getElementById('btn-search-client');
+            btn.innerHTML = "⏳"; btn.disabled = true;
+
+            try {
+                // Se hace una petición GET para buscar el cliente
+                const response = await fetch(`${API_URL_GET}&action=searchClient&cedula=${cedula}`);
+                const data = await response.json();
+
+                if(data.found) {
+                    currentClient = data.client;
+                    document.getElementById('customer-name-display').innerText = currentClient.nombre;
+                    document.getElementById('customer-info').classList.remove('hidden');
+                    enableCompleteBtn();
+                } else {
+                    // No existe, abrimos modal para registrarlo
+                    document.getElementById('new-client-cedula').value = cedula;
+                    document.getElementById('new-client-nombre').value = "";
+                    document.getElementById('new-client-residencia').value = "";
+                    document.getElementById('new-client-telefono').value = "";
+                    document.getElementById('new-customer-modal').classList.remove('hidden');
+                }
+            } catch (e) {
+                alert("⚠️ Error de conexión al buscar cliente.");
+                console.error(e);
+            } finally {
+                btn.innerHTML = "🔍"; btn.disabled = false;
+            }
+        };
+
+        window.closeNewCustomerModal = () => { document.getElementById('new-customer-modal').classList.add('hidden'); };
+
+        window.saveNewCustomer = async () => {
+            const cedula = document.getElementById('new-client-cedula').value;
+            const nombre = document.getElementById('new-client-nombre').value.trim();
+            const residencia = document.getElementById('new-client-residencia').value.trim();
+            const telefono = document.getElementById('new-client-telefono').value.trim();
+
+            if(!nombre) return alert("⚠️ El Nombre es obligatorio.");
+
+            const btn = document.getElementById('btn-save-client');
+            btn.innerHTML = "Guardando..."; btn.disabled = true;
+
+            const payload = { token: SECURITY_TOKEN, action: "registerClient", cedula, nombre, residencia, telefono };
+
+            try {
+                await fetch(API_URL_BASE, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                
+                // Al usar no-cors, asumimos que se guardó correctamente para fluidez de caja
+                currentClient = { cedula, nombre };
+                document.getElementById('customer-name-display').innerText = currentClient.nombre;
+                document.getElementById('customer-info').classList.remove('hidden');
+                enableCompleteBtn();
+                closeNewCustomerModal();
+            } catch(e) {
+                alert("⚠️ Error al guardar el cliente.");
+            } finally {
+                btn.innerHTML = "Guardar y Usar"; btn.disabled = false;
+            }
+        };
+
+        // COMPLETAR VENTA (MODIFICADO PARA ENVIAR CLIENTE)
+        window.completeSale = async () => { 
+            if(calcState.currentTotal === 0 || !currentClient) return;
+
             let itemsVendidos = [];
             for (const [key, value] of Object.entries(calcState.cart)) {
                 if (value > 0) itemsVendidos.push(`${value}x ${key.toUpperCase()}`);
             }
             const detalleVenta = itemsVendidos.join(" + ");
 
-            // 2. Extraer los métodos de pago
             const cash = parseFloat(document.getElementById('pay-cash').value) || 0;
             const usd = parseFloat(document.getElementById('pay-usd').value) || 0;
             const punto = parseFloat(document.getElementById('pay-punto').value) || 0;
             const pm = parseFloat(document.getElementById('pay-pagomovil').value) || 0;
 
-            // 3. Crear el paquete de datos (JSON Payload)
             const payload = {
                 token: SECURITY_TOKEN,
                 action: "registerSale",
@@ -422,24 +554,22 @@
                 dolares: usd,
                 punto: punto,
                 pagoMovil: pm,
-                total: calcState.currentTotal
+                total: calcState.currentTotal,
+                clienteNombre: currentClient.nombre, // ¡Dato nuevo!
+                clienteCedula: currentClient.cedula  // ¡Dato nuevo!
             };
 
-            // Damos feedback visual cambiando el texto del botón a "REGISTRANDO..."
-            const btn = document.querySelector('button[onclick="completeSale()"]');
-            btn.innerHTML = '⏳ REGISTRANDO...';
-            btn.disabled = true;
+            const btn = document.getElementById('btn-complete-sale');
+            btn.innerHTML = '⏳ REGISTRANDO...'; btn.disabled = true;
 
             try {
-                // 4. Enviar los datos a tu Google Apps Script de forma silenciosa
                 await fetch(API_URL_BASE, {
                     method: 'POST',
-                    mode: 'no-cors', // Fundamental para que el celular no bloquee la petición
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
 
-                // 5. Limpiamos la pantalla y cerramos el modal
                 resetCart(); 
                 closeCheckout(); 
                 document.getElementById('pay-cash').value = ""; 
@@ -449,11 +579,8 @@
                 
             } catch (e) {
                 alert("⚠️ Ocurrió un error de red. Verifica la conexión.");
-                console.error(e);
             } finally {
-                // Restauramos el botón a su estado normal
-                btn.innerHTML = '✅ Completar Venta';
-                btn.disabled = false;
+                btn.innerHTML = '✅ Completar Venta'; btn.disabled = false;
             }
         };
     </script>
