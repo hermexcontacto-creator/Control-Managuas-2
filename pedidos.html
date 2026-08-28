@@ -184,11 +184,14 @@
             b12_tapa_aro: "COD_12_ARO" 
         };
 
-        const API_URL = "https://script.google.com/macros/s/AKfycby9UyLSHWS4mtvN3y_DuCh7Ly722kteXUgY6xJ1fln_zgjDLsPu5k2g6LDxXOawNOGT/exec?token=Managua2026_Seguro_FirmaX";
+        // NUEVAS VARIABLES DE ENLACE Y SEGURIDAD
+        const API_URL_BASE = "https://script.google.com/macros/s/AKfycbz2wZCOD43miyMwO6S02zCXW2zyQHH-ERcMo_pCmORdX1smDn17mwAnZK35a1T0mimD/exec";
+        const SECURITY_TOKEN = "Managua2026_Seguro_FirmaX";
+        const API_URL_GET = `${API_URL_BASE}?token=${SECURITY_TOKEN}`;
 
         async function sincronizarPrecios() {
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch(API_URL_GET);
                 const preciosNube = await response.json();
                 
                 if(preciosNube.b19) BS_PRICES.b19 = preciosNube.b19;
@@ -369,16 +372,12 @@
             const rateInput = document.getElementById('bcv-rate').value;
             const rate = parseFloat(rateInput.replace(',', '.')) || 0;
 
-            // Extraer los valores ingresados en los 4 métodos de pago
             const cash = parseFloat(document.getElementById('pay-cash').value) || 0;
             const usd = parseFloat(document.getElementById('pay-usd').value) || 0;
             const punto = parseFloat(document.getElementById('pay-punto').value) || 0;
             const pm = parseFloat(document.getElementById('pay-pagomovil').value) || 0;
 
-            // Convertir los dólares a bolívares según la tasa BCV del sistema
             const usdToBs = window.roundBs(usd * rate);
-            
-            // Sumar todo lo que el cliente pagó
             const paid = window.roundBs(cash + punto + pm + usdToBs);
             const diff = window.roundBs(paid - total);
             
@@ -397,15 +396,65 @@
             }
         };
 
-        window.completeSale = () => { 
-            resetCart(); 
-            closeCheckout(); 
-            
-            // Limpiar todos los campos del formulario para el siguiente cliente
-            document.getElementById('pay-cash').value = ""; 
-            document.getElementById('pay-usd').value = "";
-            document.getElementById('pay-punto').value = "";
-            document.getElementById('pay-pagomovil').value = ""; 
+        // NUEVA FUNCIÓN COMPLETE SALE (ENVIANDO DATOS A GOOGLE SHEETS)
+        window.completeSale = async () => { 
+            if(calcState.currentTotal === 0) return;
+
+            // 1. Convertir el carrito en un texto para el Detalle del Pedido
+            let itemsVendidos = [];
+            for (const [key, value] of Object.entries(calcState.cart)) {
+                if (value > 0) itemsVendidos.push(`${value}x ${key.toUpperCase()}`);
+            }
+            const detalleVenta = itemsVendidos.join(" + ");
+
+            // 2. Extraer los métodos de pago
+            const cash = parseFloat(document.getElementById('pay-cash').value) || 0;
+            const usd = parseFloat(document.getElementById('pay-usd').value) || 0;
+            const punto = parseFloat(document.getElementById('pay-punto').value) || 0;
+            const pm = parseFloat(document.getElementById('pay-pagomovil').value) || 0;
+
+            // 3. Crear el paquete de datos (JSON Payload)
+            const payload = {
+                token: SECURITY_TOKEN,
+                action: "registerSale",
+                detalle: detalleVenta,
+                efectivo: cash,
+                dolares: usd,
+                punto: punto,
+                pagoMovil: pm,
+                total: calcState.currentTotal
+            };
+
+            // Damos feedback visual cambiando el texto del botón a "REGISTRANDO..."
+            const btn = document.querySelector('button[onclick="completeSale()"]');
+            btn.innerHTML = '⏳ REGISTRANDO...';
+            btn.disabled = true;
+
+            try {
+                // 4. Enviar los datos a tu Google Apps Script de forma silenciosa
+                await fetch(API_URL_BASE, {
+                    method: 'POST',
+                    mode: 'no-cors', // Fundamental para que el celular no bloquee la petición
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                // 5. Limpiamos la pantalla y cerramos el modal
+                resetCart(); 
+                closeCheckout(); 
+                document.getElementById('pay-cash').value = ""; 
+                document.getElementById('pay-usd').value = "";
+                document.getElementById('pay-punto').value = "";
+                document.getElementById('pay-pagomovil').value = ""; 
+                
+            } catch (e) {
+                alert("⚠️ Ocurrió un error de red. Verifica la conexión.");
+                console.error(e);
+            } finally {
+                // Restauramos el botón a su estado normal
+                btn.innerHTML = '✅ Completar Venta';
+                btn.disabled = false;
+            }
         };
     </script>
 </body>
