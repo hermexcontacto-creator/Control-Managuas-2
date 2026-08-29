@@ -99,7 +99,7 @@
                 </div>
                 <div class="flex gap-2 w-full">
                     <button onclick="resetCart()" class="toy-btn w-1/3 py-2 text-[10px] font-black text-rose-400 border-rose-200 uppercase">Borrar</button>
-                    <button onclick="openCheckout()" class="toy-btn btn-green-solid w-2/3 py-2 text-sm uppercase tracking-wider flex flex-row gap-2 font-black justify-center items-center"><span>💸</span> COBRAR</button>
+                    <button onclick="openCheckout()" class="toy-btn btn-green-solid w-2/3 py-2 text-sm uppercase tracking-wider flex flex-row gap-2"><span>💸</span> COBRAR</button>
                 </div>
             </div>
         </div>
@@ -112,6 +112,7 @@
 
     <!-- MODAL DE SELECCIÓN DE TAPA -->
     <div id="tapa-modal" class="hidden fixed inset-0 z-[60] bg-slate-900/60 flex items-center justify-center p-4">
+        <!-- (Contenido intacto) -->
         <div class="bg-white rounded-3xl p-6 w-full max-w-xs shadow-2xl transform transition-all text-center">
             <h3 class="text-lg font-black text-slate-800 mb-4 tracking-tight">Seleccionar Tipo</h3>
             <div class="space-y-3">
@@ -126,7 +127,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE REGISTRO DE NUEVO CLIENTE -->
+    <!-- MODAL DE REGISTRO DE NUEVO CLIENTE (NUEVO) -->
     <div id="new-customer-modal" class="hidden fixed inset-0 z-[70] bg-slate-900/80 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl">
             <h3 class="text-xl font-black text-slate-800 mb-1">Nuevo Cliente</h3>
@@ -156,11 +157,11 @@
         </div>
     </div>
 
-    <!-- MODAL DE COBRO -->
+    <!-- MODAL DE COBRO ACTUALIZADO -->
     <div id="checkout-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex flex-col justify-end">
         <div class="bg-white rounded-t-3xl p-5 shadow-2xl transition-transform duration-300 translate-y-full max-h-[95vh] overflow-y-auto" id="checkout-content">
             
-            <!-- HEADER CON BUSCADOR -->
+            <!-- HEADER CON BUSCADOR (MODIFICADO) -->
             <div class="flex justify-between items-center mb-3">
                 <h2 class="text-xl font-black text-slate-800 tracking-tight shrink-0 mr-2">Pagos</h2>
                 <div class="flex flex-grow bg-slate-100 rounded-full p-1 border-2 border-slate-200">
@@ -212,7 +213,7 @@
                 <span class="text-xs font-bold ml-1">Bs.</span>
             </div>
             
-            <!-- BOTÓN COMPLETAR -->
+            <!-- BOTÓN COMPLETAR (MODIFICADO CON ID Y DESHABILITADO POR DEFECTO) -->
             <button id="btn-complete-sale" disabled onclick="completeSale()" class="w-full toy-btn bg-slate-200 text-slate-400 border-slate-300 h-14 text-lg font-black uppercase tracking-widest cursor-not-allowed">
                 🔒 BUSCAR CLIENTE PRIMERO
             </button>
@@ -231,6 +232,7 @@
         const SECURITY_TOKEN = "Managua2026_Seguro_FirmaX";
         const API_URL_GET = `${API_URL_BASE}?token=${SECURITY_TOKEN}`;
 
+        // ESTADO GLOBAL DEL CLIENTE ACTUAL
         let currentClient = null;
 
         async function sincronizarPrecios() {
@@ -391,6 +393,7 @@
                 </div>`).join('') || '<div class="text-center p-8 text-slate-300 italic text-sm">Carrito vacío</div>';
         };
 
+        // MANEJO DE ESTADOS DEL BOTON COMPLETAR
         window.disableCompleteBtn = () => {
             const btn = document.getElementById('btn-complete-sale');
             btn.disabled = true;
@@ -405,16 +408,11 @@
             btn.innerHTML = '✅ Completar Venta';
         };
 
-        window.clearCustomer = () => {
-            currentClient = null;
-            document.getElementById('customer-info').classList.add('hidden');
-            document.getElementById('search-cedula').value = '';
-            disableCompleteBtn();
-        };
-
+        // AL ABRIR EL CHECKOUT, REINICIAMOS EL CLIENTE
         window.openCheckout = () => { 
             if(calcState.currentTotal === 0) return;
-            clearCustomer();
+            
+            clearCustomer(); // Limpiamos cliente previo
             document.getElementById('checkout-modal').classList.remove('hidden');
             setTimeout(() => document.getElementById('checkout-content').classList.remove('translate-y-full'), 10);
             document.getElementById('co-total-display').innerText = calcState.currentTotal.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -445,66 +443,145 @@
             
             if(diff < 0) { 
                 box.className = "rounded-2xl p-4 border-2 mb-4 bg-rose-50 border-rose-200 text-center"; 
+                disp.innerText = Math.abs(diff).toLocaleString('es-VE', {minimumFractionDigits:2}); 
                 lbl.innerText = "Resta por Pagar";
-                disp.className = "text-3xl font-black text-rose-600 tracking-tighter";
-                disp.innerText = Math.abs(diff).toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            } else {
+            } else { 
                 box.className = "rounded-2xl p-4 border-2 mb-4 bg-emerald-50 border-emerald-200 text-center"; 
-                lbl.innerText = "Cambio / Vuelto";
-                disp.className = "text-3xl font-black text-emerald-600 tracking-tighter";
-                disp.innerText = diff.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                disp.innerText = diff.toLocaleString('es-VE', {minimumFractionDigits:2}); 
+                lbl.innerText = "Vuelto a Entregar (Bs)";
             }
+        };
+
+        // ==========================================
+        // NUEVAS FUNCIONES DE CLIENTES
+        // ==========================================
+        window.clearCustomer = () => {
+            currentClient = null;
+            document.getElementById('search-cedula').value = "";
+            document.getElementById('customer-info').classList.add('hidden');
+            disableCompleteBtn();
         };
 
         window.searchCustomer = async () => {
             const cedula = document.getElementById('search-cedula').value.trim();
-            if(!cedula) return;
+            if(!cedula) return alert("⚠️ Ingresa una cédula para buscar.");
+
+            const btn = document.getElementById('btn-search-client');
+            btn.innerHTML = "⏳"; btn.disabled = true;
 
             try {
-                const res = await fetch(`${API_URL_GET}&action=getCliente&cedula=${cedula}`);
-                const data = await res.json();
+                // Se hace una petición GET para buscar el cliente
+                const response = await fetch(`${API_URL_GET}&action=searchClient&cedula=${cedula}`);
+                const data = await response.json();
 
                 if(data.found) {
-                    currentClient = data.cliente;
+                    currentClient = data.client;
                     document.getElementById('customer-name-display').innerText = currentClient.nombre;
                     document.getElementById('customer-info').classList.remove('hidden');
                     enableCompleteBtn();
                 } else {
+                    // No existe, abrimos modal para registrarlo
                     document.getElementById('new-client-cedula').value = cedula;
+                    document.getElementById('new-client-nombre').value = "";
+                    document.getElementById('new-client-residencia').value = "";
+                    document.getElementById('new-client-telefono').value = "";
                     document.getElementById('new-customer-modal').classList.remove('hidden');
                 }
-            } catch(e) {
-                alert("Error al conectar con la base de datos de clientes.");
+            } catch (e) {
+                alert("⚠️ Error de conexión al buscar cliente.");
+                console.error(e);
+            } finally {
+                btn.innerHTML = "🔍"; btn.disabled = false;
             }
         };
 
-        window.closeNewCustomerModal = () => {
-            document.getElementById('new-customer-modal').classList.add('hidden');
-        };
+        window.closeNewCustomerModal = () => { document.getElementById('new-customer-modal').classList.add('hidden'); };
 
-        window.saveNewCustomer = () => {
+        window.saveNewCustomer = async () => {
             const cedula = document.getElementById('new-client-cedula').value;
             const nombre = document.getElementById('new-client-nombre').value.trim();
             const residencia = document.getElementById('new-client-residencia').value.trim();
             const telefono = document.getElementById('new-client-telefono').value.trim();
 
-            if(!nombre) {
-                alert("El nombre es obligatorio");
-                return;
-            }
+            if(!nombre) return alert("⚠️ El Nombre es obligatorio.");
 
-            currentClient = { cedula, nombre, residencia, telefono };
-            document.getElementById('customer-name-display').innerText = nombre;
-            document.getElementById('customer-info').classList.remove('hidden');
-            closeNewCustomerModal();
-            enableCompleteBtn();
+            const btn = document.getElementById('btn-save-client');
+            btn.innerHTML = "Guardando..."; btn.disabled = true;
+
+            const payload = { token: SECURITY_TOKEN, action: "registerClient", cedula, nombre, residencia, telefono };
+
+            try {
+                await fetch(API_URL_BASE, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                
+                // Al usar no-cors, asumimos que se guardó correctamente para fluidez de caja
+                currentClient = { cedula, nombre };
+                document.getElementById('customer-name-display').innerText = currentClient.nombre;
+                document.getElementById('customer-info').classList.remove('hidden');
+                enableCompleteBtn();
+                closeNewCustomerModal();
+            } catch(e) {
+                alert("⚠️ Error al guardar el cliente.");
+            } finally {
+                btn.innerHTML = "Guardar y Usar"; btn.disabled = false;
+            }
         };
 
-        window.completeSale = () => {
-            if(!currentClient) return;
-            alert(`Venta registrada con éxito para: ${currentClient.nombre}`);
-            resetCart();
-            closeCheckout();
+        // COMPLETAR VENTA (MODIFICADO PARA ENVIAR CLIENTE)
+        window.completeSale = async () => { 
+            if(calcState.currentTotal === 0 || !currentClient) return;
+
+            let itemsVendidos = [];
+            for (const [key, value] of Object.entries(calcState.cart)) {
+                if (value > 0) itemsVendidos.push(`${value}x ${key.toUpperCase()}`);
+            }
+            const detalleVenta = itemsVendidos.join(" + ");
+
+            const cash = parseFloat(document.getElementById('pay-cash').value) || 0;
+            const usd = parseFloat(document.getElementById('pay-usd').value) || 0;
+            const punto = parseFloat(document.getElementById('pay-punto').value) || 0;
+            const pm = parseFloat(document.getElementById('pay-pagomovil').value) || 0;
+
+            const payload = {
+                token: SECURITY_TOKEN,
+                action: "registerSale",
+                detalle: detalleVenta,
+                efectivo: cash,
+                dolares: usd,
+                punto: punto,
+                pagoMovil: pm,
+                total: calcState.currentTotal,
+                clienteNombre: currentClient.nombre, // ¡Dato nuevo!
+                clienteCedula: currentClient.cedula  // ¡Dato nuevo!
+            };
+
+            const btn = document.getElementById('btn-complete-sale');
+            btn.innerHTML = '⏳ REGISTRANDO...'; btn.disabled = true;
+
+            try {
+                await fetch(API_URL_BASE, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                resetCart(); 
+                closeCheckout(); 
+                document.getElementById('pay-cash').value = ""; 
+                document.getElementById('pay-usd').value = "";
+                document.getElementById('pay-punto').value = "";
+                document.getElementById('pay-pagomovil').value = ""; 
+                
+            } catch (e) {
+                alert("⚠️ Ocurrió un error de red. Verifica la conexión.");
+            } finally {
+                btn.innerHTML = '✅ Completar Venta'; btn.disabled = false;
+            }
         };
     </script>
 </body>
