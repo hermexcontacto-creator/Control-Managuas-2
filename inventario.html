@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistemas Managua - Inventario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; -webkit-tap-highlight-color: transparent; }
+        .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        /* Animación para los items de la lista */
+        .item-enter { animation: slideInRight 0.4s ease-out forwards; opacity: 0; transform: translateX(20px); }
+        @keyframes slideInRight { to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body class="text-slate-200 pb-20">
+
+    <!-- Loader de Pantalla Completa -->
+    <div id="loader-inventario" class="fixed inset-0 bg-[#0f172a] z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+        <svg class="animate-spin h-12 w-12 text-emerald-500 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><circle class="opacity-25" cx="12" cy="12" r="10"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        <p class="text-emerald-400 font-bold tracking-[0.2em] text-xs uppercase animate-pulse">Cargando Inventario...</p>
+    </div>
+
+    <!-- Botón Volver -->
+    <a href="index.html" class="fixed top-4 left-4 z-40 bg-slate-800 text-white p-3 rounded-full shadow-xl hover:bg-slate-700 transition-all border border-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </a>
+
+    <div class="max-w-md mx-auto pt-20 px-4 space-y-6">
+        
+        <!-- Cabecera -->
+        <div class="text-center fade-in-up">
+            <h1 class="text-3xl font-black text-white tracking-tight mb-2">Inventario</h1>
+            <p class="text-slate-400 text-sm">Control de Insumos y Stock</p>
+        </div>
+
+        <!-- Tarjeta: Crear Nuevo Insumo -->
+        <div class="glass-card rounded-3xl p-6 fade-in-up bg-gradient-to-br from-slate-800/80 to-emerald-900/20 border-emerald-500/30">
+            <h2 class="text-xl font-black text-emerald-400 mb-4 flex items-center tracking-wide">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                NUEVO INSUMO
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">ID Corto (Ej: tapas_19l)</label>
+                    <input type="text" id="inv_id" placeholder="tapas_19l" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nombre del Insumo</label>
+                    <input type="text" id="inv_nombre" placeholder="Tapas Botellón 19L" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Stock Inicial</label>
+                        <input type="number" id="inv_stock" value="0" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Stock Mínimo</label>
+                        <input type="number" id="inv_minimo" value="10" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-rose-500 transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Unidad de Medida</label>
+                    <select id="inv_unidad" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all appearance-none">
+                        <option value="Und">Unidades (Und)</option>
+                        <option value="Kg">Kilogramos (Kg)</option>
+                        <option value="Lts">Litros (Lts)</option>
+                        <option value="Paquete">Paquetes</option>
+                    </select>
+                </div>
+                <button onclick="registrarInsumo()" id="btnCrearInsumo" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-95 flex justify-center items-center mt-2">
+                    Crear Producto
+                </button>
+            </div>
+        </div>
+
+        <!-- Tarjeta: Lista de Inventario Actual -->
+        <div class="glass-card rounded-3xl p-6 fade-in-up" style="animation-delay: 200ms;">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-cyan-400 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    Stock Actual
+                </h2>
+                <button onclick="cargarInventario()" class="text-slate-400 hover:text-white transition-colors p-2 bg-slate-800 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Contenedor donde se inyectarán los items -->
+            <div id="lista-inventario" class="space-y-3">
+                <!-- Se llena por JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerta Flotante Nativa Personalizada -->
+    <div id="custom-alert" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div id="alert-card" class="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border-b-4 transform transition-all scale-95 duration-100">
+            <div id="alert-icon" class="text-4xl mb-2 animate-bounce">✅</div>
+            <h3 id="alert-title" class="text-lg font-black text-slate-800 tracking-tight mb-1">Título</h3>
+            <p id="alert-msg" class="text-xs text-slate-500 mb-5 leading-relaxed">Mensaje descriptivo del estado.</p>
+            <button id="alert-btn" onclick="closeCustomAlert()" class="w-full py-3 text-white font-black rounded-xl transition-all shadow-md active:translate-y-0.5 uppercase tracking-wider text-xs">Aceptar</button>
+        </div>
+    </div>
+
+    <script>
+        const TOKEN = "Managua2026_Seguro_FirmaX";
+        const API_URL = "https://script.google.com/macros/s/AKfycby9UyLSHWS4mtvN3y_DuCh7Ly722kteXUgY6xJ1fln_zgjDLsPu5k2g6LDxXOawNOGT/exec"; 
+
+        window.addEventListener('DOMContentLoaded', cargarInventario);
+
+        // Sistema Operativo de Alertas Propias (Idéntico a Admin)
+        function mostrarAlertaCustom(icono, titulo, mensaje, tipo = 'success') {
+            const modal = document.getElementById('custom-alert');
+            const elIcono = document.getElementById('alert-icon');
+            const elTitulo = document.getElementById('alert-title');
+            const elMensaje = document.getElementById('alert-msg');
+            const elCard = document.getElementById('alert-card');
+            const elBtn = document.getElementById('alert-btn');
+
+            elIcono.innerText = icono;
+            elTitulo.innerText = titulo;
+            elMensaje.innerText = mensaje;
+
+            elCard.className = "bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border-b-4 transform transition-all";
+            elBtn.className = "w-full py-3 text-white font-black rounded-xl transition-all shadow-md active:translate-y-0.5 uppercase tracking-wider text-xs";
+
+            if (tipo === 'success') {
+                elCard.classList.add('border-emerald-500');
+                elBtn.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'shadow-emerald-200');
+            } else if (tipo === 'error') {
+                elCard.classList.add('border-rose-500');
+                elBtn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'shadow-rose-200');
+            } else {
+                elCard.classList.add('border-amber-500');
+                elBtn.classList.add('bg-amber-500', 'hover:bg-amber-600', 'shadow-amber-200');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('custom-alert').classList.add('hidden');
+        }
+
+        // Cargar datos de la pestaña Inventario
+        async function cargarInventario() {
+            const contenedor = document.getElementById('lista-inventario');
+            contenedor.innerHTML = '<p class="text-center text-slate-500 text-sm py-4 animate-pulse">Sincronizando base de datos...</p>';
+            
+            try {
+                // Usamos el doGet que modificamos, pasándole action=getInventario
+                const response = await fetch(`${API_URL}?token=${TOKEN}&action=getInventario`);
+                const data = await response.json();
+                
+                contenedor.innerHTML = ''; // Limpiar loader
+                
+                if(data.length === 0 || data.status === "Error") {
+                    contenedor.innerHTML = '<p class="text-center text-slate-500 text-sm py-4">No hay insumos registrados aún.</p>';
+                    return;
+                }
+
+                data.forEach((item, index) => {
+                    const isLowStock = item.stockActual <= item.stockMinimo;
+                    const stockColor = isLowStock ? 'text-rose-400 font-black' : 'text-emerald-400 font-bold';
+                    const bgCard = isLowStock ? 'bg-rose-950/20 border-rose-500/30' : 'bg-slate-800/50 border-slate-700';
+                    const statusIcon = isLowStock ? '⚠️' : '✅';
+
+                    const htmlCard = `
+                        <div class="${bgCard} border rounded-xl p-4 flex justify-between items-center item-enter" style="animation-delay: ${index * 50}ms">
+                            <div>
+                                <h3 class="text-white font-bold text-sm mb-1">${item.insumo}</h3>
+                                <span class="text-[10px] text-slate-500 font-mono uppercase bg-slate-900 px-2 py-0.5 rounded-md">ID: ${item.id}</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xl ${stockColor}">${item.stockActual} <span class="text-xs text-slate-400 font-normal">${item.unidad}</span></div>
+                                <div class="text-[10px] text-slate-400 mt-1">${statusIcon} Mínimo: ${item.stockMinimo}</div>
+                            </div>
+                        </div>
+                    `;
+                    contenedor.insertAdjacentHTML('beforeend', htmlCard);
+                });
+
+            } catch (error) {
+                console.error("Error cargando inventario:", error);
+                contenedor.innerHTML = '<p class="text-center text-rose-500 text-sm py-4">Error de conexión al cargar datos.</p>';
+            } finally {
+                const loader = document.getElementById('loader-inventario');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.classList.add('hidden'), 500);
+                }
+            }
+        }
+
+        // Enviar nuevo insumo al doPost
+        function registrarInsumo() {
+            const id = document.getElementById('inv_id').value;
+            const insumo = document.getElementById('inv_nombre').value;
+            const stock = document.getElementById('inv_stock').value;
+            const minimo = document.getElementById('inv_minimo').value;
+            const unidad = document.getElementById('inv_unidad').value;
+
+            if(!id || !insumo) {
+                mostrarAlertaCustom("⚠️", "Datos Incompletos", "El ID y el Nombre del insumo son obligatorios.", "warning");
+                return;
+            }
+
+            const btn = document.getElementById('btnCrearInsumo');
+            const textoOriginal = btn.innerHTML;
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-white inline" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Registrando...`;
+            btn.disabled = true;
+
+            const payload = {
+                token: TOKEN,
+                action: "crearInsumo",
+                id: id,
+                insumo: insumo,
+                stockInicial: stock,
+                stockMinimo: minimo,
+                unidad: unidad
+            };
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    mostrarAlertaCustom("📦", "Insumo Creado", "El producto se ha registrado en el inventario exitosamente.", "success");
+                    
+                    // Limpiar formulario
+                    document.getElementById('inv_id').value = "";
+                    document.getElementById('inv_nombre').value = "";
+                    document.getElementById('inv_stock').value = "0";
+                    document.getElementById('inv_minimo').value = "10";
+                    
+                    // Recargar la lista para que aparezca el nuevo producto
+                    cargarInventario();
+                } else {
+                    mostrarAlertaCustom("❌", "Error", "El servidor rechazó la operación.", "error");
+                }
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+            })
+            .catch(error => {
+                mostrarAlertaCustom("❌", "Error de Red", "No se pudo comunicar con la base de datos.", "error");
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
