@@ -51,67 +51,24 @@
             </div>
         </section>
 
-        <!-- ================= SECCIÓN 2: CREAR NUEVO ================= -->
-        <section id="sec-nuevo" class="fade-in-up hidden space-y-4">
-            <div class="glass-card rounded-3xl p-6 bg-gradient-to-br from-slate-800/80 to-emerald-900/20 border-emerald-500/30 shadow-xl">
-                <h2 class="text-xl font-black text-emerald-400 mb-4 flex items-center tracking-wide">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    NUEVO INSUMO
-                </h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">ID Corto (Ej: tapas_19l)</label>
-                        <input type="text" id="inv_id" placeholder="tapas_19l" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Nombre del Insumo</label>
-                        <input type="text" id="inv_nombre" placeholder="Tapas Botellón 19L" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Stock Inicial</label>
-                            <input type="number" id="inv_stock" value="0" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Stock Mínimo</label>
-                            <input type="number" id="inv_minimo" value="10" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-rose-500 transition-all">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Unidad de Medida</label>
-                        <select id="inv_unidad" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 transition-all appearance-none">
-                            <option value="Und">Unidades (Und)</option>
-                            <option value="Kg">Kilogramos (Kg)</option>
-                            <option value="Lts">Litros (Lts)</option>
-                            <option value="Paquete">Paquetes</option>
-                        </select>
-                    </div>
-                    <button onclick="registrarInsumo()" id="btnCrearInsumo" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-95 flex justify-center items-center mt-2">
-                        Guardar Producto
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= SECCIÓN 3: HISTORIAL ================= -->
+        <!-- ================= SECCIÓN 2: HISTORIAL AGRUPADO ================= -->
         <section id="sec-historial" class="fade-in-up hidden space-y-4">
-            <div id="lista-historial" class="space-y-3">
+            <div class="flex justify-between items-center mb-2 px-1">
+                <p class="text-slate-400 text-sm">Movimientos por Fecha</p>
+            </div>
+            <div id="lista-historial" class="space-y-1">
                 <!-- Se inyecta por JS -->
             </div>
         </section>
     </div>
 
-    <!-- Barra de Navegación Inferior -->
-    <nav class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-slate-800 flex justify-around p-2 z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.3)] pb-safe">
-        <button onclick="cambiarTab('stock', this)" class="nav-btn nav-active flex flex-col items-center p-2 w-20 transition-colors">
+    <!-- Barra de Navegación Inferior (Ahora solo 2 botones, 50% / 50%) -->
+    <nav class="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-slate-800 flex justify-between z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.3)] pb-safe">
+        <button onclick="cambiarTab('stock', this)" class="nav-btn nav-active flex flex-col items-center justify-center py-3 w-1/2 transition-colors border-r border-slate-800">
             <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
             <span class="text-[10px] font-bold uppercase tracking-wider">Stock</span>
         </button>
-        <button onclick="cambiarTab('nuevo', this)" class="nav-btn nav-inactive flex flex-col items-center p-2 w-20 transition-colors">
-            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Nuevo</span>
-        </button>
-        <button onclick="cambiarTab('historial', this)" class="nav-btn nav-inactive flex flex-col items-center p-2 w-20 transition-colors">
+        <button onclick="cambiarTab('historial', this)" class="nav-btn nav-inactive flex flex-col items-center justify-center py-3 w-1/2 transition-colors">
             <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <span class="text-[10px] font-bold uppercase tracking-wider">Historial</span>
         </button>
@@ -173,7 +130,6 @@
 
             // Ocultar todas las secciones
             document.getElementById('sec-stock').classList.add('hidden');
-            document.getElementById('sec-nuevo').classList.add('hidden');
             document.getElementById('sec-historial').classList.add('hidden');
 
             // Mostrar activa y cambiar el header
@@ -182,12 +138,9 @@
                 document.getElementById('sec-stock').classList.remove('hidden');
                 titulo.innerText = "Stock Actual";
                 cargarInventario(false); // false = no mostrar loader pantalla completa de nuevo
-            } else if (tab === 'nuevo') {
-                document.getElementById('sec-nuevo').classList.remove('hidden');
-                titulo.innerText = "Nuevo Insumo";
             } else if (tab === 'historial') {
                 document.getElementById('sec-historial').classList.remove('hidden');
-                titulo.innerText = "Historial";
+                titulo.innerText = "Historial de Movimientos";
                 cargarHistorial();
             }
         }
@@ -263,7 +216,6 @@
                                     <div class="text-[10px] text-slate-400 mt-1">${statusIcon} Mínimo: ${item.stockMinimo}</div>
                                 </div>
                             </div>
-                            <!-- BOTÓN ÚNICO DE ENTRADA (Full width) -->
                             <button onclick="abrirModalEntrada('${item.id}')" class="w-full bg-slate-900 border border-emerald-900/50 text-emerald-400 hover:bg-emerald-900/30 rounded-xl py-2.5 text-xs font-black transition-colors flex justify-center items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                 INGRESAR STOCK
@@ -323,7 +275,7 @@
             .then(res => res.json())
             .then(data => {
                 cerrarModal();
-                cargarInventario(false); // Recargar stock sin pantalla negra
+                cargarInventario(false); 
                 mostrarAlertaCustom("✅", "¡Stock Actualizado!", `Se sumaron ${cant} al producto ${id}.`, "success");
                 btn.innerHTML = txtOriginal; btn.disabled = false;
             }).catch(e => {
@@ -332,10 +284,10 @@
             });
         }
 
-        // --- 3. CARGAR HISTORIAL ---
+        // --- 3. CARGAR HISTORIAL (AGRUPADO POR FECHAS) ---
         async function cargarHistorial() {
             const contenedor = document.getElementById('lista-historial');
-            contenedor.innerHTML = '<p class="text-center text-slate-500 text-sm py-8 animate-pulse">Buscando movimientos recientes...</p>';
+            contenedor.innerHTML = '<p class="text-center text-slate-500 text-sm py-8 animate-pulse">Buscando movimientos...</p>';
             
             try {
                 const res = await fetch(`${API_URL}?token=${TOKEN}&action=getHistorial`);
@@ -347,72 +299,98 @@
                     return;
                 }
 
-                data.forEach((item, index) => {
-                    const esEntrada = item.tipo === "ENTRADA";
-                    const color = esEntrada ? 'text-emerald-400' : 'text-rose-400';
-                    const borde = esEntrada ? 'border-emerald-500/50' : 'border-rose-500/50';
-                    const signo = esEntrada ? '+' : '-';
-                    // Formato de fecha simplificado
+                // 3.1 Agrupar los datos por Fecha (día)
+                const movimientosPorFecha = {};
+                
+                data.forEach(item => {
                     const fechaObj = new Date(item.fecha);
-                    const fechaFormato = fechaObj.toLocaleDateString('es-VE') + ' ' + fechaObj.toLocaleTimeString('es-VE', {hour: '2-digit', minute:'2-digit'});
+                    // Formato de fecha para el título (ej: "Lunes, 02 de Sep")
+                    const fechaLegible = fechaObj.toLocaleDateString('es-VE', { weekday: 'long', day: '2-digit', month: 'short' }); 
                     
-                    const div = `
-                    <div class="glass-card border-l-4 ${borde} rounded-r-xl p-3 flex justify-between items-center item-enter" style="animation-delay: ${index * 30}ms">
-                        <div>
-                            <div class="text-white font-bold text-sm uppercase">${item.id}</div>
-                            <div class="text-[10px] text-slate-400 mt-0.5">${fechaFormato}</div>
-                            <div class="text-[11px] text-slate-300 mt-1 italic opacity-80">${item.observacion}</div>
-                        </div>
-                        <div class="${color} font-black text-xl bg-slate-900/50 px-3 py-1 rounded-lg">
-                            ${signo}${item.cantidad}
-                        </div>
-                    </div>`;
-                    contenedor.insertAdjacentHTML('beforeend', div);
+                    if (!movimientosPorFecha[fechaLegible]) {
+                        movimientosPorFecha[fechaLegible] = [];
+                    }
+                    movimientosPorFecha[fechaLegible].push(item);
                 });
+
+                // 3.2 Generar el HTML de los Acordeones (Fechas)
+                Object.keys(movimientosPorFecha).forEach((fecha, index) => {
+                    const movimientos = movimientosPorFecha[fecha];
+                    const idAcordeon = 'fecha-' + index;
+
+                    // Calcular totales del día
+                    let entradasTotales = 0;
+                    let salidasTotales = 0;
+                    movimientos.forEach(m => {
+                        if (m.tipo === "ENTRADA") entradasTotales += Number(m.cantidad);
+                        else salidasTotales += Number(m.cantidad);
+                    });
+
+                    // Construir los items (hijos) dentro de la fecha
+                    let movimientosHTML = '';
+                    movimientos.forEach(item => {
+                        const esEntrada = item.tipo === "ENTRADA";
+                        const color = esEntrada ? 'text-emerald-400' : 'text-rose-400';
+                        const borde = esEntrada ? 'border-emerald-500/50' : 'border-rose-500/50';
+                        const signo = esEntrada ? '+' : '-';
+                        const hora = new Date(item.fecha).toLocaleTimeString('es-VE', {hour: '2-digit', minute:'2-digit'});
+
+                        movimientosHTML += `
+                        <div class="bg-slate-900/60 border-l-2 ${borde} rounded-r-lg p-3 mb-2 flex justify-between items-center shadow-sm">
+                            <div>
+                                <div class="text-white font-bold text-xs uppercase">${item.id} <span class="text-[10px] font-normal text-slate-400 ml-2">🕒 ${hora}</span></div>
+                                <div class="text-[11px] text-slate-400 italic mt-0.5">${item.observacion}</div>
+                            </div>
+                            <div class="${color} font-black text-lg bg-slate-950/80 px-2.5 py-1 rounded-md border border-slate-800">
+                                ${signo}${item.cantidad}
+                            </div>
+                        </div>`;
+                    });
+
+                    // Construir el contenedor padre (La barra de la fecha clickeable)
+                    const htmlCard = `
+                        <div class="glass-card rounded-xl mb-3 overflow-hidden item-enter shadow-lg" style="animation-delay: ${index * 40}ms">
+                            <button onclick="toggleAcordeon('${idAcordeon}')" class="w-full flex justify-between items-center p-4 text-left focus:outline-none hover:bg-slate-800/50 transition-colors">
+                                <div>
+                                    <h3 class="text-emerald-400 font-bold capitalize text-sm flex items-center tracking-wide">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        ${fecha}
+                                    </h3>
+                                    <div class="text-[10px] text-slate-400 mt-1.5 flex space-x-3">
+                                        <span class="bg-slate-900 px-2 py-0.5 rounded-md border border-emerald-900/30">Entradas: <b class="text-emerald-500">${entradasTotales}</b></span>
+                                        <span class="bg-slate-900 px-2 py-0.5 rounded-md border border-rose-900/30">Salidas: <b class="text-rose-500">${salidasTotales}</b></span>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-800 p-1.5 rounded-full">
+                                    <svg id="icon-${idAcordeon}" class="w-5 h-5 text-slate-300 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </button>
+                            <!-- Contenido oculto por defecto -->
+                            <div id="${idAcordeon}" class="hidden px-3 pb-3 border-t border-slate-700/50 pt-3 bg-slate-800/20">
+                                ${movimientosHTML}
+                            </div>
+                        </div>
+                    `;
+                    contenedor.insertAdjacentHTML('beforeend', htmlCard);
+                });
+
             } catch (err) { 
                 contenedor.innerHTML = '<p class="text-rose-500 text-center py-4 text-sm">Error al cargar historial.</p>'; 
             }
         }
 
-        // --- 4. CREAR NUEVO INSUMO ---
-        function registrarInsumo() {
-            const id = document.getElementById('inv_id').value;
-            const insumo = document.getElementById('inv_nombre').value;
-            const stock = document.getElementById('inv_stock').value;
-            const minimo = document.getElementById('inv_minimo').value;
-            const unidad = document.getElementById('inv_unidad').value;
-
-            if(!id || !insumo) {
-                mostrarAlertaCustom("⚠️", "Faltan Datos", "El ID y el Nombre son obligatorios.", "warning");
-                return;
+        // --- 4. FUNCIÓN PARA ABRIR/CERRAR FECHAS EN EL HISTORIAL ---
+        function toggleAcordeon(id) {
+            const contenido = document.getElementById(id);
+            const icono = document.getElementById('icon-' + id);
+            
+            if (contenido.classList.contains('hidden')) {
+                contenido.classList.remove('hidden');
+                icono.classList.add('rotate-180');
+            } else {
+                contenido.classList.add('hidden');
+                icono.classList.remove('rotate-180');
             }
-
-            const btn = document.getElementById('btnCrearInsumo');
-            const textoOriginal = btn.innerHTML;
-            btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-white inline" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Guardando...`;
-            btn.disabled = true;
-
-            const payload = {
-                token: TOKEN, action: "crearInsumo", id: id, insumo: insumo, 
-                stockInicial: stock, stockMinimo: minimo, unidad: unidad
-            };
-
-            fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success) {
-                    mostrarAlertaCustom("📦", "Producto Creado", "Se ha registrado en la base de datos.", "success");
-                    // Limpiar formulario
-                    document.getElementById('inv_id').value = ""; document.getElementById('inv_nombre').value = "";
-                    document.getElementById('inv_stock').value = "0"; document.getElementById('inv_minimo').value = "10";
-                } else {
-                    mostrarAlertaCustom("❌", "Error", "El servidor rechazó la operación.", "error");
-                }
-                btn.innerHTML = textoOriginal; btn.disabled = false;
-            }).catch(error => {
-                mostrarAlertaCustom("❌", "Error de Red", "No se pudo comunicar con el servidor.", "error");
-                btn.innerHTML = textoOriginal; btn.disabled = false;
-            });
         }
     </script>
 </body>
