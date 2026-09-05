@@ -11,6 +11,8 @@
         .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
         .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        /* Estilo sutil para inputs bloqueados */
+        .input-locked { background-color: rgba(30, 41, 59, 0.8) !important; color: #94a3b8 !important; cursor: not-allowed; border-color: rgba(51, 65, 85, 0.5) !important; }
     </style>
 </head>
 <body class="text-slate-200 pb-24">
@@ -18,7 +20,7 @@
     <!-- Loader Inicial -->
     <div id="loader-cuadre" class="fixed inset-0 bg-[#0f172a] z-50 flex flex-col items-center justify-center transition-opacity duration-500">
         <svg class="animate-spin h-12 w-12 text-cyan-500 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><circle class="opacity-25" cx="12" cy="12" r="10"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-        <p class="text-cyan-400 font-bold tracking-[0.2em] text-xs uppercase animate-pulse">Sincronizando datos y precios...</p>
+        <p class="text-cyan-400 font-bold tracking-[0.2em] text-xs uppercase animate-pulse">Sincronizando datos...</p>
     </div>
 
     <!-- Botón Volver -->
@@ -29,7 +31,7 @@
     <div class="max-w-md mx-auto pt-20 px-4 space-y-6">
         <div class="text-center fade-in-up">
             <h1 class="text-3xl font-black text-white tracking-tight mb-2">Cuadre de Caja</h1>
-            <p class="text-slate-400 text-sm">Cierre de Turno y Arqueo Moderno</p>
+            <p class="text-slate-400 text-sm">Cierre de Turno y Arqueo Automático</p>
         </div>
 
         <!-- Información General -->
@@ -53,11 +55,11 @@
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 mb-1">Reloj Inicial (Ayer)</label>
-                    <input type="number" id="reloj_inicial" oninput="calcularCuadre()" placeholder="0" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-amber-500 font-mono">
+                    <input type="number" id="reloj_inicial" readonly placeholder="..." class="w-full input-locked border border-slate-700 rounded-xl p-3 font-bold focus:outline-none font-mono transition-colors">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 mb-1">Reloj Final (Hoy)</label>
-                    <input type="number" id="reloj_final" oninput="calcularCuadre()" placeholder="0" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-amber-500 font-mono">
+                    <input type="number" id="reloj_final" oninput="calcularCuadre()" placeholder="0" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-amber-500 font-mono shadow-inner shadow-black/20">
                 </div>
             </div>
             <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
@@ -66,26 +68,28 @@
             </div>
         </div>
 
-        <!-- Unidades Vendidas (Sistema / Fórmula Compleja) -->
+        <!-- Unidades Vendidas (Sistema / Fórmula Automática) -->
         <div class="glass-card rounded-3xl p-6 fade-in-up space-y-4" style="animation-delay: 150ms;">
-            <h2 class="text-lg font-bold text-blue-400 flex items-center">3. Unidades Vendidas Hoy</h2>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Ingresa cuántas unidades de cada producto salieron en el turno para calcular automáticamente el agua del sistema y su valor en Bolívares.</p>
+            <div class="flex justify-between items-center mb-1">
+                <h2 class="text-lg font-bold text-blue-400 flex items-center">3. Unidades Vendidas</h2>
+                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-1 rounded-md font-bold uppercase tracking-wider">Automático</span>
+            </div>
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 mb-1">Botellón 19L</label>
-                    <input type="number" id="cant_b19" value="0" oninput="calcularCuadre()" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-blue-500 font-mono">
+                    <input type="number" id="cant_b19" value="0" readonly class="w-full input-locked border border-slate-700 rounded-xl p-3 font-bold font-mono">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 mb-1">Botellón 12L</label>
-                    <input type="number" id="cant_b12" value="0" oninput="calcularCuadre()" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-blue-500 font-mono">
+                    <input type="number" id="cant_b12" value="0" readonly class="w-full input-locked border border-slate-700 rounded-xl p-3 font-bold font-mono">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 mb-1">Botellón 8L</label>
-                    <input type="number" id="cant_b8" value="0" oninput="calcularCuadre()" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-blue-500 font-mono">
+                    <input type="number" id="cant_b8" value="0" readonly class="w-full input-locked border border-slate-700 rounded-xl p-3 font-bold font-mono">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 mb-1">Botellón 5L</label>
-                    <input type="number" id="cant_b5" value="0" oninput="calcularCuadre()" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-blue-500 font-mono">
+                    <input type="number" id="cant_b5" value="0" readonly class="w-full input-locked border border-slate-700 rounded-xl p-3 font-bold font-mono">
                 </div>
             </div>
             <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
@@ -181,54 +185,29 @@
         const API_URL = "https://script.google.com/macros/s/AKfycby9UyLSHWS4mtvN3y_DuCh7Ly722kteXUgY6xJ1fln_zgjDLsPu5k2g6LDxXOawNOGT/exec?token=Managua2026_Seguro_FirmaX"; 
 
         let preciosGlobales = {
-            tasa_bcv: 1,
-            b19: 0,
-            b12: 0,
-            b8: 0,
-            b5: 0
+            tasa_bcv: 1, b19: 0, b12: 0, b8: 0, b5: 0
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Fecha por defecto hoy
             const hoy = new Date().toISOString().split('T')[0];
             document.getElementById('fecha_cierre').value = hoy;
             
-            cargarDatosConfiguracion();
+            // Ejecutar ambas consultas en paralelo y ocultar el loader al finalizar
+            Promise.all([
+                cargarDatosConfiguracion(),
+                cargarDatosAutomaticos()
+            ]).finally(() => {
+                const loader = document.getElementById('loader-cuadre');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.remove(), 500);
+                }
+            });
         });
 
-        function mostrarAlertaCustom(icono, titulo, mensaje, tipo = 'success') {
-            const modal = document.getElementById('custom-alert');
-            const elIcono = document.getElementById('alert-icon');
-            const elTitulo = document.getElementById('alert-title');
-            const elMensaje = document.getElementById('alert-msg');
-            const elCard = document.getElementById('alert-card');
-            const elBtn = document.getElementById('alert-btn');
-
-            elIcono.innerText = icono;
-            elTitulo.innerText = titulo;
-            elMensaje.innerText = mensaje;
-
-            elCard.className = "bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border-b-4 transform transition-all";
-            elBtn.className = "w-full py-3 text-white font-black rounded-xl transition-all shadow-md active:translate-y-0.5 uppercase tracking-wider text-xs";
-
-            if (tipo === 'success') {
-                elCard.classList.add('border-emerald-500');
-                elBtn.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'shadow-emerald-200');
-            } else if (tipo === 'error') {
-                elCard.classList.add('border-rose-500');
-                elBtn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'shadow-rose-200');
-            } else {
-                elCard.classList.add('border-amber-500');
-                elBtn.classList.add('bg-amber-500', 'hover:bg-amber-600', 'shadow-amber-200');
-            }
-
-            modal.classList.remove('hidden');
-        }
-
-        function closeCustomAlert() {
-            document.getElementById('custom-alert').classList.add('hidden');
-        }
-
+        // ==========================================
+        // 1. OBTENER PRECIOS
+        // ==========================================
         async function cargarDatosConfiguracion() {
             try {
                 const response = await fetch(API_URL);
@@ -241,22 +220,49 @@
                 preciosGlobales.b5 = parseFloat(data.b5) || 0;
 
                 document.getElementById('lbl_tasa_bcv').innerText = preciosGlobales.tasa_bcv.toFixed(2);
+                calcularCuadre();
             } catch (error) {
                 console.error("Error cargando configuración:", error);
-            } finally {
-                const loader = document.getElementById('loader-cuadre');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 500);
-                }
+            }
+        }
+
+        // ==========================================
+        // 2. OBTENER DATOS AUTOMÁTICOS (RELOJ Y VENTAS)
+        // ==========================================
+        async function cargarDatosAutomaticos() {
+            try {
+                const response = await fetch(API_URL + "&action=getDatosCuadre");
+                const data = await response.json();
+                
+                // Asignar los datos traídos del sistema
+                document.getElementById('reloj_inicial').value = data.litrosAyer || 0;
+                document.getElementById('cant_b19').value = data.cant_b19 || 0;
+                document.getElementById('cant_b12').value = data.cant_b12 || 0;
+                document.getElementById('cant_b8').value = data.cant_b8 || 0;
+                document.getElementById('cant_b5').value = data.cant_b5 || 0;
+
+                calcularCuadre();
+            } catch (error) {
+                console.error("Error cargando datos automáticos:", error);
+                mostrarAlertaCustom("⚠️", "Conexión Lenta", "No se pudieron obtener las ventas automáticas. Los campos han sido desbloqueados para ingreso manual.", "warning");
+                
+                // Si falla, liberar los inputs para que el operador pueda introducirlos a mano
+                const camposBloqueados = ['reloj_inicial', 'cant_b19', 'cant_b12', 'cant_b8', 'cant_b5'];
+                camposBloqueados.forEach(id => {
+                    const el = document.getElementById(id);
+                    el.removeAttribute('readonly');
+                    el.classList.remove('input-locked');
+                    el.classList.add('bg-slate-800/50', 'text-white');
+                    el.setAttribute('oninput', 'calcularCuadre()');
+                });
             }
         }
 
         function calcularCuadre() {
-            // Reloj
+            // Reloj (Permite dar números negativos si el reloj se reinicia)
             const rInicial = parseFloat(document.getElementById('reloj_inicial').value) || 0;
             const rFinal = parseFloat(document.getElementById('reloj_final').value) || 0;
-            const litrosReloj = Math.max(0, rFinal - rInicial);
+            const litrosReloj = rFinal - rInicial;
             document.getElementById('lbl_litros_reloj').innerText = litrosReloj.toLocaleString('es-VE') + " L";
 
             // Cantidades vendidas
@@ -269,7 +275,7 @@
             const litrosSistema = (b19 * 19) + (b12 * 12) + (b8 * 8) + (b5 * 5);
             document.getElementById('lbl_litros_sistema').innerText = litrosSistema.toLocaleString('es-VE') + " L";
 
-            // Ventas Teóricas Bs (b19*precio + b12*precio + ...)
+            // Ventas Teóricas Bs
             const ventasSistemaBs = (b19 * preciosGlobales.b19) + (b12 * preciosGlobales.b12) + (b8 * preciosGlobales.b8) + (b5 * preciosGlobales.b5);
             document.getElementById('lbl_ventas_sistema_bs').innerText = "Bs. " + ventasSistemaBs.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
@@ -320,13 +326,12 @@
 
             const btn = document.getElementById('btnGuardarCuadre');
             const textoOriginal = btn.innerHTML;
-            btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Guardando Cierre...`;
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-white inline-block" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Guardando Cierre...`;
             btn.disabled = true;
 
-            // Recalcular para asegurar variables exactas
             const rInicial = parseFloat(document.getElementById('reloj_inicial').value) || 0;
             const rFinal = parseFloat(document.getElementById('reloj_final').value) || 0;
-            const litrosReloj = Math.max(0, rFinal - rInicial);
+            const litrosReloj = rFinal - rInicial;
             
             const b19 = parseFloat(document.getElementById('cant_b19').value) || 0;
             const b12 = parseFloat(document.getElementById('cant_b12').value) || 0;
@@ -373,7 +378,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                mostrarAlertaCustom("✅", "¡Cierre Guardado!", "El cuadre diario se registró exitosamente en el sistema y en la hoja de Excel.", "success");
+                mostrarAlertaCustom("✅", "¡Cierre Guardado!", "El cuadre diario se registró exitosamente en el sistema.", "success");
                 btn.innerHTML = textoOriginal;
                 btn.disabled = false;
             })
@@ -382,6 +387,32 @@
                 btn.innerHTML = textoOriginal;
                 btn.disabled = false;
             });
+        }
+
+        function mostrarAlertaCustom(icono, titulo, mensaje, tipo = 'success') {
+            const modal = document.getElementById('custom-alert');
+            document.getElementById('alert-icon').innerText = icono;
+            document.getElementById('alert-title').innerText = titulo;
+            document.getElementById('alert-msg').innerText = mensaje;
+            
+            const elCard = document.getElementById('alert-card');
+            const elBtn = document.getElementById('alert-btn');
+            
+            elCard.className = "bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border-b-4 transform transition-all";
+            elBtn.className = "w-full py-3 text-white font-black rounded-xl transition-all shadow-md active:translate-y-0.5 uppercase tracking-wider text-xs";
+
+            if (tipo === 'success') {
+                elCard.classList.add('border-emerald-500'); elBtn.classList.add('bg-emerald-500', 'hover:bg-emerald-600');
+            } else if (tipo === 'error') {
+                elCard.classList.add('border-rose-500'); elBtn.classList.add('bg-rose-500', 'hover:bg-rose-600');
+            } else {
+                elCard.classList.add('border-amber-500'); elBtn.classList.add('bg-amber-500', 'hover:bg-amber-600');
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('custom-alert').classList.add('hidden');
         }
     </script>
 </body>
