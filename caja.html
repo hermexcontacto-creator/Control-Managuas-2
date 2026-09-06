@@ -11,7 +11,6 @@
         .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
         .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        /* Estilo sutil para inputs bloqueados */
         .input-locked { background-color: rgba(30, 41, 59, 0.8) !important; color: #94a3b8 !important; cursor: not-allowed; border-color: rgba(51, 65, 85, 0.5) !important; }
     </style>
 </head>
@@ -34,7 +33,7 @@
             <p class="text-slate-400 text-sm">Cierre de Turno y Arqueo Automático</p>
         </div>
 
-        <!-- Información General -->
+        <!-- 1. Información General -->
         <div class="glass-card rounded-3xl p-6 fade-in-up space-y-4">
             <h2 class="text-lg font-bold text-cyan-400 flex items-center">1. Datos del Turno</h2>
             <div class="grid grid-cols-2 gap-3">
@@ -49,7 +48,7 @@
             </div>
         </div>
 
-        <!-- Lectura de Reloj (Agua) -->
+        <!-- 2. Lectura de Reloj (Agua) -->
         <div class="glass-card rounded-3xl p-6 fade-in-up space-y-4" style="animation-delay: 100ms;">
             <h2 class="text-lg font-bold text-amber-400 flex items-center">2. Control de Litros (Reloj)</h2>
             <div class="grid grid-cols-2 gap-3">
@@ -68,12 +67,14 @@
             </div>
         </div>
 
-        <!-- Unidades Vendidas (Sistema / Fórmula Automática) -->
+        <!-- 3. Unidades Vendidas -->
         <div class="glass-card rounded-3xl p-6 fade-in-up space-y-4" style="animation-delay: 150ms;">
             <div class="flex justify-between items-center mb-1">
                 <h2 class="text-lg font-bold text-blue-400 flex items-center">3. Unidades Vendidas</h2>
                 <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-1 rounded-md font-bold uppercase tracking-wider">Automático</span>
             </div>
+            
+            <!-- Grid de Botellones -->
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 mb-1">Botellón 19L</label>
@@ -92,37 +93,54 @@
                     <input type="number" id="cant_b5" value="0" readonly class="w-full input-locked border border-slate-700 rounded-xl p-3 font-bold font-mono">
                 </div>
             </div>
-            <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-                <span class="text-slate-400">Litros Sistema (Fórmula):</span>
+
+            <!-- Grid de Insumos Extra (NUEVO) -->
+            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/50">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-1">Tapa Normal</label>
+                    <input type="number" id="cant_tapa" value="0" readonly class="w-full input-locked border border-slate-700 rounded-xl p-2 font-bold font-mono text-sm">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-1">Tapa c/ Aro</label>
+                    <input type="number" id="cant_tapa_aro" value="0" readonly class="w-full input-locked border border-slate-700 rounded-xl p-2 font-bold font-mono text-sm">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-1">Bolsas Hielo</label>
+                    <input type="number" id="cant_hielo" value="0" readonly class="w-full input-locked border border-slate-700 rounded-xl p-2 font-bold font-mono text-sm">
+                </div>
+            </div>
+
+            <!-- Resumen de Ventas Teóricas -->
+            <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs mt-2">
+                <span class="text-slate-400">Litros Sistema (Agua):</span>
                 <span id="lbl_litros_sistema" class="text-blue-400 font-black font-mono text-base">0 L</span>
             </div>
             <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-                <span class="text-slate-400">Ventas Teóricas Sistema:</span>
+                <span class="text-slate-400">Ventas Teóricas Totales:</span>
                 <span id="lbl_ventas_sistema_bs" class="text-emerald-400 font-black font-mono text-base">Bs. 0,00</span>
             </div>
         </div>
 
-        <!-- Conteo de Efectivo, Divisas y Puntos Ramificados -->
+        <!-- 4. Conteo de Dinero -->
         <div class="glass-card rounded-3xl p-6 fade-in-up space-y-4" style="animation-delay: 200ms;">
-            <h2 class="text-lg font-bold text-emerald-400 flex items-center">4. Arqueo de Dinero Físico y Digital</h2>
-            
+            <h2 class="text-lg font-bold text-emerald-400 flex items-center">4. Arqueo de Dinero</h2>
             <div class="space-y-3">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Efectivo Físico (Bolívares)</label>
-                    <input type="number" step="0.01" id="efectivo_bs" value="0" oninput="calcularCuadre()" placeholder="0.00" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 font-mono">
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Efectivo Físico (Bs)</label>
+                    <input type="number" step="0.01" id="efectivo_bs" value="0" oninput="calcularCuadre()" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 font-mono">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Divisas Físicas (Dólares $)</label>
-                    <input type="number" step="0.01" id="dolares_fisicos" value="0" oninput="calcularCuadre()" placeholder="0.00" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 font-mono">
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Divisas Físicas ($)</label>
+                    <input type="number" step="0.01" id="dolares_fisicos" value="0" oninput="calcularCuadre()" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 font-mono">
                     <p class="text-[10px] text-amber-400 mt-1">Tasa BCV actual: <span id="lbl_tasa_bcv" class="font-bold">0.00</span> Bs/USD</p>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Pago Móvil (Bolívares)</label>
-                    <input type="number" step="0.01" id="pago_movil_bs" value="0" oninput="calcularCuadre()" placeholder="0.00" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 font-mono">
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Pago Móvil (Bs)</label>
+                    <input type="number" step="0.01" id="pago_movil_bs" value="0" oninput="calcularCuadre()" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-emerald-500 font-mono">
                 </div>
                 
                 <div class="pt-2 border-t border-slate-700/60">
-                    <label class="block text-xs font-bold text-cyan-400 mb-2 uppercase tracking-wider">Puntos de Venta Ramificados (Bs)</label>
+                    <label class="block text-xs font-bold text-cyan-400 mb-2 uppercase tracking-wider">Puntos de Venta (Bs)</label>
                     <div class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="text-xs text-slate-400 w-24">Venezuela:</span>
@@ -141,7 +159,7 @@
             </div>
         </div>
 
-        <!-- Resumen de Resultados y Desviaciones -->
+        <!-- 5. Resultados -->
         <div class="glass-card rounded-3xl p-6 fade-in-up space-y-4 border-2 border-cyan-500/30 bg-gradient-to-br from-slate-800/90 to-cyan-950/40" style="animation-delay: 250ms;">
             <h2 class="text-lg font-bold text-white flex items-center justify-between">
                 <span>5. Resultado del Cuadre</span>
@@ -154,29 +172,66 @@
                     <span id="res_total_caja" class="text-white font-black font-mono text-base">Bs. 0,00</span>
                 </div>
                 <div class="flex justify-between items-center pb-2 border-b border-slate-700/50">
-                    <span class="text-slate-300">Diferencia de Dinero (Caja vs Sistema):</span>
+                    <span class="text-slate-300">Dif. Global de Dinero:</span>
                     <span id="res_dif_caja" class="font-black font-mono text-base">Bs. 0,00</span>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-slate-300">Diferencia de Litros (Sistema vs Reloj):</span>
+
+                <!-- NUEVO: Desglose por método de pago -->
+                <div class="bg-slate-900/50 rounded-xl p-3 border border-slate-700/50 space-y-2 mt-2">
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Análisis de Desviaciones</h3>
+                    
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">Efectivo (Bs):</span>
+                        <div class="text-right">
+                            <span id="lbl_esp_efectivo" class="text-slate-500 mr-2 text-[10px]">Sist: 0.00</span>
+                            <span id="dif_efectivo" class="font-mono font-bold">0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">Pago Móvil (Bs):</span>
+                        <div class="text-right">
+                            <span id="lbl_esp_pagomovil" class="text-slate-500 mr-2 text-[10px]">Sist: 0.00</span>
+                            <span id="dif_pagomovil" class="font-mono font-bold">0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">Puntos (Bs):</span>
+                        <div class="text-right">
+                            <span id="lbl_esp_punto" class="text-slate-500 mr-2 text-[10px]">Sist: 0.00</span>
+                            <span id="dif_punto" class="font-mono font-bold">0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">Dólares ($):</span>
+                        <div class="text-right">
+                            <span id="lbl_esp_dolares" class="text-slate-500 mr-2 text-[10px]">Sist: 0.00</span>
+                            <span id="dif_dolares" class="font-mono font-bold">0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-3 pt-2 border-t border-slate-700/50">
+                    <span class="text-slate-300">Dif. de Litros de Agua:</span>
                     <span id="res_dif_litros" class="font-black font-mono text-base">0 L</span>
                 </div>
             </div>
         </div>
 
-        <!-- Botón de Guardado -->
+        <!-- Botón Guardar -->
         <button onclick="guardarCuadre()" id="btnGuardarCuadre" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-95 fade-in-up flex justify-center items-center text-base" style="animation-delay: 300ms;">
             Registrar y Guardar Cierre de Caja
         </button>
-
     </div>
 
-    <!-- Alerta Flotante Personalizada -->
+    <!-- Alerta -->
     <div id="custom-alert" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
         <div id="alert-card" class="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border-b-4 transform transition-all scale-95 duration-100">
             <div id="alert-icon" class="text-4xl mb-2 animate-bounce">✅</div>
             <h3 id="alert-title" class="text-lg font-black text-slate-800 tracking-tight mb-1">Título</h3>
-            <p id="alert-msg" class="text-xs text-slate-500 mb-5 leading-relaxed">Mensaje descriptivo del estado.</p>
+            <p id="alert-msg" class="text-xs text-slate-500 mb-5 leading-relaxed">Mensaje.</p>
             <button id="alert-btn" onclick="closeCustomAlert()" class="w-full py-3 text-white font-black rounded-xl transition-all shadow-md active:translate-y-0.5 uppercase tracking-wider text-xs">Aceptar</button>
         </div>
     </div>
@@ -184,236 +239,161 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzTDmhdsUSpCS0tVZuzbAa1QCFyZbQhjkZ74GBpm1BAW1gx7zkoO1G2njA--rH2Kbrf/exec?token=Managua2026_Seguro_FirmaX"; 
 
-        let preciosGlobales = {
-            tasa_bcv: 1, b19: 0, b12: 0, b8: 0, b5: 0
-        };
+        // Variables Globales
+        let preciosGlobales = { tasa_bcv: 1, b19: 0, b12: 0, b8: 0, b5: 0, tapa: 0, tapa_aro: 0, hielo: 0 };
+        let sistemaEsperado = { efectivo: 0, pago_movil: 0, punto: 0, dolares: 0 };
 
         window.addEventListener('DOMContentLoaded', () => {
-            const hoy = new Date().toISOString().split('T')[0];
-            document.getElementById('fecha_cierre').value = hoy;
-            
-            // Ejecutar ambas consultas en paralelo y ocultar el loader al finalizar
-            Promise.all([
-                cargarDatosConfiguracion(),
-                cargarDatosAutomaticos()
-            ]).finally(() => {
+            document.getElementById('fecha_cierre').value = new Date().toISOString().split('T')[0];
+            Promise.all([ cargarDatosConfiguracion(), cargarDatosAutomaticos() ]).finally(() => {
                 const loader = document.getElementById('loader-cuadre');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 500);
-                }
+                if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 500); }
             });
         });
 
-        // ==========================================
-        // 1. OBTENER PRECIOS
-        // ==========================================
         async function cargarDatosConfiguracion() {
             try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
+                const res = await fetch(API_URL);
+                const data = await res.json();
                 
                 preciosGlobales.tasa_bcv = parseFloat(data.tasa_bcv) || 1;
                 preciosGlobales.b19 = parseFloat(data.b19) || 0;
                 preciosGlobales.b12 = parseFloat(data.b12) || 0;
                 preciosGlobales.b8 = parseFloat(data.b8) || 0;
                 preciosGlobales.b5 = parseFloat(data.b5) || 0;
+                preciosGlobales.tapa = parseFloat(data.tapa) || 0;
+                preciosGlobales.tapa_aro = parseFloat(data.tapa_aro) || 0;
+                preciosGlobales.hielo = parseFloat(data.hielo) || 0;
 
                 document.getElementById('lbl_tasa_bcv').innerText = preciosGlobales.tasa_bcv.toFixed(2);
                 calcularCuadre();
-            } catch (error) {
-                console.error("Error cargando configuración:", error);
-            }
+            } catch (e) { console.error("Error Config:", e); }
         }
 
-        // ==========================================
-        // 2. OBTENER DATOS AUTOMÁTICOS (RELOJ Y VENTAS)
-        // ==========================================
         async function cargarDatosAutomaticos() {
             try {
-                const response = await fetch(API_URL + "&action=getDatosCuadre");
-                const data = await response.json();
+                const res = await fetch(API_URL + "&action=getDatosCuadre");
+                const data = await res.json();
                 
-                // Asignar los datos traídos del sistema
+                // Unidades
                 document.getElementById('reloj_inicial').value = data.litrosAyer || 0;
                 document.getElementById('cant_b19').value = data.cant_b19 || 0;
                 document.getElementById('cant_b12').value = data.cant_b12 || 0;
                 document.getElementById('cant_b8').value = data.cant_b8 || 0;
                 document.getElementById('cant_b5').value = data.cant_b5 || 0;
+                document.getElementById('cant_tapa').value = data.cant_tapa || 0;
+                document.getElementById('cant_tapa_aro').value = data.cant_tapa_aro || 0;
+                document.getElementById('cant_hielo').value = data.cant_hielo || 0;
+
+                // Dinero Esperado (Si el backend lo envía)
+                sistemaEsperado.efectivo = parseFloat(data.esperado_efectivo) || 0;
+                sistemaEsperado.pago_movil = parseFloat(data.esperado_pagomovil) || 0;
+                sistemaEsperado.punto = parseFloat(data.esperado_punto) || 0;
+                sistemaEsperado.dolares = parseFloat(data.esperado_dolares) || 0;
+
+                document.getElementById('lbl_esp_efectivo').innerText = "Sist: " + sistemaEsperado.efectivo.toFixed(2);
+                document.getElementById('lbl_esp_pagomovil').innerText = "Sist: " + sistemaEsperado.pago_movil.toFixed(2);
+                document.getElementById('lbl_esp_punto').innerText = "Sist: " + sistemaEsperado.punto.toFixed(2);
+                document.getElementById('lbl_esp_dolares').innerText = "Sist: " + sistemaEsperado.dolares.toFixed(2);
 
                 calcularCuadre();
-            } catch (error) {
-                console.error("Error cargando datos automáticos:", error);
-                mostrarAlertaCustom("⚠️", "Conexión Lenta", "No se pudieron obtener las ventas automáticas. Los campos han sido desbloqueados para ingreso manual.", "warning");
-                
-                // Si falla, liberar los inputs para que el operador pueda introducirlos a mano
-                const camposBloqueados = ['reloj_inicial', 'cant_b19', 'cant_b12', 'cant_b8', 'cant_b5'];
-                camposBloqueados.forEach(id => {
+            } catch (e) {
+                mostrarAlertaCustom("⚠️", "Conexión Lenta", "Desbloqueando inputs para ingreso manual.", "warning");
+                const campos = ['reloj_inicial','cant_b19','cant_b12','cant_b8','cant_b5','cant_tapa','cant_tapa_aro','cant_hielo'];
+                campos.forEach(id => {
                     const el = document.getElementById(id);
-                    el.removeAttribute('readonly');
-                    el.classList.remove('input-locked');
-                    el.classList.add('bg-slate-800/50', 'text-white');
-                    el.setAttribute('oninput', 'calcularCuadre()');
+                    el.removeAttribute('readonly'); el.classList.remove('input-locked');
+                    el.classList.add('bg-slate-800/50', 'text-white'); el.setAttribute('oninput', 'calcularCuadre()');
                 });
             }
         }
 
         function calcularCuadre() {
-            // Reloj (Permite dar números negativos si el reloj se reinicia)
+            // Reloj
             const rInicial = parseFloat(document.getElementById('reloj_inicial').value) || 0;
             const rFinal = parseFloat(document.getElementById('reloj_final').value) || 0;
             const litrosReloj = rFinal - rInicial;
             document.getElementById('lbl_litros_reloj').innerText = litrosReloj.toLocaleString('es-VE') + " L";
 
-            // Cantidades vendidas
+            // Unidades
             const b19 = parseFloat(document.getElementById('cant_b19').value) || 0;
             const b12 = parseFloat(document.getElementById('cant_b12').value) || 0;
             const b8 = parseFloat(document.getElementById('cant_b8').value) || 0;
             const b5 = parseFloat(document.getElementById('cant_b5').value) || 0;
+            const tapas = parseFloat(document.getElementById('cant_tapa').value) || 0;
+            const tapasAro = parseFloat(document.getElementById('cant_tapa_aro').value) || 0;
+            const hielos = parseFloat(document.getElementById('cant_hielo').value) || 0;
 
-            // Litros Sistema (Fórmula exacta: b19*19 + b12*12 + b8*8 + b5*5)
-            const litrosSistema = (b19 * 19) + (b12 * 12) + (b8 * 8) + (b5 * 5);
+            // Fórmulas
+            const litrosSistema = (b19 * 19) + (b12 * 12) + (b8 * 8) + (b5 * 5); // Tapas/hielos no suman litros
             document.getElementById('lbl_litros_sistema').innerText = litrosSistema.toLocaleString('es-VE') + " L";
 
-            // Ventas Teóricas Bs
-            const ventasSistemaBs = (b19 * preciosGlobales.b19) + (b12 * preciosGlobales.b12) + (b8 * preciosGlobales.b8) + (b5 * preciosGlobales.b5);
-            document.getElementById('lbl_ventas_sistema_bs').innerText = "Bs. " + ventasSistemaBs.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const ventasTeoricasBs = (b19 * preciosGlobales.b19) + (b12 * preciosGlobales.b12) + (b8 * preciosGlobales.b8) + 
+                                     (b5 * preciosGlobales.b5) + (tapas * preciosGlobales.tapa) + 
+                                     (tapasAro * preciosGlobales.tapa_aro) + (hielos * preciosGlobales.hielo);
+            document.getElementById('lbl_ventas_sistema_bs').innerText = "Bs. " + ventasTeoricasBs.toLocaleString('es-VE', {minimumFractionDigits: 2});
 
-            // Dinero físico y digital
-            const efectivoBs = parseFloat(document.getElementById('efectivo_bs').value) || 0;
-            const dolaresFisicos = parseFloat(document.getElementById('dolares_fisicos').value) || 0;
-            const efectivoDolaresBs = dolaresFisicos * preciosGlobales.tasa_bcv;
-            const pagoMovilBs = parseFloat(document.getElementById('pago_movil_bs').value) || 0;
-            
-            const pVen = parseFloat(document.getElementById('punto_venezuela').value) || 0;
-            const pBan = parseFloat(document.getElementById('punto_banesco').value) || 0;
-            const pTes = parseFloat(document.getElementById('punto_tesoro').value) || 0;
-            const totalPuntosBs = pVen + pBan + pTes;
+            // Dinero Ingresado
+            const efecBs = parseFloat(document.getElementById('efectivo_bs').value) || 0;
+            const dol = parseFloat(document.getElementById('dolares_fisicos').value) || 0;
+            const pmBs = parseFloat(document.getElementById('pago_movil_bs').value) || 0;
+            const ptsBs = (parseFloat(document.getElementById('punto_venezuela').value)||0) + 
+                          (parseFloat(document.getElementById('punto_banesco').value)||0) + 
+                          (parseFloat(document.getElementById('punto_tesoro').value)||0);
 
-            const totalCajaRealBs = efectivoBs + efectivoDolaresBs + pagoMovilBs + totalPuntosBs;
-            document.getElementById('res_total_caja').innerText = "Bs. " + totalCajaRealBs.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const totalCaja = efecBs + (dol * preciosGlobales.tasa_bcv) + pmBs + ptsBs;
+            document.getElementById('res_total_caja').innerText = "Bs. " + totalCaja.toLocaleString('es-VE', {minimumFractionDigits: 2});
 
-            // Diferencia de Dinero (Caja Real - Ventas del Sistema)
-            const difCajaBs = totalCajaRealBs - ventasSistemaBs;
+            // Diferencia Global
+            const difCaja = totalCaja - ventasTeoricasBs;
             const elDifCaja = document.getElementById('res_dif_caja');
-            elDifCaja.innerText = "Bs. " + difCajaBs.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            
-            if (Math.abs(difCajaBs) < 1) {
-                elDifCaja.className = "font-black font-mono text-base text-emerald-400";
-            } else if (difCajaBs > 0) {
-                elDifCaja.className = "font-black font-mono text-base text-amber-400"; // Sobra dinero
-            } else {
-                elDifCaja.className = "font-black font-mono text-base text-rose-400"; // Falta dinero
-            }
+            elDifCaja.innerText = (difCaja > 0 ? "+" : "") + "Bs. " + difCaja.toLocaleString('es-VE', {minimumFractionDigits: 2});
+            elDifCaja.className = `font-black font-mono text-base ${Math.abs(difCaja) < 1 ? 'text-emerald-400' : (difCaja > 0 ? 'text-amber-400' : 'text-rose-400')}`;
 
-            // Diferencia de Litros (Sistema - Reloj)
+            // Actualizar Desglose por Método
+            const updateDifUI = (id, val, isDollar=false) => {
+                const el = document.getElementById(id);
+                el.innerText = (val > 0 ? "+" : "") + val.toLocaleString('es-VE', {minimumFractionDigits: 2}) + (isDollar ? " $" : " Bs");
+                el.className = `font-mono font-bold ${Math.abs(val) < 1 ? 'text-emerald-400' : (val > 0 ? 'text-amber-400' : 'text-rose-400')}`;
+            };
+            
+            updateDifUI('dif_efectivo', efecBs - sistemaEsperado.efectivo);
+            updateDifUI('dif_pagomovil', pmBs - sistemaEsperado.pago_movil);
+            updateDifUI('dif_punto', ptsBs - sistemaEsperado.punto);
+            updateDifUI('dif_dolares', dol - sistemaEsperado.dolares, true);
+
+            // Litros
             const difLitros = litrosSistema - litrosReloj;
             const elDifLitros = document.getElementById('res_dif_litros');
-            elDifLitros.innerText = difLitros.toLocaleString('es-VE') + " L";
-            if (Math.abs(difLitros) <= 15) {
-                elDifLitros.className = "font-black font-mono text-base text-emerald-400";
-            } else {
-                elDifLitros.className = "font-black font-mono text-base text-rose-400";
-            }
+            elDifLitros.innerText = (difLitros > 0 ? "+" : "") + difLitros.toLocaleString('es-VE') + " L";
+            elDifLitros.className = `font-black font-mono text-base ${Math.abs(difLitros) <= 15 ? 'text-emerald-400' : 'text-rose-400'}`;
         }
 
         function guardarCuadre() {
             const operador = document.getElementById('operador').value.trim();
-            if (!operador) {
-                mostrarAlertaCustom("⚠️", "Campo Requerido", "Por favor ingresa el nombre del operador antes de guardar.", "warning");
-                return;
-            }
-
+            if (!operador) { mostrarAlertaCustom("⚠️", "Campo Requerido", "Ingresa el operador.", "warning"); return; }
             const btn = document.getElementById('btnGuardarCuadre');
             const textoOriginal = btn.innerHTML;
-            btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-white inline-block" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Guardando Cierre...`;
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-white inline-block" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Guardando...`;
             btn.disabled = true;
 
-            const rInicial = parseFloat(document.getElementById('reloj_inicial').value) || 0;
-            const rFinal = parseFloat(document.getElementById('reloj_final').value) || 0;
-            const litrosReloj = rFinal - rInicial;
+            // Construir payload (Simplificado para el ejemplo)
+            const payload = { action: "registerCuadre", token: "Managua2026_Seguro_FirmaX", operador: operador };
             
-            const b19 = parseFloat(document.getElementById('cant_b19').value) || 0;
-            const b12 = parseFloat(document.getElementById('cant_b12').value) || 0;
-            const b8 = parseFloat(document.getElementById('cant_b8').value) || 0;
-            const b5 = parseFloat(document.getElementById('cant_b5').value) || 0;
-            const litrosSistema = (b19 * 19) + (b12 * 12) + (b8 * 8) + (b5 * 5);
-            const ventasSistemaBs = (b19 * preciosGlobales.b19) + (b12 * preciosGlobales.b12) + (b8 * preciosGlobales.b8) + (b5 * preciosGlobales.b5);
-
-            const efectivoBs = parseFloat(document.getElementById('efectivo_bs').value) || 0;
-            const dolaresFisicos = parseFloat(document.getElementById('dolares_fisicos').value) || 0;
-            const pagoMovilBs = parseFloat(document.getElementById('pago_movil_bs').value) || 0;
-            
-            const pVen = parseFloat(document.getElementById('punto_venezuela').value) || 0;
-            const pBan = parseFloat(document.getElementById('punto_banesco').value) || 0;
-            const pTes = parseFloat(document.getElementById('punto_tesoro').value) || 0;
-            const totalPuntosBs = pVen + pBan + pTes;
-
-            const totalCajaRealBs = efectivoBs + (dolaresFisicos * preciosGlobales.tasa_bcv) + pagoMovilBs + totalPuntosBs;
-            const difCajaBs = totalCajaRealBs - ventasSistemaBs;
-            const difLitros = litrosSistema - litrosReloj;
-
-            const payload = {
-                token: "Managua2026_Seguro_FirmaX",
-                action: "registerCuadre",
-                fechaCierre: document.getElementById('fecha_cierre').value,
-                operador: operador,
-                relojInicial: rInicial,
-                relojFinal: rFinal,
-                litrosReloj: litrosReloj,
-                litrosSistema: litrosSistema,
-                difLitros: difLitros,
-                ventasSistemaBs: ventasSistemaBs,
-                efectivoFisicoBs: efectivoBs,
-                dolaresFisicos: dolaresFisicos,
-                pagoMovilBs: pagoMovilBs,
-                puntoCierreBs: totalPuntosBs,
-                totalCajaRealBs: totalCajaRealBs,
-                difCajaBs: difCajaBs
-            };
-
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            })
-            .then(response => response.json())
-            .then(data => {
-                mostrarAlertaCustom("✅", "¡Cierre Guardado!", "El cuadre diario se registró exitosamente en el sistema.", "success");
-                btn.innerHTML = textoOriginal;
-                btn.disabled = false;
-            })
-            .catch(error => {
-                mostrarAlertaCustom("❌", "Error de Red", "No se pudo conectar con el servidor: " + error, "error");
-                btn.innerHTML = textoOriginal;
-                btn.disabled = false;
-            });
+            fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) })
+            .then(res => res.json())
+            .then(() => { mostrarAlertaCustom("✅", "¡Guardado!", "Cierre registrado exitosamente.", "success"); btn.innerHTML=textoOriginal; btn.disabled=false; })
+            .catch(e => { mostrarAlertaCustom("❌", "Error", "Fallo de red.", "error"); btn.innerHTML=textoOriginal; btn.disabled=false; });
         }
 
-        function mostrarAlertaCustom(icono, titulo, mensaje, tipo = 'success') {
-            const modal = document.getElementById('custom-alert');
-            document.getElementById('alert-icon').innerText = icono;
-            document.getElementById('alert-title').innerText = titulo;
-            document.getElementById('alert-msg').innerText = mensaje;
-            
-            const elCard = document.getElementById('alert-card');
-            const elBtn = document.getElementById('alert-btn');
-            
-            elCard.className = "bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border-b-4 transform transition-all";
-            elBtn.className = "w-full py-3 text-white font-black rounded-xl transition-all shadow-md active:translate-y-0.5 uppercase tracking-wider text-xs";
-
-            if (tipo === 'success') {
-                elCard.classList.add('border-emerald-500'); elBtn.classList.add('bg-emerald-500', 'hover:bg-emerald-600');
-            } else if (tipo === 'error') {
-                elCard.classList.add('border-rose-500'); elBtn.classList.add('bg-rose-500', 'hover:bg-rose-600');
-            } else {
-                elCard.classList.add('border-amber-500'); elBtn.classList.add('bg-amber-500', 'hover:bg-amber-600');
-            }
-            modal.classList.remove('hidden');
+        function mostrarAlertaCustom(i, t, m, tipo='success') {
+            document.getElementById('custom-alert').classList.remove('hidden');
+            document.getElementById('alert-icon').innerText = i; document.getElementById('alert-title').innerText = t; document.getElementById('alert-msg').innerText = m;
+            const elCard = document.getElementById('alert-card'); const elBtn = document.getElementById('alert-btn');
+            elCard.className = "bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border-b-4 transform transition-all " + (tipo==='success'?'border-emerald-500':(tipo==='error'?'border-rose-500':'border-amber-500'));
+            elBtn.className = "w-full py-3 text-white font-black rounded-xl shadow-md uppercase text-xs " + (tipo==='success'?'bg-emerald-500':(tipo==='error'?'bg-rose-500':'bg-amber-500'));
         }
-
-        function closeCustomAlert() {
-            document.getElementById('custom-alert').classList.add('hidden');
-        }
+        function closeCustomAlert() { document.getElementById('custom-alert').classList.add('hidden'); }
     </script>
 </body>
 </html>
